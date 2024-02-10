@@ -1,0 +1,9 @@
+:root {
+    /* --primary-color: #1877F2; */
+    --primary-color: white;
+    --secondary-color: rgb(240, 240, 240);
+}
+
+html, body, #root {
+    height: 100%;
+}
