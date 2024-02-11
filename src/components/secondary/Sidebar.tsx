@@ -1,6 +1,6 @@
 import {useState, useEffect, FC} from 'react';
 import styled from 'styled-components'
-import { SecondaryContainer } from '../components-styled/Containers';
+import { SecondaryContainer } from '../main-styles/Containers';
 import Person2Icon from '@mui/icons-material/Person2';
 import GradeIcon from '@mui/icons-material/Grade';
 import WebAssetIcon from '@mui/icons-material/WebAsset';

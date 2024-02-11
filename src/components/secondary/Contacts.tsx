@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { SecondaryContainer } from '../components-styled/Containers';
+import { SecondaryContainer } from '../main-styles/Containers';
 
 const ContactsContainer = styled(SecondaryContainer)`
     grid-area: contacts;

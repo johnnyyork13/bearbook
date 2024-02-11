@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { PrimaryContainer } from '../components-styled/Containers';
+import { PrimaryContainer } from '../main-styles/Containers';
 
 const FeedContainer = styled(PrimaryContainer)`
     grid-area: feed;
