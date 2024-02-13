@@ -4,12 +4,14 @@ interface UserState {
     email: string,
     firstName: string,
     lastName: string,
+    loggedIn: boolean,
 }
 
 const initialState: UserState = {
     email: "",
     firstName: "",
     lastName: "",
+    loggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -18,7 +20,7 @@ const userSlice = createSlice({
     reducers: {
         //is actually counter/increment for name
         setGlobalUser: (state, action: PayloadAction<UserState>) => { //can also take action. I.E. (state, action)
-            return state = action.payload;
+            return state = {...action.payload, loggedIn: true};
         },
     },
 });

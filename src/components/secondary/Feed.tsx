@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { PrimaryContainer } from '../main-styles/Containers';
 
 const FeedContainer = styled(PrimaryContainer)`
-    grid-area: feed;
+    
 `
 
 export default function Feed(props) {

@@ -1,10 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
 :root {
     /* --primary-color: #1877F2; */
     --primary-color: white;
     --secondary-color: rgb(240, 240, 240);
+    --primary-blue: #1877f2;
+    --primary-green: #42b72a;
+    --input-background-grey: rgb(245,245,245);
+    --border-color: rgb(200,200,200);
+    font-family: "Titillium Web";
 }
 
 html, body, #root {
     height: 100%;
 }
 
+#root {
+    position: relative;
+}

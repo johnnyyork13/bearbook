@@ -1,10 +1,36 @@
 import {useEffect, useState, FC} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from '../../state/store';
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-export default function Home(props) {
+import Contacts from "../secondary/Contacts";
+import Feed from "../secondary/Feed";
+import Sidebar from "../secondary/Sidebar";
 
+export default function Home() {
+
+    const navigate = useNavigate();
+    const globalUser = useSelector((state: RootState) => state.user);
+
+    useEffect(() => {
+        if (!globalUser.loggedIn) {
+            navigate("/login");
+        }
+    }, [])
     return (
-        <main>
-            Home
-        </main>
+        <HomeContainer>
+            <Sidebar />
+            <Feed />
+            <Contacts />
+        </HomeContainer>
     )
 }
+
+const HomeContainer = styled.main`
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 20px;
+    padding: 20px;
+`

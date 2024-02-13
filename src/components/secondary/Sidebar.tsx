@@ -5,12 +5,11 @@ import Person2Icon from '@mui/icons-material/Person2';
 import GradeIcon from '@mui/icons-material/Grade';
 import WebAssetIcon from '@mui/icons-material/WebAsset';
 import MessageIcon from '@mui/icons-material/Message';
-
 import GroupIcon from '@mui/icons-material/Group';
 
 
+
 const SidebarContainer = styled(SecondaryContainer)`
-    grid-area: sidebar;
     background-color: var(--secondary-color);
     display: grid;
     grid-template-columns: 1fr;
@@ -27,7 +26,7 @@ const SpanText = styled.p`
     font-size: 1.5rem;
 `
 
-export const Sidebar = () => {
+export default function Sidebar() {
 
     return (
         <SidebarContainer>
