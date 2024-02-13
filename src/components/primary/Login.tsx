@@ -32,6 +32,26 @@ export default function Login(props: {url: string}) {
 
     useEffect(() => {
         try {
+            async function checkIfAlreadyLoggedIn(){
+                const url = props.url + "/login";
+                await fetch(url, {
+                    credentials: "include",
+                }).then((res) => res.json())
+                .then((res) => {
+                    if (!res.message) {
+                        dispatch(setGlobalUser(res));
+                        navigate("/home");
+                    }
+                }).catch((err) => console.log(err));
+            }
+            checkIfAlreadyLoggedIn();
+        } catch(err) {
+            console.log(err);
+        }
+    }, []);
+
+    useEffect(() => {
+        try {
             if (sendUser) {
                 async function loginUser() {
                     const url = props.url + "/login";

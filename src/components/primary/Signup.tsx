@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
 import { PrimaryContainer } from "../main-styles/Containers";
 import { GreenButton, MainInput, Error } from "../main-styles/Inputs";
+import SimpleModal from "../secondary/SimpleModal";
 
 export default function Signup(props: {url: string, setOpenSignup: Function}) {
 
@@ -19,6 +20,12 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
         email: false,
         password: false,
     })
+    const [loginModalAttributes, setLoginModalAttributes] = useState({
+        show: false,
+        mainText: "Please login with credentials.",
+        buttonText: "Go to Login",
+        buttonFunc: () => props.setOpenSignup(false)
+    });
 
     function  handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setUser((prev) => ({
@@ -42,20 +49,22 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
                     [key]: false,
                 }))
             }
-
-            if (allFieldsHaveValues && key === "email") {
-                if (!validateEmail(user.email)) {
-                    allFieldsHaveValues = false;
-                    setError((prev) => ({
-                        ...prev,
-                        email: true,
-                    }))
-                } 
-            }
         }
 
-        if (allFieldsHaveValues) {
+        if (!validateEmail(user.email)) {
+            setError((prev) => ({
+                ...prev,
+                email: true,
+            }))
+        }
+
+        if (allFieldsHaveValues && user.password.length >= 8) { 
             setSendUser(true);
+        } else {
+            setError((prev) => ({
+                ...prev,
+                password: true,
+            }))
         }
     }
 
@@ -83,7 +92,21 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
                     }).then((res) => res.json())
                     .then((res) => {
                         setSendUser(false);
-                        console.log("SIGNUP RESPONSE ", res);
+                        if (res.success) {
+                            setLoginModalAttributes(() => ({
+                                show: true,
+                                mainText: "Please login with credentials.",
+                                buttonText: "Go to Login",
+                                buttonFunc: () => props.setOpenSignup(false)
+                            }));
+                        } else {
+                            setLoginModalAttributes(() => ({
+                                show: true,
+                                mainText: "Email already exists!",
+                                buttonText: "Back",
+                                buttonFunc: () => setLoginModalAttributes((prev) => ({...prev, show: false}))
+                            }))
+                        }
                     }).catch((err) => console.log(err));
                 }
                 addUser();
@@ -96,6 +119,11 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
 
     return (
         <SignupContainer>
+            {loginModalAttributes.show && <SimpleModal 
+                mainText={loginModalAttributes.mainText}
+                buttonText={loginModalAttributes.buttonText}
+                buttonFunc={loginModalAttributes.buttonFunc}
+            />}
             <SignupForm onSubmit={(e) => e.preventDefault()}>
                 <SignupHeaderContainer>
                     <SignupHeader>Sign Up for HistoryBook</SignupHeader>

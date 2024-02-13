@@ -21,7 +21,8 @@ export default function HeaderMain() {
             <LinkContainer>
                 <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link><NavLink to=""><IconContainer><MessageIcon /></IconContainer></NavLink></Link>
-                <Link><NavLink to=""><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
+                <Link><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
+                <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
 
         </Header>

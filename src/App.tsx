@@ -16,7 +16,7 @@ function App() {
   const location: currentLocation = useLocation();
 
   const AppContainer = styled.div`
-  ${location.pathname !== "/login" && location.pathname !== "/" ? `
+  ${location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout" ? `
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 64px 1fr;` :
@@ -31,7 +31,7 @@ function App() {
 
   return (
     <AppContainer>
-      {(location.pathname !== "/login" && location.pathname !== "/") && <HeaderMain />}
+      {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout") && <HeaderMain />}
       <Main />
     </AppContainer>
   )
