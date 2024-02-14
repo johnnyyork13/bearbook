@@ -92,7 +92,7 @@ export default function Login(props: {url: string}) {
                     {error && <Error>Please enter a valid email and password.</Error>}
                     <Input name="email" onChange={handleInputChange} placeholder="Email"/>
                     <Input name="password" type="password" onChange={handleInputChange} placeholder="Password"/>
-                    <BlueButton onClick={() => setSendUser(true)}>Login</BlueButton>
+                    <LoginButton onClick={() => setSendUser(true)}>Login</LoginButton>
                     <ForgotPassword>Forgot password?</ForgotPassword>
                 </LoginForm>
                 <LineBreak></LineBreak>
@@ -129,6 +129,10 @@ const LoginForm = styled.form`
 const Input = styled(MainInput)`
     height: 40px;
     margin-bottom: 10px;
+`
+
+const LoginButton = styled(BlueButton)`
+    font-size: 1.4rem;
 `
 
 const ForgotPassword = styled.p`

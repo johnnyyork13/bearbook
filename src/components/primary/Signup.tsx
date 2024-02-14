@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
-import { PrimaryContainer } from "../main-styles/Containers";
-import { GreenButton, MainInput, Error } from "../main-styles/Inputs";
+import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
+import { GreenButton, MainInput, Error, ExitButton } from "../main-styles/Inputs";
 import SimpleModal from "../secondary/SimpleModal";
 
 export default function Signup(props: {url: string, setOpenSignup: Function}) {
@@ -118,7 +118,7 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
     }, [sendUser]);
 
     return (
-        <SignupContainer>
+        <OpacityBackground>
             {loginModalAttributes.show && <SimpleModal 
                 mainText={loginModalAttributes.mainText}
                 buttonText={loginModalAttributes.buttonText}
@@ -142,19 +142,9 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
                 <Input name="password" type="password" placeholder="Password (minimum 8 characters)" onChange={handleInputChange}/>
                 <SignupButton onClick={handleUserSubmit}>Sign Up</SignupButton>
             </SignupForm>
-        </SignupContainer>
+        </OpacityBackground>
     )
 }
-
-const SignupContainer = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255,255,255,.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
 
 const SignupForm = styled(PrimaryContainer)`
     display: flex;
@@ -166,12 +156,6 @@ const SignupHeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-`
-
-const ExitButton = styled.button`
-    color: var(--primary-blue);
-    border: none;
-    background-color: var(--primary-color);
 `
 
 const SignupHeader = styled.p`

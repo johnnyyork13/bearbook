@@ -1,28 +1,18 @@
 import styled from "styled-components"
-import { PrimaryContainer } from "../main-styles/Containers"
+import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers"
 import { BlueButton } from "../main-styles/Inputs"
 
 export default function SimpleModal(props: {mainText: String, buttonText: String, buttonFunc: React.MouseEventHandler<HTMLButtonElement>}) {
 
     return (
-        <ModalContainer>
+        <OpacityBackground>
             <Modal>
                 <ModalMainText>{props.mainText}</ModalMainText>
                 <ModalButton onClick={props.buttonFunc}>{props.buttonText}</ModalButton>
             </Modal>
-        </ModalContainer>
+        </OpacityBackground>
     )
 }
-
-const ModalContainer = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: background-color: rgba(255,255,255,.5);
-`
 
 const Modal = styled(PrimaryContainer)`
     display: flex;

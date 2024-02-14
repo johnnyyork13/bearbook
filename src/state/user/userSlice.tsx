@@ -4,6 +4,7 @@ interface UserState {
     email: string,
     firstName: string,
     lastName: string,
+    friends: [],
     loggedIn: boolean,
 }
 
@@ -11,6 +12,7 @@ const initialState: UserState = {
     email: "",
     firstName: "",
     lastName: "",
+    friends: [],
     loggedIn: false,
 };
 

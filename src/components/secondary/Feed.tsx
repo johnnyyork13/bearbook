@@ -2,11 +2,8 @@ import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { PrimaryContainer } from '../main-styles/Containers';
 
-const FeedContainer = styled(PrimaryContainer)`
-    
-`
 
-export default function Feed(props) {
+export default function Feed() {
 
     return (
         <FeedContainer>
@@ -14,3 +11,7 @@ export default function Feed(props) {
         </FeedContainer>
     )
 }
+
+export const FeedContainer = styled(PrimaryContainer)`
+
+`

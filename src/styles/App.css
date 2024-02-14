@@ -6,6 +6,8 @@
     --secondary-color: rgb(240, 240, 240);
     --primary-blue: #1877f2;
     --primary-green: #42b72a;
+    --primary-grey: rgb(211, 211, 211);
+    --opacity-background: rgba(255,255,255,.5);
     --input-background-grey: rgb(245,245,245);
     --border-color: rgb(200,200,200);
     font-family: "Titillium Web";
@@ -13,6 +15,7 @@
 
 html, body, #root {
     height: 100%;
+    background-color: var(--secondary-color);
 }
 
 #root {

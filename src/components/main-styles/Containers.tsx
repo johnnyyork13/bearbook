@@ -11,3 +11,15 @@ export const SecondaryContainer = styled.div`
     background-color: var(--secondary-color);
     padding: 20px;
 `
+
+export const OpacityBackground = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--opacity-background);
+`
