@@ -40,7 +40,7 @@ export default function Profile(props: {url: String}) {
                 </ProfileNameAndImageContainer>
                 <ProfileHeaderButtons>
                     <FindFriendsButton>Find Friends</FindFriendsButton>
-                    <EditProfileButton>Edit Profile</EditProfileButton>
+                    {/* <EditProfileButton>Edit Profile</EditProfileButton> */}
                 </ProfileHeaderButtons>
             </ProfileHeader>
             <ProfileBody>

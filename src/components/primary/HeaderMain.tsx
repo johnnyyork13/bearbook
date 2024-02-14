@@ -11,12 +11,55 @@ import SearchIcon from '@mui/icons-material/Search';
 
 export default function HeaderMain() {
 
+    const [query, setQuery] = useState("");
+    const [id, setId] = useState("");
+    const [searchInput, setSearchInput] = useState("");
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    useEffect(() => {
+        try {
+            const splitSearchOnSpaces = searchInput.split(" ");
+            if (splitSearchOnSpaces.length > 1) {
+                console.log('sending request for names ', splitSearchOnSpaces);
+                //fix capitalization
+                for (let i = 0; i < splitSearchOnSpaces.length; i++) {
+                    if (splitSearchOnSpaces[i].length > 0) {
+                        const e = splitSearchOnSpaces[i];
+                        splitSearchOnSpaces[i] = e[0].toUpperCase() + e.slice(1).toLowerCase();
+                    }
+                }
+                const properString = splitSearchOnSpaces.join(" ");
+                async function getHumanNames() {
+                    const query = `SELECT ?human ?humanLabel WHERE { ?human wdt:P31 wd:Q5; rdfs:label ?humanLabel. FILTER(LANG(?humanLabel) = "en"). FILTER(STRSTARTS(?humanLabel, "${properString}")). } LIMIT 5`
+                    const url = `https://query.wikidata.org/sparql?format=json&query=${query}`;
+                    await fetch(url, {
+                        signal: signal,
+                    })
+                    .then((res) => res.json())
+                    .then((res) => console.log(res))
+                    .catch((err) => console.log(err));
+                }
+                getHumanNames();
+            }
+        } catch(err) {
+            console.log(err);
+        }
+        
+    }, [searchInput])
+
+    function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+        controller.abort();
+        setSearchInput(e.target.value);
+    }
+
     return (
         <Header>
             <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>HistoryBook</HeaderLogo></NavLink>
             <SearchContainer>
                 <SearchIcon />
-                <Searchbar placeholder="Search for a Historical Figure"/>
+                <Searchbar onChange={handleSearchInputChange} placeholder="Search for a Historical Figure"/>
             </SearchContainer>
             <LinkContainer>
                 <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 

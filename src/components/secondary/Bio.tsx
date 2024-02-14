@@ -5,6 +5,7 @@ import { GreyButton } from "../main-styles/Inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import EditAddress from "./EditAddress";
+import EditBio from "./EditBio";
 
 export default function Bio(props: {url: String}) {
 
@@ -13,6 +14,7 @@ export default function Bio(props: {url: String}) {
         address: "",
     })
     const [showEditAddress, setShowEditAddress] = useState(false);
+    const [showEditBio, setShowEditBio] = useState(false);
 
     useEffect(() => {
         try {
@@ -43,9 +45,10 @@ export default function Bio(props: {url: String}) {
              }
              {bio.bio ? 
                 `${<BioBoldText>{bio.bio}</BioBoldText>}` : 
-                <BioButton>Add Bio</BioButton>
+                <BioButton onClick={() => setShowEditBio(true)}>Add Bio</BioButton>
              }
              {showEditAddress && <EditAddress setShowEditAddress={() => setShowEditAddress(false)}/>}
+             {showEditBio && <EditBio setShowEditBio={() => setShowEditBio(false)}/>}
         </BioContainer>
     )
 }
