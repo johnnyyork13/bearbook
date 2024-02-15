@@ -11,17 +11,52 @@ import { PrimaryContainer } from "../main-styles/Containers";
 import Bio from "../secondary/Bio";
 import Friends from "../secondary/Friends";
 import ProfileFeed from "../secondary/ProfileFeed";
+import NewPost from "../secondary/NewPost";
+import { UserState, setVisiting } from "../../state/user/userSlice";
 
 export default function Profile(props: {url: String}) {
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
+    const [profileData, setProfileData] = useState<UserState>({
+        email: "",
+        firstName: "",
+        lastName: "",
+        name: "",
+        friends: [],
+        loggedIn: false,
+        visiting: "",
+    });
 
     useEffect(() => {
         if (!globalUser.loggedIn) {
             navigate("/login");
         }
-    }, []);
+        if (globalUser.visiting) {
+            try {
+                const url = props.url + "/get-profile";
+                async function getUserProfile() {
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({email: globalUser.visiting})
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setProfileData(res.user);
+                    }).catch((err) => console.log(err));
+                }
+                getUserProfile();
+            } catch(err) {
+                console.log(err);
+            }
+        } else {
+            setProfileData(globalUser);
+        }
+    }, [globalUser.visiting]);
 
     return (
         <ProfileContainer>
@@ -34,21 +69,24 @@ export default function Profile(props: {url: String}) {
                         </ProfileImageEditButton>
                     </ProfileImage>
                     <ProfileNameContainer>
-                        <ProfileName>{`${globalUser.firstName} ${globalUser.lastName}`}</ProfileName>
-                        <ProfileFriendsCount>{`${globalUser.friends.length} friends`}</ProfileFriendsCount>
+                        <ProfileName>{profileData.name}</ProfileName>
+                        <ProfileFriendsCount>{`${profileData.friends.length} friends`}</ProfileFriendsCount>
                     </ProfileNameContainer>
                 </ProfileNameAndImageContainer>
-                <ProfileHeaderButtons>
+                {!globalUser.visiting && <ProfileHeaderButtons>
                     <FindFriendsButton>Find Friends</FindFriendsButton>
                     {/* <EditProfileButton>Edit Profile</EditProfileButton> */}
-                </ProfileHeaderButtons>
+                </ProfileHeaderButtons>}
             </ProfileHeader>
             <ProfileBody>
                 <ProfileBodySidebar>
                     <Bio url={props.url}/>
                     <Friends />
                 </ProfileBodySidebar>
-                <ProfileFeed />
+                <ProfileMainFeedContainer>
+                    {!globalUser.visiting && <NewPost url={props.url}/>}
+                    <ProfileFeed url={props.url} email={profileData.email}/>
+                </ProfileMainFeedContainer>
             </ProfileBody>
         </ProfileContainer>
     )
@@ -138,4 +176,10 @@ const ProfileBody = styled.div`
 const ProfileBodySidebar = styled.div`
     width: 30%;
     margin-left: 150px;
+`
+
+const ProfileMainFeedContainer = styled.div`
+    margin-right: 150px;
+    margin-left: 20px;
+    width: 50%;
 `

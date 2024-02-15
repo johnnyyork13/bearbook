@@ -7,35 +7,40 @@ import './styles/App.css';
 import HeaderMain from './components/primary/HeaderMain';
 import Main from './components/primary/Routes';
 
+interface currentLocation {
+  pathname: string;
+}
+
 function App() {
 
-  interface currentLocation {
-    pathname: string;
-  }
+  const url = "http://localhost:3000";
 
   const location: currentLocation = useLocation();
 
-  const AppContainer = styled.div`
-  ${location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout" ? `
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 64px 1fr;` :
-
-  `display: flex;
-  align-items: center;
-  justify-content: center;`}
-
-  height: 100%;
-  background-color: var(--secondary-color);
-`
-
   return (
-    <AppContainer>
-      {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout") && <HeaderMain />}
-      <Main />
+    <AppContainer $location={location}>
+      {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout") && 
+        <HeaderMain url={url}/>}
+      <Main url={url} />
     </AppContainer>
   )
 }
 
 
 export default App
+
+const AppContainer = styled.div<{$location: currentLocation}>`
+${props => props.$location.pathname !== "/login" && 
+  props.$location.pathname !== "/" && 
+  props.$location.pathname !== "/logout" ? `
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: 64px 1fr;` :
+
+`display: flex;
+align-items: center;
+justify-content: center;`}
+
+height: 100%;
+background-color: var(--secondary-color);
+`

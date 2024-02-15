@@ -3,31 +3,56 @@ import { PrimaryContainer } from "../main-styles/Containers";
 import { BlueButton } from "../main-styles/Inputs";
 import { EditHeader } from "../main-styles/Text";
 import { useEffect, useState } from "react";
+import {v4 as uuidv4} from 'uuid';
 
-export default function ProfileFeed() {
+export default function ProfileFeed(props: {url: String, email: String}) {
 
-    const [test, setTest] = useState(false);
+    const [feed, setFeed] = useState([]);
 
-    // useEffect(() => {
-    //     if (test) {
-    //         async function sendRequest() {
-    //             const url = `https://query.wikidata.org/sparql?query=${testQuery}&format=json`;
-    //             await fetch(url).then((res) => res.json()).then((res) => console.log(res));
-    //         }
-    //         sendRequest();
-    //     }
-    // }, [test])
+    useEffect(() => {
+        try {
+            if (props.email) {
+                async function getUserFeed() {
+                    const url = props.url + "/get-profile-feed";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({email: props.email})
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setFeed(res.user.posts);
+                    })
+                    .catch((err) => console.log(err));
+                }
+                getUserFeed();  
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }, [props.email])
+
+    interface PostInterface {
+        date: string,
+        email: string,
+        name: string,
+        text: string,
+        time: string,
+    }
+
+    const mappedFeed = feed.map((post: PostInterface) => {
+        return <p key={uuidv4()}>{post.text}</p>
+    })
 
     return (
         <ProfileFeedContainer>
-            <BlueButton  onClick={() => setTest((prev) => !prev)}>Test</BlueButton>
-            <EditHeader></EditHeader>
+            {mappedFeed}
         </ProfileFeedContainer>
     )   
 }
 
 const ProfileFeedContainer = styled(PrimaryContainer)`
-    margin-right: 150px;
-    width: 50%;
-    margin-left: 20px;
+    width: 100%;
 `

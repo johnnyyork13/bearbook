@@ -16,25 +16,25 @@ export default function Bio(props: {url: String}) {
     const [showEditAddress, setShowEditAddress] = useState(false);
     const [showEditBio, setShowEditBio] = useState(false);
 
-    useEffect(() => {
-        try {
-            async function getUserBio() {
-                const url = props.url + "/bio";
-                await fetch(url, {
-                    credentials: "include",
-                }).then((res) => res.json())
-                .then((res) => {
-                    setBio({
-                        bio: res.bio,
-                        address: `${res.city}, ${res.state}`,
-                    })
-                })
-            }
-            getUserBio();
-        } catch(err) {
-            console.log(err);
-        }
-    }, [])
+    // useEffect(() => {
+    //     try {
+    //         async function getUserBio() {
+    //             const url = props.url + "/bio";
+    //             await fetch(url, {
+    //                 credentials: "include",
+    //             }).then((res) => res.json())
+    //             .then((res) => {
+    //                 setBio({
+    //                     bio: res.bio,
+    //                     address: `${res.city}, ${res.state}`,
+    //                 })
+    //             })
+    //         }
+    //         getUserBio();
+    //     } catch(err) {
+    //         console.log(err);
+    //     }
+    // }, [])
 
     return (
         <BioContainer>

@@ -1,73 +1,115 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from '../../state/store';
 import { PrimaryContainer } from '../main-styles/Containers';
-import { NavLink } from 'react-router-dom';
-
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Logo } from '../main-styles/Logo';
 import MessageIcon from '@mui/icons-material/Message';
 import Person2Icon from '@mui/icons-material/Person2';
 import GroupIcon from '@mui/icons-material/Group';
 import SearchIcon from '@mui/icons-material/Search';
+import SearchResult from '../secondary/SearchResult';
+import {v4 as uuidv4} from 'uuid';
+import { setVisiting } from '../../state/user/userSlice';
 
-export default function HeaderMain() {
+export default function HeaderMain(props: {url: string}) {
 
+
+    const navigate = useNavigate();
+    const globalUser = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
     const [query, setQuery] = useState("");
-    const [id, setId] = useState("");
-    const [searchInput, setSearchInput] = useState("");
+    const [results, setResults] = useState([]);
+    const [selectedName, setSelectedName] = useState({
+        selected: false,
+        email: "",
+    });
 
-    const controller = new AbortController();
-    const signal = controller.signal;
+    const [focused, setFocused] = useState(false)
+    const onFocus = () => setFocused(true)
+    const onBlur = () => setFocused(false)
+
+    function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setQuery(e.target.value);
+    } 
+
+    function handleSelectSearchItem(email: string) {
+        setSelectedName({
+            selected: true,
+            email: email,
+        })
+    }
 
     useEffect(() => {
         try {
-            const splitSearchOnSpaces = searchInput.split(" ");
-            if (splitSearchOnSpaces.length > 1) {
-                console.log('sending request for names ', splitSearchOnSpaces);
-                //fix capitalization
-                for (let i = 0; i < splitSearchOnSpaces.length; i++) {
-                    if (splitSearchOnSpaces[i].length > 0) {
-                        const e = splitSearchOnSpaces[i];
-                        splitSearchOnSpaces[i] = e[0].toUpperCase() + e.slice(1).toLowerCase();
-                    }
-                }
-                const properString = splitSearchOnSpaces.join(" ");
-                async function getHumanNames() {
-                    const query = `SELECT ?human ?humanLabel WHERE { ?human wdt:P31 wd:Q5; rdfs:label ?humanLabel. FILTER(LANG(?humanLabel) = "en"). FILTER(STRSTARTS(?humanLabel, "${properString}")). } LIMIT 5`
-                    const url = `https://query.wikidata.org/sparql?format=json&query=${query}`;
+            if (query.length > 0) {
+                async function getSearchResults() {
+                    console.log('searching');
+                    const url = props.url + "/search";
                     await fetch(url, {
-                        signal: signal,
-                    })
-                    .then((res) => res.json())
-                    .then((res) => console.log(res))
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({name: query})
+                    }).then((res) => res.json())
+                    .then((res) => setResults(res.results))
                     .catch((err) => console.log(err));
                 }
-                getHumanNames();
+                getSearchResults();
             }
         } catch(err) {
             console.log(err);
         }
-        
-    }, [searchInput])
+    }, [query])
 
-    function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        controller.abort();
-        setSearchInput(e.target.value);
+    useEffect(() => {
+        if (selectedName.selected) {
+            dispatch(setVisiting({
+                ...globalUser,
+                visiting: selectedName.email,
+            }))
+            navigate('/profile');
+        }
+    }, [selectedName])
+
+    interface SearchResultInterface {
+        name: string,
+        email: string,
+        handleSelectSearchTerm: Function,
     }
+
+    const mappedResults = results.map((result: SearchResultInterface) => {
+        return <SearchResult
+                    key={uuidv4()}
+                    name={result.name}
+                    email={result.email}
+                    handleSelectSearchItem={handleSelectSearchItem}
+                    setFocused={setFocused}
+                />
+    })
 
     return (
         <Header>
-            <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>HistoryBook</HeaderLogo></NavLink>
             <SearchContainer>
-                <SearchIcon />
-                <Searchbar onChange={handleSearchInputChange} placeholder="Search for a Historical Figure"/>
+                <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>MyFace</HeaderLogo></NavLink>
+                <SearchBarContainer>
+                    <SearchIcon />
+                    <Searchbar onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for Friends"/>
+                </SearchBarContainer>
+                
+                {query.length > 0 && focused && <SearchResultsContainer>
+                    {mappedResults.length > 0 ? mappedResults : "No matches..."}
+                </SearchResultsContainer>}
             </SearchContainer>
             <LinkContainer>
                 <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link><NavLink to=""><IconContainer><MessageIcon /></IconContainer></NavLink></Link>
-                <Link><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
+                <Link onClick={() => dispatch(setVisiting({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
-
         </Header>
     )
 }
@@ -87,19 +129,46 @@ const HeaderLogo = styled(Logo)`
 `
 
 const SearchContainer = styled.div`
+    a {
+        margin-right: 20px;
+    }
+    height: 64px;
     width: 50%;
     display: flex;
     align-items: center;
+    position: relative;
 `
+
+const SearchBarContainer = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    svg {
+        position: absolute;
+        left: 10px;
+        color: var(--border-color);
+    }
+`
+
 const Searchbar = styled.input`
     font-size: 1.2rem;
     height: 35px;
     width: 90%;
     border-radius: 10px;
     border: 1px solid var(--border-color);
-    padding-left: 10px;
+    padding-left: 30px;
     padding-right: 10px;
     margin-left: 5px;
+`
+
+const SearchResultsContainer = styled(PrimaryContainer)`
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: -20px;
+    border-radius: 0px;
+    width: 430px;
 `
 
 const LinkContainer = styled.div`
@@ -117,7 +186,7 @@ const Link = styled.div`
     align-items: center;
 `
 
-const IconContainer = styled.a`
+const IconContainer = styled.div`
     &:visited {
         color: black;
     }

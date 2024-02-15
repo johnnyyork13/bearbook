@@ -28,6 +28,7 @@ export const MainInput = styled.input`
     padding-right: 10px;
     border-radius: 5px;
     border: 1px solid var(--border-color);
+    font-family: "Titillium Web";
 `
 
 export const ExitButton = styled.button`

@@ -5,15 +5,13 @@ import Profile from './Profile';
 import Logout from './Logout';
 
 
-export default function Main() {
-
-    const url = "http://localhost:3000";
+export default function Main(props: {url: string}) {
 
     return <Routes>
-        <Route path="/" element={<Login url={url}/>}></Route>
-        <Route path="/login" element={<Login url={url}/>}></Route>
-        <Route path="/logout" element={<Logout url={url}/>}></Route>
-        <Route path="/profile" element={<Profile url={url}/>}></Route>
+        <Route path="/" element={<Login url={props.url}/>}></Route>
+        <Route path="/login" element={<Login url={props.url}/>}></Route>
+        <Route path="/logout" element={<Logout url={props.url}/>}></Route>
+        <Route path="/profile" element={<Profile url={props.url}/>}></Route>
         <Route path="/home" element={<Home />}></Route>
     </Routes>
 }
