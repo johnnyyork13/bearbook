@@ -2,11 +2,15 @@ import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import { BlueButton } from "../main-styles/Inputs";
 import { EditHeader } from "../main-styles/Text";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from '../../state/store';
 import { useEffect, useState } from "react";
 import {v4 as uuidv4} from 'uuid';
+import Post from "./Post";
 
 export default function ProfileFeed(props: {url: String, email: String}) {
 
+    const globalUser = useSelector((state: RootState) => state.user);
     const [feed, setFeed] = useState([]);
 
     useEffect(() => {
@@ -43,7 +47,14 @@ export default function ProfileFeed(props: {url: String, email: String}) {
     }
 
     const mappedFeed = feed.map((post: PostInterface) => {
-        return <p key={uuidv4()}>{post.text}</p>
+        return <Post 
+            key={uuidv4()}
+            name={post.name}
+            date={post.date}
+            time={post.time}
+            text={post.text}
+            profile_img_link={globalUser}
+        />
     })
 
     return (
@@ -53,6 +64,6 @@ export default function ProfileFeed(props: {url: String, email: String}) {
     )   
 }
 
-const ProfileFeedContainer = styled(PrimaryContainer)`
+const ProfileFeedContainer = styled.div`
     width: 100%;
 `

@@ -8,6 +8,7 @@ export interface UserState {
     friends: [],
     loggedIn: boolean,
     visiting: string,
+    profile_img_link: string,
 }
 
 const initialState: UserState = {
@@ -18,6 +19,7 @@ const initialState: UserState = {
     friends: [],
     loggedIn: false,
     visiting: "",
+    profile_img_link: "",
 };
 
 const userSlice = createSlice({

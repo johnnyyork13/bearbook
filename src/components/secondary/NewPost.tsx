@@ -5,6 +5,7 @@ import Person2Icon from '@mui/icons-material/Person2';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
+import ProfilePic from "./ProfilePic";
 
 export default function NewPost(props: {url: String}) {
 
@@ -42,9 +43,7 @@ export default function NewPost(props: {url: String}) {
 
     return (
         <NewPostContainer>
-            <Img>
-                <Person2Icon />
-            </Img>
+            <ProfilePic width={"50px"} height={"50px"} hasEdit={false}/>
             <NewPostInput onChange={(e) => setText(e.target.value)} placeholder="What's on your mind?" />
             <ShareButton onClick={() => setSendPost(true)}>Share</ShareButton>
         </NewPostContainer>

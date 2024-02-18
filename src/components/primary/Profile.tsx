@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
-import Person2Icon from '@mui/icons-material/Person2';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { BlueButton, GreyButton } from "../main-styles/Inputs";
 import { PrimaryContainer } from "../main-styles/Containers";
 
@@ -13,6 +11,7 @@ import Friends from "../secondary/Friends";
 import ProfileFeed from "../secondary/ProfileFeed";
 import NewPost from "../secondary/NewPost";
 import { UserState, setVisiting } from "../../state/user/userSlice";
+import ProfilePic from "../secondary/ProfilePic";
 
 export default function Profile(props: {url: String}) {
 
@@ -62,12 +61,7 @@ export default function Profile(props: {url: String}) {
         <ProfileContainer>
             <ProfileHeader>
                 <ProfileNameAndImageContainer>
-                    <ProfileImage>
-                        <Person2Icon />
-                        <ProfileImageEditButton>
-                            <CameraAltIcon />
-                        </ProfileImageEditButton>
-                    </ProfileImage>
+                    <ProfilePic height={"150px"} width={"150px"} hasEdit={true}/>
                     <ProfileNameContainer>
                         <ProfileName>{profileData.name}</ProfileName>
                         <ProfileFriendsCount>{`${profileData.friends.length} friends`}</ProfileFriendsCount>
@@ -110,36 +104,6 @@ const ProfileNameAndImageContainer = styled.div`
     align-items: flex-end;
 `
 
-const ProfileImage = styled.div`
-    position: relative;
-    width: 150px;
-    height: 150px;
-    background-color: var(--secondary-color);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    svg {
-        width: 40%;
-        height: 40%;
-    }
-`
-const ProfileImageEditButton = styled.div`
-    height: 35px;
-    width: 35px;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    background-color: var(--border-color);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    svg {
-        width: 25px;
-        height: 25px;
-    }
-`
 
 const ProfileNameContainer = styled.div`
     margin-left: 20px;
