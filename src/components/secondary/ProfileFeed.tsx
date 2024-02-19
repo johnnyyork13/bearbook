@@ -7,11 +7,12 @@ import {AppDispatch, RootState} from '../../state/store';
 import { useEffect, useState } from "react";
 import {v4 as uuidv4} from 'uuid';
 import Post from "./Post";
+import { PostInterface, UserPostInterface } from "../../lib/interfaces";
 
 export default function ProfileFeed(props: {url: String, email: String}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
-    const [feed, setFeed] = useState([]);
+    const [postList, setPostList] = useState([]);
 
     useEffect(() => {
         try {
@@ -27,7 +28,7 @@ export default function ProfileFeed(props: {url: String, email: String}) {
                         body: JSON.stringify({email: props.email})
                     }).then((res) => res.json())
                     .then((res) => {
-                        setFeed(res.user.posts);
+                        setPostList(res.posts);
                     })
                     .catch((err) => console.log(err));
                 }
@@ -38,22 +39,13 @@ export default function ProfileFeed(props: {url: String, email: String}) {
         }
     }, [props.email])
 
-    interface PostInterface {
-        date: string,
-        email: string,
-        name: string,
-        text: string,
-        time: string,
-    }
-
-    const mappedFeed = feed.map((post: PostInterface) => {
+    const mappedFeed = postList.map((post: UserPostInterface) => {
+        console.log(post);
         return <Post 
             key={uuidv4()}
-            name={post.name}
-            date={post.date}
-            time={post.time}
-            text={post.text}
-            profile_img_link={globalUser}
+            url={props.url}
+            post_id={post._id}
+            // profile_img_link={globalUser}
         />
     })
 
