@@ -25,3 +25,7 @@ export interface PostIDInterface {
     _id: string,
 }
 
+export interface Friend {
+    name: string,
+    email: string,
+}

@@ -137,11 +137,13 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
             <PostText>
                 {post.text}
             </PostText>
-            {mappedComments.length > 2 && <CommentHeader onClick={() => setShowComments((prev) => !prev)}>{showComments ? "Hide" : "Show"} Comments</CommentHeader>}
             <CommentSection>
-                {(mappedComments.length <= 2 || showComments) && <Comments>
-                    {mappedComments}
-                </Comments>}
+                <Comments>
+                    {mappedComments.length > 0 && mappedComments[0]}
+                    {mappedComments.length > 1 && mappedComments[1]}
+                    {showComments && mappedComments.slice(2)}
+                    {mappedComments.length > 2 && <CommentHeader onClick={() => setShowComments((prev) => !prev)}>{showComments ? "Hide" : "Show"} all comments</CommentHeader>}
+                </Comments>
                 <SubmitCommentContainer>
                     <ProfilePic width={"40px"} height={"40px"} hasEdit={false} profile_img_link={globalUser.profile_img_link}/>{/* This is a placeholder for the user's profile pic */}
                     <CommentInput 

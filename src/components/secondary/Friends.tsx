@@ -3,14 +3,17 @@ import { PrimaryContainer } from "../main-styles/Containers";
 import { useEffect, useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
+import { updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "./ProfilePic";
 import {v4 as uuidv4} from 'uuid';
+import { Friend } from "../../lib/interfaces";
 
 
 export default function Friends(props: {url: String}) {
 
     const [friends, setFriends] = useState([]);
     const globalUser = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         try {
@@ -23,7 +26,7 @@ export default function Friends(props: {url: String}) {
                         headers: {
                             "Content-Type":"application/json",
                         },
-                        body: JSON.stringify({email: globalUser.email})
+                        body: JSON.stringify({email: globalUser.visiting ? globalUser.visiting : globalUser.email})
                     }).then((res) => res.json())
                     .then((res) => {
                         setFriends(res.friends);
@@ -34,16 +37,15 @@ export default function Friends(props: {url: String}) {
         } catch(err) {
             console.log(err);
         }
-    }, [])
+    }, [globalUser.visiting])
 
-    interface Friend {
-        name: string,
-        email: string,
+    function handleFriendTileClick(email: string) {
+        dispatch(updateGlobalUser({...globalUser, visiting: email}));
     }
 
     const mappedFriends = friends.map((friend: Friend) => {
         return (
-            <FriendTile key={uuidv4()}>
+            <FriendTile key={uuidv4()} onClick={() => handleFriendTileClick(friend.email)}>
                 <ProfilePic 
                     key={uuidv4()} 
                     height="70px" 
@@ -63,6 +65,7 @@ export default function Friends(props: {url: String}) {
             <FriendsGrid>
                 {mappedFriends}
             </FriendsGrid>
+            <SeeAllFriends>See all friends</SeeAllFriends>
         </FriendsContainer>
     )
 }
@@ -94,5 +97,12 @@ const FriendTile = styled.div`
 `
 
 const FriendName = styled.p`
+    
+`
 
+const SeeAllFriends = styled.p`
+    text-align: end;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
 `

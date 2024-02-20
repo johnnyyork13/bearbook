@@ -67,12 +67,11 @@ export default function Profile(props: {url: String}) {
             setProfileData(globalUser);
             setLoadProfile(true);
         }
-    }, [globalUser.visiting, loadProfile]);
+    }, [globalUser.visiting, loadProfile, addFriend]);
 
     useEffect(() => {
         if (addFriend) {
             try {
-                console.log("adding friend: myemail: ", globalUser.email, "friend: ", profileData.email);
                 const url = props.url + "/add-friend";
                 async function addFriendToUser() {
                     await fetch(url, {
@@ -89,10 +88,10 @@ export default function Profile(props: {url: String}) {
                     }).then((res) => res.json())
                     .then(() => {
                         setAddFriend(false);
-                        updateGlobalUser({
+                        dispatch(updateGlobalUser({
                             ...globalUser,
                             friends: [...globalUser.friends, profileData.email],
-                        })
+                        }))
                     })
                     .catch((err) => console.log(err));
                 }
@@ -110,7 +109,7 @@ export default function Profile(props: {url: String}) {
                     <ProfilePic height={"150px"} width={"150px"} hasEdit={true} profile_img_link=""/>
                     <ProfileNameContainer>
                         <ProfileName>{profileData.name}</ProfileName>
-                        <ProfileFriendsCount>{`${profileData.friends.length} friends`}</ProfileFriendsCount>
+                        <ProfileFriendsCount>{`${profileData.friends.length} friend${profileData.friends.length > 1 ? "s" : ""}`}</ProfileFriendsCount>
                     </ProfileNameContainer>
                 </ProfileNameAndImageContainer>
                 <ProfileHeaderButtons>

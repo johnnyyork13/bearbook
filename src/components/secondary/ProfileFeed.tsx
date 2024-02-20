@@ -57,4 +57,5 @@ export default function ProfileFeed(props: {url: String, email: String, setLoadP
 
 const ProfileFeedContainer = styled.div`
     width: 100%;
+
 `
