@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
-import { BlueButton, GreyButton } from "../main-styles/Inputs";
+import { EditButton, MainButton, SecondaryButton } from "../main-styles/Inputs";
 import { PrimaryContainer } from "../main-styles/Containers";
 
 import Bio from "../secondary/Bio";
 import Friends from "../secondary/Friends";
 import ProfileFeed from "../secondary/ProfileFeed";
 import NewPost from "../secondary/NewPost";
-import { UserState, setVisiting } from "../../state/user/userSlice";
+import { UserState, updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "../secondary/ProfilePic";
 
 export default function Profile(props: {url: String}) {
@@ -26,7 +26,11 @@ export default function Profile(props: {url: String}) {
         friends: [],
         loggedIn: false,
         visiting: "",
+        profile_img_link: "",
     });
+    const [loadProfile, setLoadProfile] = useState(false);
+    const [addFriend, setAddFriend] = useState(false);
+    const [isFriend, setIsFriend] = useState(false);
 
     useEffect(() => {
         if (!globalUser.loggedIn) {
@@ -42,10 +46,17 @@ export default function Profile(props: {url: String}) {
                         headers: {
                             "Content-Type":"application/json",
                         },
-                        body: JSON.stringify({email: globalUser.visiting})
+                        body: JSON.stringify({
+                            email: globalUser.email,
+                            visiting: globalUser.visiting
+                        })
                     }).then((res) => res.json())
                     .then((res) => {
                         setProfileData(res.user);
+                        if (res.isFriend) {
+                            setIsFriend(true);
+                        }
+                        setLoadProfile(true);
                     }).catch((err) => console.log(err));
                 }
                 getUserProfile();
@@ -54,32 +65,73 @@ export default function Profile(props: {url: String}) {
             }
         } else {
             setProfileData(globalUser);
+            setLoadProfile(true);
         }
-    }, [globalUser.visiting]);
+    }, [globalUser.visiting, loadProfile]);
+
+    useEffect(() => {
+        if (addFriend) {
+            try {
+                console.log("adding friend: myemail: ", globalUser.email, "friend: ", profileData.email);
+                const url = props.url + "/add-friend";
+                async function addFriendToUser() {
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({
+                            email: globalUser.email,
+                            name: profileData.name,
+                            friend: profileData.email,
+                        })
+                    }).then((res) => res.json())
+                    .then(() => {
+                        setAddFriend(false);
+                        updateGlobalUser({
+                            ...globalUser,
+                            friends: [...globalUser.friends, profileData.email],
+                        })
+                    })
+                    .catch((err) => console.log(err));
+                }
+                addFriendToUser();
+            } catch(err) {
+                console.log(err);
+            }
+        }
+    }, [addFriend])
 
     return (
         <ProfileContainer>
             <ProfileHeader>
                 <ProfileNameAndImageContainer>
-                    <ProfilePic height={"150px"} width={"150px"} hasEdit={true}/>
+                    <ProfilePic height={"150px"} width={"150px"} hasEdit={true} profile_img_link=""/>
                     <ProfileNameContainer>
                         <ProfileName>{profileData.name}</ProfileName>
                         <ProfileFriendsCount>{`${profileData.friends.length} friends`}</ProfileFriendsCount>
                     </ProfileNameContainer>
                 </ProfileNameAndImageContainer>
-                {!globalUser.visiting && <ProfileHeaderButtons>
-                    <FindFriendsButton>Find Friends</FindFriendsButton>
-                    {/* <EditProfileButton>Edit Profile</EditProfileButton> */}
-                </ProfileHeaderButtons>}
+                <ProfileHeaderButtons>
+                    {profileData.email === globalUser.email && <>
+                        <FindFriendsButton>Find Friends</FindFriendsButton>
+                        <EditProfileButton>Edit Profile</EditProfileButton>
+                    </>}
+                    {profileData.email !== globalUser.email && <>
+                        {!isFriend && <AddFriendButton onClick={() => setAddFriend(true)}>Add Friend</AddFriendButton>}
+                        {isFriend && <RemoveFriendButton>Remove Friend</RemoveFriendButton>}
+                    </>}
+                </ProfileHeaderButtons>
             </ProfileHeader>
             <ProfileBody>
                 <ProfileBodySidebar>
                     <Bio url={props.url}/>
-                    <Friends />
+                    <Friends url={props.url}/>
                 </ProfileBodySidebar>
                 <ProfileMainFeedContainer>
-                    {!globalUser.visiting && <NewPost url={props.url}/>}
-                    <ProfileFeed url={props.url} email={profileData.email}/>
+                    {!globalUser.visiting && <NewPost url={props.url} setLoadProfile={setLoadProfile} />}
+                    {loadProfile && <ProfileFeed url={props.url} email={profileData.email} setLoadProfile={setLoadProfile} />}
                 </ProfileMainFeedContainer>
             </ProfileBody>
         </ProfileContainer>
@@ -123,11 +175,19 @@ const ProfileHeaderButtons = styled.div`
 
 `
 
-const FindFriendsButton = styled(BlueButton)`
+const FindFriendsButton = styled(MainButton)`
     margin-right: 10px;
 `
 
-const EditProfileButton = styled(GreyButton)`
+const EditProfileButton = styled(EditButton)`
+
+`
+
+const AddFriendButton = styled(MainButton)`
+
+`
+
+const RemoveFriendButton = styled(SecondaryButton)`
 
 `
 
@@ -140,6 +200,7 @@ const ProfileBody = styled.div`
 const ProfileBodySidebar = styled.div`
     width: 30%;
     margin-left: 150px;
+    margin-right: 20px;
 `
 
 const ProfileMainFeedContainer = styled.div`

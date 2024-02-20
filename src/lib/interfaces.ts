@@ -17,6 +17,10 @@ export interface CommentInterface {
     profile_img_link: string;
 }
 
+export interface CommentArray {
+    comments: [];
+}
+
 export interface PostIDInterface {
     _id: string,
 }

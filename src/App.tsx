@@ -43,4 +43,5 @@ justify-content: center;`}
 
 height: 100%;
 background-color: var(--secondary-color);
+padding-bottom: 50px;
 `

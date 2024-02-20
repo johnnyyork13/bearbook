@@ -11,16 +11,16 @@ const Button = styled.button`
     padding-bottom: 5px;
 `
 
-export const BlueButton = styled(Button)`
-    background-color: var(--primary-blue);
+export const MainButton = styled(Button)`
+    background-color: var(--primary-orange);
 `
 
-export const GreenButton = styled(Button)`
-    background-color: var(--primary-green);
+export const SecondaryButton = styled(Button)`
+    background-color: var(--primary-black);
 `
-export const GreyButton = styled(Button)`
-    background-color: var(--primary-grey);
-    color: black;
+export const EditButton = styled(Button)`
+    background-color: var(--secondary-black);
+    color: white;
 `
 
 export const MainInput = styled.input`

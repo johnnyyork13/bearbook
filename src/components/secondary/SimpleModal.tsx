@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers"
-import { BlueButton } from "../main-styles/Inputs"
+import { MainButton } from "../main-styles/Inputs"
 
 export default function SimpleModal(props: {mainText: String, buttonText: String, buttonFunc: React.MouseEventHandler<HTMLButtonElement>}) {
 
@@ -26,6 +26,6 @@ const ModalMainText = styled.p`
     margin-bottom: 40px;
 `
 
-const ModalButton = styled(BlueButton)`
+const ModalButton = styled(MainButton)`
 
 `

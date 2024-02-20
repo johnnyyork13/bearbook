@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
 import { EditHeader } from "../main-styles/Text";
-import { BlueButton, ExitButton, MainInput } from "../main-styles/Inputs";
+import { ExitButton, MainButton, MainInput } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function EditBio(props: {setShowEditBio: React.MouseEventHandler<HTMLButtonElement>}) {
@@ -15,7 +15,7 @@ export default function EditBio(props: {setShowEditBio: React.MouseEventHandler<
                     <ExitButton onClick={props.setShowEditBio}><CloseIcon /></ExitButton>
                 </BioHeaderContainer>
                 <EditInput placeholder="Tell us about yourself." />
-                <BlueButton>Update</BlueButton>
+                <MainButton>Update</MainButton>
             </BioContainer>
         </OpacityBackground>
     )

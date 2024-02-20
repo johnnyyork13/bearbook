@@ -7,7 +7,7 @@ import {NavLink, useNavigate} from "react-router-dom"
 
 import Signup from './Signup';
 import { PrimaryContainer } from "../main-styles/Containers";
-import { MainInput, Error, GreenButton, BlueButton } from '../main-styles/Inputs';
+import { MainInput, Error, MainButton, SecondaryButton } from '../main-styles/Inputs';
 import { Logo } from '../main-styles/Logo';
 
 export default function Login(props: {url: string}) {
@@ -86,7 +86,7 @@ export default function Login(props: {url: string}) {
 
     return (
         <MainContainer>
-            <HistoryLogo>MyFace</HistoryLogo>
+            <HistoryLogo>BearBook</HistoryLogo>
             <FormContainer>
                 <LoginForm onSubmit={(e) => e.preventDefault()}>
                     {error && <Error>Please enter a valid email and password.</Error>}
@@ -131,7 +131,7 @@ const Input = styled(MainInput)`
     margin-bottom: 10px;
 `
 
-const LoginButton = styled(BlueButton)`
+const LoginButton = styled(MainButton)`
     font-size: 1.4rem;
 `
 
@@ -147,7 +147,7 @@ const LineBreak = styled.hr`
     margin-bottom: 20px;
 `
 
-const SignupButton = styled(GreenButton)`
+const SignupButton = styled(SecondaryButton)`
     margin-left: 50px;
     margin-right: 50px;
     font-size: 1.2rem;

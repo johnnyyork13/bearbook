@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
-import { BlueButton, MainInput } from "../main-styles/Inputs";
+import { MainButton, MainInput } from "../main-styles/Inputs";
 import Person2Icon from '@mui/icons-material/Person2';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import ProfilePic from "./ProfilePic";
 
-export default function NewPost(props: {url: String}) {
+export default function NewPost(props: {url: String, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
 
@@ -31,7 +31,10 @@ export default function NewPost(props: {url: String}) {
                             text: text,
                         })
                     }).then((res) => res.json())
-                    .then(() => setSendPost(false))
+                    .then(() => {
+                        setSendPost(false)
+                        props.setLoadProfile(false);
+                    })
                     .catch((err) => console.log(err));
                 }
                 addPostToUser();
@@ -43,7 +46,7 @@ export default function NewPost(props: {url: String}) {
 
     return (
         <NewPostContainer>
-            <ProfilePic width={"50px"} height={"50px"} hasEdit={false}/>
+            <ProfilePic width={"50px"} height={"50px"} hasEdit={false} profile_img_link=""/>
             <NewPostInput onChange={(e) => setText(e.target.value)} placeholder="What's on your mind?" />
             <ShareButton onClick={() => setSendPost(true)}>Share</ShareButton>
         </NewPostContainer>
@@ -78,6 +81,6 @@ const NewPostInput = styled(MainInput)`
     padding-right: 10px;
 `
 
-const ShareButton = styled(BlueButton)`
+const ShareButton = styled(MainButton)`
     height: 35px;
 `

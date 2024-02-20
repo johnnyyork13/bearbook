@@ -31,6 +31,7 @@ const ProfilePicContainer = styled.div<{$width: string, $height: string, $img: s
         width: 40%;
         height: 40%;
     }
+    z-index: 0;
 `
 
 const ProfilePicEditButton = styled.div`

@@ -5,7 +5,7 @@ export interface UserState {
     firstName: string,
     lastName: string,
     name: string,
-    friends: [],
+    friends: string[],
     loggedIn: boolean,
     visiting: string,
     profile_img_link: string,
@@ -30,12 +30,12 @@ const userSlice = createSlice({
         setGlobalUser: (state, action: PayloadAction<UserState>) => { //can also take action. I.E. (state, action)
             return state = {...action.payload, loggedIn: true};
         },
-        setVisiting: (state, action: PayloadAction<UserState>) => {
+        updateGlobalUser: (state, action: PayloadAction<UserState>) => {
             return state = {...action.payload}
-        }
+        },
     },
 });
 
-export const {setGlobalUser, setVisiting} = userSlice.actions;
+export const {setGlobalUser, updateGlobalUser} = userSlice.actions;
 
 export default userSlice.reducer;

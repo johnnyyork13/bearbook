@@ -4,12 +4,14 @@ import {v4 as uuidv4} from 'uuid';
 import { PrimaryContainer } from "../main-styles/Containers";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
-import { CommentInterface, PostInterface, UserPostInterface } from "../../lib/interfaces";
-import { BlueButton } from "../main-styles/Inputs";
+import { CommentInterface, PostInterface } from "../../lib/interfaces";
+import { MainButton } from "../main-styles/Inputs";
 import { useEffect, useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
 import Comment from "./Comment";
+import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
 
-export default function Post(props: {url: String, post_id: string}) {
+export default function Post(props: {url: String, post_id: string, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
     const [post, setPost] = useState({
@@ -21,13 +23,15 @@ export default function Post(props: {url: String, post_id: string}) {
         profile_img_link: "",
         comments: [],
     });
-    const [mappedComments, setMappedComments] = useState([]);
+    const [mappedComments, setMappedComments] = useState<any[]>([]);
     const [comment, setComment] = useState("");
     const [sendComment, setSendComment] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deletePost, setDeletePost] = useState(false);
 
     function addMappedComments(comments: CommentInterface[]) {
-        return comments.map((comment) => {
+        return comments.map((comment: CommentInterface) => {
             return <Comment 
                 key={uuidv4()}
                 url={props.url}
@@ -77,6 +81,27 @@ export default function Post(props: {url: String, post_id: string}) {
         }
     }, [sendComment])
 
+    useEffect(() => {
+        if (deletePost) {
+            const url = props.url + "/delete-post";
+            async function deletePost() {
+                await fetch(url, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type":"application/json",
+                    },
+                    body: JSON.stringify({post_id: post._id})
+                }).then((res) => res.json())
+                .then(() => {
+                    setDeletePost(false);
+                    props.setLoadProfile(false);
+                }).catch((err) => console.log(err));
+            }
+            deletePost();
+        }
+    }, [deletePost])
+
 
 
     function handleCommentChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -87,14 +112,27 @@ export default function Post(props: {url: String, post_id: string}) {
         setSendComment(true);
     }
 
+    function handleDeletePost() {
+        setShowDeleteModal(true);
+    }
+
     return (
         <PostContainer>
+            {showDeleteModal && 
+                <DeleteConfirmModal
+                    mainText="Are you sure you want to delete this post?"
+                    buttonText="Confirm"
+                    buttonFunc={() => {setDeletePost(true); setShowDeleteModal(false)}}
+                    closeFunc={() => setShowDeleteModal(false)}
+                />
+            }
             <PostHeader>
                 <ProfilePic width={"50px"} height={"50px"} hasEdit={false} profile_img_link={post.profile_img_link}/>
                 <PostInfo>
                     <Name>{post.name}</Name>
                     <PostDate>{post.date}</PostDate>
                 </PostInfo>
+                <DeletePost onClick={handleDeletePost}><CloseIcon /></DeletePost>
             </PostHeader>
             <PostText>
                 {post.text}
@@ -119,6 +157,7 @@ export default function Post(props: {url: String, post_id: string}) {
 }
 
 const PostContainer = styled(PrimaryContainer)`
+    width: 100%;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
@@ -127,6 +166,16 @@ const PostContainer = styled(PrimaryContainer)`
 const PostHeader = styled.div`
     display: flex;
     margin-bottom: 15px;
+    &:hover button {
+        visibility: visible;
+    }
+`
+
+const DeletePost = styled.button`
+    margin-left: auto;
+    background-color: var(--primary-color);
+    border: none;
+    visibility: hidden;
 `
 
 const PostInfo = styled.div`
@@ -163,6 +212,7 @@ const CommentHeader = styled.p`
     margin-top: 10px;
     font-weight: bold;
     text-decoration: underline;
+    cursor: pointer;
 `
 
 const SubmitCommentContainer = styled.div`
@@ -172,7 +222,7 @@ const SubmitCommentContainer = styled.div`
 `
 
 const CommentInput = styled.input`
-    width: 60%;
+    width: 90%;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--border-color);
@@ -181,6 +231,6 @@ const CommentInput = styled.input`
     background-color: var(--secondary-color);
 `
 
-const CommentButton = styled(BlueButton)`
+const CommentButton = styled(MainButton)`
 
 `

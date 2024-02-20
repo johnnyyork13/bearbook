@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
-import { BlueButton, ExitButton, MainInput } from "../main-styles/Inputs";
+import { ExitButton, MainButton, MainInput } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
 import { EditHeader } from "../main-styles/Text";
 
@@ -19,7 +19,7 @@ export default function EditAddress(props: {setShowEditAddress: React.MouseEvent
                     <EditInput placeholder="City" />
                     <EditInput placeholder="State" />
                 </EditInputContainer>
-                <BlueButton>Update</BlueButton>
+                <MainButton>Update</MainButton>
             </EditAddressContainer>
         </OpacityBackground>
     )

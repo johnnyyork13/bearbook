@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import {useEffect, useState} from 'react';
 import { PrimaryContainer } from "../main-styles/Containers"
-import { GreyButton } from "../main-styles/Inputs";
+import { EditButton } from "../main-styles/Inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import EditAddress from "./EditAddress";
@@ -65,7 +65,7 @@ const BioHeader = styled.p`
     margin-bottom: 20px;
 `
 
-const BioButton = styled(GreyButton)`
+const BioButton = styled(EditButton)`
     margin-bottom: 15px;
     height: 40px;
 `

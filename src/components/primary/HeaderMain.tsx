@@ -11,7 +11,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchResult from '../secondary/SearchResult';
 import {v4 as uuidv4} from 'uuid';
-import { setVisiting } from '../../state/user/userSlice';
+import { updateGlobalUser } from '../../state/user/userSlice';
 
 export default function HeaderMain(props: {url: string}) {
 
@@ -67,7 +67,7 @@ export default function HeaderMain(props: {url: string}) {
 
     useEffect(() => {
         if (selectedName.selected) {
-            dispatch(setVisiting({
+            dispatch(updateGlobalUser({
                 ...globalUser,
                 visiting: selectedName.email,
             }))
@@ -94,10 +94,10 @@ export default function HeaderMain(props: {url: string}) {
     return (
         <Header>
             <SearchContainer>
-                <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>MyFace</HeaderLogo></NavLink>
+                <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>BearBook</HeaderLogo></NavLink>
                 <SearchBarContainer>
                     <SearchIcon />
-                    <Searchbar onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for Friends"/>
+                    <Searchbar onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>
                 </SearchBarContainer>
                 
                 {query.length > 0 && focused && <SearchResultsContainer>
@@ -107,7 +107,7 @@ export default function HeaderMain(props: {url: string}) {
             <LinkContainer>
                 <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link><NavLink to=""><IconContainer><MessageIcon /></IconContainer></NavLink></Link>
-                <Link onClick={() => dispatch(setVisiting({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
+                <Link onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
         </Header>
@@ -120,6 +120,7 @@ const Header = styled(PrimaryContainer)`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--primary-orange);
 `
 
 const HeaderLogo = styled(Logo)`

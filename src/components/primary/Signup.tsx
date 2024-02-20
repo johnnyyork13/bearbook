@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 import CloseIcon from '@mui/icons-material/Close';
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
-import { GreenButton, MainInput, Error, ExitButton } from "../main-styles/Inputs";
+import { MainInput, Error, ExitButton, SecondaryButton } from "../main-styles/Inputs";
 import SimpleModal from "../secondary/SimpleModal";
 
 export default function Signup(props: {url: string, setOpenSignup: Function}) {
@@ -185,7 +185,7 @@ const Input = styled(MainInput)`
     background-color: var(--input-background-grey);
 `
 
-const SignupButton = styled(GreenButton)`
+const SignupButton = styled(SecondaryButton)`
     margin-left: 50px;
     margin-right: 50px;
     margin-top: 20px;
