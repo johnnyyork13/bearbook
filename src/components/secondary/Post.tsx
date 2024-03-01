@@ -14,8 +14,9 @@ import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
 export default function Post(props: {url: String, post_id: string, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
-    const [post, setPost] = useState({
+    const [post, setPost] = useState<PostInterface>({
         _id: "",
+        email: "",
         name: "",
         date: "",
         time: "",
@@ -132,7 +133,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                     <Name>{post.name}</Name>
                     <PostDate>{post.date}</PostDate>
                 </PostInfo>
-                <DeletePost onClick={handleDeletePost}><CloseIcon /></DeletePost>
+                {globalUser.email === post.email && <DeletePost onClick={handleDeletePost}><CloseIcon /></DeletePost>}
             </PostHeader>
             <PostText>
                 {post.text}
@@ -159,7 +160,6 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
 }
 
 const PostContainer = styled(PrimaryContainer)`
-    width: 100%;
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;

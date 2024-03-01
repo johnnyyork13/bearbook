@@ -86,7 +86,7 @@ export default function Login(props: {url: string}) {
 
     return (
         <MainContainer>
-            <HistoryLogo>BearBook</HistoryLogo>
+            <HistoryLogo>MyBear</HistoryLogo>
             <FormContainer>
                 <LoginForm onSubmit={(e) => e.preventDefault()}>
                     {error && <Error>Please enter a valid email and password.</Error>}

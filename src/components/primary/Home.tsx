@@ -7,8 +7,9 @@ import styled from "styled-components";
 import Contacts from "../secondary/Contacts";
 import Feed from "../secondary/Feed";
 import Sidebar from "../secondary/Sidebar";
+import { PropaneSharp } from "@mui/icons-material";
 
-export default function Home() {
+export default function Home(props: {url: String}) {
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
@@ -21,7 +22,7 @@ export default function Home() {
     return (
         <HomeContainer>
             <Sidebar />
-            <Feed />
+            <Feed url={props.url}/>
             <Contacts />
         </HomeContainer>
     )

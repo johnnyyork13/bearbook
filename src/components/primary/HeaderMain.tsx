@@ -12,17 +12,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import SearchResult from '../secondary/SearchResult';
 import {v4 as uuidv4} from 'uuid';
 import { updateGlobalUser } from '../../state/user/userSlice';
+import Messages from './Messages';
+import ChatWindow from './ChatWindow';
 
 export default function HeaderMain(props: {url: string}) {
-
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
+    const [showMessages, setShowMessages] = useState(false);
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
     const [selectedName, setSelectedName] = useState({
         selected: false,
+        email: "",
+    });
+    const [chatWindow, setChatWindow] = useState({
+        show: false,
         email: "",
     });
 
@@ -45,7 +51,6 @@ export default function HeaderMain(props: {url: string}) {
         try {
             if (query.length > 0) {
                 async function getSearchResults() {
-                    console.log('searching');
                     const url = props.url + "/search";
                     await fetch(url, {
                         method: "POST",
@@ -94,7 +99,7 @@ export default function HeaderMain(props: {url: string}) {
     return (
         <Header>
             <SearchContainer>
-                <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>BearBook</HeaderLogo></NavLink>
+                <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>MyBear</HeaderLogo></NavLink>
                 <SearchBarContainer>
                     <SearchIcon />
                     <Searchbar onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>
@@ -106,10 +111,12 @@ export default function HeaderMain(props: {url: string}) {
             </SearchContainer>
             <LinkContainer>
                 <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
-                <Link><NavLink to=""><IconContainer><MessageIcon /></IconContainer></NavLink></Link>
+                <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
                 <Link onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
+            {showMessages && <Messages url={props.url} setChatWindow={setChatWindow}/>}
+            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email}/>}
         </Header>
     )
 }
@@ -121,6 +128,7 @@ const Header = styled(PrimaryContainer)`
     justify-content: space-between;
     align-items: center;
     background-color: var(--primary-orange);
+    position: relative;
 `
 
 const HeaderLogo = styled(Logo)`

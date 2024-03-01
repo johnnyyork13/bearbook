@@ -1,5 +1,6 @@
 export interface PostInterface {
     _id: string;
+    email: string;
     name: string;
     date: string;
     time: string;
@@ -29,3 +30,10 @@ export interface Friend {
     name: string,
     email: string,
 }
+
+// export interface ChatWindowInterface {
+//     chat_id: string,
+//     name: string,
+//     email: string,
+    
+// }
