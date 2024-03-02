@@ -8,19 +8,18 @@ import {v4 as uuidv4} from 'uuid';
 import { ExitButton } from "../main-styles/Inputs";
 import SendIcon from '@mui/icons-material/Send';
 
-export default function ChatWindow(props: {url: string, email: string, setChatWindow: Function}) {
+export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function}) {
 
     const messagesEndRef = useRef(null);
     const globalUser = useSelector((state: RootState) => state.user);
 
-    const [chatHistory, setChatHistory] = useState({
+    const [chat, setChat] = useState({
         _id: "",
-        name: "",
-        email: "",
         messages: [],
     })
     const [message, setMessage] = useState("");
     const [sendMessage, setSendMessage] = useState(false);
+    const [requestSent, setRequestSent] = useState(false);
 
     const SOCKET_URL = "http://localhost:3001";
     const socket = io(SOCKET_URL);
@@ -31,38 +30,39 @@ export default function ChatWindow(props: {url: string, email: string, setChatWi
     }
 
     useEffect(() => {
-        socket.emit("get-chat-history", {
-            userEmail: globalUser.email,
-            contactEmail: props.email,
-        })
-        socket.on("receive-chat-history", (res) => {
-            console.log("Chat History", res);
-            setChatHistory(res);
-        })
+        if (!requestSent) {
+            socket.emit("get-chat-history", {
+                userEmail: globalUser.email,
+                contactEmail: props.email,
+            })
+            socket.on("receive-chat-history", (res) => {
+                setChat(res);
+            })
+            setRequestSent(true);
+        }
     }, [])
 
     useEffect(() => {
         scrollToBottom();
-    }, [chatHistory])
+    }, [chat])
 
     useEffect(() => {
         if (sendMessage) {
+            console.log("sending message", chat)
             socket.emit('send-message', {
                 name: globalUser.name,
-                chat_id: chatHistory._id,
+                chat_id: chat._id,
                 email: globalUser.email,
                 message: message
             });
             socket.on("receive-message", (res) => {
-                console.log('receiving message', res);
-                setChatHistory(res);
+                setChat(res);
             })
             setSendMessage(false);
         }
     }, [sendMessage]);
 
-
-    const mappedMessages = chatHistory && chatHistory.messages.map((message: any) => {
+    const mappedMessages = chat && chat.messages.map((message: any) => {
         return message.email === globalUser.email ?
         <MessageContainerRight key={uuidv4()}>
             <MessageBubbleName>{message.name}</MessageBubbleName>
@@ -78,13 +78,12 @@ export default function ChatWindow(props: {url: string, email: string, setChatWi
         </MessageContainer> 
     })
 
-    console.log('rerender fired');
     return (
         <>
-            {chatHistory && <ChatWindowContainer>
+            {chat && <ChatWindowContainer>
                 <ChatWindowHeader>
                     <ChatWindowHeaderTitle>
-                        {chatHistory.name}
+                        {props.contactName}
                         <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}>X</ExitButton>
                     </ChatWindowHeaderTitle>
                 </ChatWindowHeader>

@@ -30,6 +30,7 @@ export default function HeaderMain(props: {url: string}) {
     const [chatWindow, setChatWindow] = useState({
         show: false,
         email: "",
+        name: "",
     });
 
     const [focused, setFocused] = useState(false)
@@ -116,7 +117,7 @@ export default function HeaderMain(props: {url: string}) {
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={setChatWindow}/>}
-            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email} setChatWindow={setChatWindow}/>}
+            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email} contactName={chatWindow.name} setChatWindow={setChatWindow}/>}
         </Header>
     )
 }
