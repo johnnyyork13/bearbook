@@ -31,7 +31,7 @@ export interface Friend {
     email: string,
 }
 
-// export interface ChatWindowInterface {
+// export interface ChatWindowContextInterface {
 //     chat_id: string,
 //     name: string,
 //     email: string,

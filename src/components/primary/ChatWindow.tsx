@@ -3,13 +3,17 @@ import { PrimaryContainer } from "../main-styles/Containers";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {v4 as uuidv4} from 'uuid';
+import { ExitButton } from "../main-styles/Inputs";
+import SendIcon from '@mui/icons-material/Send';
 
-export default function ChatWindow(props: {url: string, email: string}) {
+export default function ChatWindow(props: {url: string, email: string, setChatWindow: Function}) {
 
+    const messagesEndRef = useRef(null);
     const globalUser = useSelector((state: RootState) => state.user);
 
-    const [context, setContext] = useState({
+    const [chatHistory, setChatHistory] = useState({
         _id: "",
         name: "",
         email: "",
@@ -21,57 +25,90 @@ export default function ChatWindow(props: {url: string, email: string}) {
     const SOCKET_URL = "http://localhost:3001";
     const socket = io(SOCKET_URL);
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    
+    }
+
     useEffect(() => {
-        socket.emit('get-context', {globalEmail: globalUser.email, contactEmail: props.email});
-        socket.on('context', (context) => {
-            console.log('getting context');
-            setContext(context);
+        socket.emit("get-chat-history", {
+            userEmail: globalUser.email,
+            contactEmail: props.email,
+        })
+        socket.on("receive-chat-history", (res) => {
+            console.log("Chat History", res);
+            setChatHistory(res);
         })
     }, [])
 
     useEffect(() => {
+        scrollToBottom();
+    }, [chatHistory])
+
+    useEffect(() => {
         if (sendMessage) {
-            console.log('sending message', context._id);
             socket.emit('send-message', {
                 name: globalUser.name,
-                chat_id: context._id,
-                globalEmail: globalUser.email, 
-                contactEmail: props.email, 
+                chat_id: chatHistory._id,
+                email: globalUser.email,
                 message: message
             });
+            socket.on("receive-message", (res) => {
+                console.log('receiving message', res);
+                setChatHistory(res);
+            })
             setSendMessage(false);
         }
     }, [sendMessage]);
 
 
-    console.log(context);
+    const mappedMessages = chatHistory && chatHistory.messages.map((message: any) => {
+        return message.email === globalUser.email ?
+        <MessageContainerRight key={uuidv4()}>
+            <MessageBubbleName>{message.name}</MessageBubbleName>
+            <MessageBubble>
+                <MessageBubbleBody>{message.message}</MessageBubbleBody>
+            </MessageBubble>
+        </MessageContainerRight> : 
+        <MessageContainer key={uuidv4()}>
+            <MessageBubbleName>{message.name}</MessageBubbleName>
+            <MessageBubble>
+                <MessageBubbleBody>{message.message}</MessageBubbleBody>
+            </MessageBubble>
+        </MessageContainer> 
+    })
 
+    console.log('rerender fired');
     return (
-        <ChatWindowContainer>
-            <ChatWindowHeader>
-                <ChatWindowHeaderTitle>Chat</ChatWindowHeaderTitle>
-            </ChatWindowHeader>
-            <ChatWindowBody>
-                <ChatWindowBodyContent>
-                    <ChatWindowBodyContentMessage>
-                        <p>Message</p>
-                    </ChatWindowBodyContentMessage>
-                </ChatWindowBodyContent>
-            </ChatWindowBody>
-            <ChatWindowFooter>
-                <ChatWindowFooterInput>
-                    <input 
+        <>
+            {chatHistory && <ChatWindowContainer>
+                <ChatWindowHeader>
+                    <ChatWindowHeaderTitle>
+                        {chatHistory.name}
+                        <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}>X</ExitButton>
+                    </ChatWindowHeaderTitle>
+                </ChatWindowHeader>
+                <ChatWindowBody>
+                    <ChatWindowBodyContent>
+                        <ChatWindowBodyContentMessage>
+                            {mappedMessages}
+                            <div ref={messagesEndRef}></div>
+                        </ChatWindowBodyContentMessage>
+                    </ChatWindowBodyContent>
+                </ChatWindowBody>
+                <ChatWindowFooter>
+                    <ChatWindowFooterInput
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         type="text" 
                         placeholder="Type a message" 
                     />
-                </ChatWindowFooterInput>
-                <ChatWindowFooterButton>
-                    <button onClick={() => setSendMessage(true)}>Send</button>
-                </ChatWindowFooterButton>
-            </ChatWindowFooter>
-        </ChatWindowContainer>
+                    <ChatWindowFooterButton onClick={() => setSendMessage(true)}>
+                        <SendIcon />
+                    </ChatWindowFooterButton>
+                </ChatWindowFooter>
+            </ChatWindowContainer>}
+        </>
     )
 }
 
@@ -81,39 +118,95 @@ const ChatWindowContainer = styled(PrimaryContainer)`
     right: 20px;
     display: flex;
     flex-direction: column;
+    padding: 0px;
+    width: 250px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 `
 const ChatWindowHeader = styled.div`
-
+    border-bottom: 2px solid var(--border-color);
+    padding: 10px;
 `
 
 const ChatWindowHeaderTitle = styled.h1`
-
+    font-size: 1.2rem;
+    font-weight: bolder;
+    display: flex;
+    justify-content: space-between;
 `
 
 const ChatWindowBody = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 10px;
 `
 
 const ChatWindowBodyContent = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-bottom: 10px;
 `
 
 const ChatWindowBodyContentMessage = styled.div`
 
 `
 
-const ChatWindowFooter = styled.div`
+const MessageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+`
+
+const MessageContainerRight = styled(MessageContainer)`
+    text-align: right;
+    div {
+        background-color: var(--primary-orange);
+        color: white;
+        align-self: flex-end;
+    }
+`
+
+const MessageBubble = styled.div`
+    border-radius: 15px;
+    background-color: var(--primary-grey);
+    padding: 10px;
+    width: fit-content;
+`
+
+const MessageBubbleName = styled.p`
+    margin: 10px;
+    margin-bottom: 4px;
+    margin-top: 0px;
+    font-size: 0.8rem;
+`
+
+const MessageBubbleBody = styled.p`
 
 `
 
-const ChatWindowFooterInput = styled.div`
 
+const ChatWindowFooter = styled.div`
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const ChatWindowFooterInput = styled.input`
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    height: 25px;
+    width: 100%;
+    margin-right: 10px;
+    padding-left: 5px;
 `
 
 const ChatWindowFooterButton = styled.div`
-
+    color: var(--primary-orange);
+    
 `

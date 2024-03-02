@@ -116,7 +116,7 @@ export default function HeaderMain(props: {url: string}) {
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={setChatWindow}/>}
-            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email}/>}
+            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email} setChatWindow={setChatWindow}/>}
         </Header>
     )
 }
