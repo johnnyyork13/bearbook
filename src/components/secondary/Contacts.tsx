@@ -1,16 +1,87 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { SecondaryContainer } from '../main-styles/Containers';
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from '../../state/store';
+import ProfilePic from './ProfilePic';
+import {v4 as uuidv4} from 'uuid';
 
-export default function Contacts(props) {
+export default function Contacts(props: {url: String, setChatWindow: Function}) {
+
+    const [contacts, setContacts] = useState([]);
+
+    const globalUser = useSelector((state: RootState) => state.user);
+
+    useEffect(() => {
+        try {
+            async function getContacts() {
+                const url = props.url + "/get-contacts";
+                await fetch(url, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type":"application/json",
+                    },
+                    body: JSON.stringify({email: globalUser.email})
+                }).then((res) => res.json())
+                .then((res) => {
+                    setContacts(res.contacts);
+                }).catch((err) => console.log(err));
+            }
+            getContacts();
+        } catch(err) {
+            console.log(err);
+        }
+    }, [])
+
+    function handleContactClick(email: string, name: string) {
+        props.setChatWindow({
+            show: true,
+            name: name,
+            email: email,
+        })
+    }
+
+    const mappedContacts = contacts.map((contact: {email: string, name: string}) => {
+        return (
+            <Contact key={uuidv4()} onClick={() => handleContactClick(contact.email, contact.name)}>
+                <ProfilePic height={"50px"} width={"50px"} hasEdit={false} profile_img_link=''/>
+                <ContactName>{contact.name}</ContactName>
+            </Contact>
+        )
+    })
 
     return (
         <ContactsContainer>
-            Contacts
+            <ContactsHeader>Contacts</ContactsHeader>
+            {mappedContacts}
         </ContactsContainer>
     )
 }
 
 const ContactsContainer = styled(SecondaryContainer)`
     background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+`
+
+const ContactsHeader = styled.p`
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+`
+
+const Contact = styled.div`
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: var(--hover-background);
+    }
+`
+
+const ContactName = styled.p`
+    font-weight: bold;
+    margin-left: 10px;
 `

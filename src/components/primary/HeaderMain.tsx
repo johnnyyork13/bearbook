@@ -15,7 +15,7 @@ import { updateGlobalUser } from '../../state/user/userSlice';
 import Messages from './Messages';
 import ChatWindow from './ChatWindow';
 
-export default function HeaderMain(props: {url: string}) {
+export default function HeaderMain(props: {url: string, chatWindow: {show: boolean, email: string, name: string}, setChatWindow: Function}) {
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
@@ -26,11 +26,6 @@ export default function HeaderMain(props: {url: string}) {
     const [selectedName, setSelectedName] = useState({
         selected: false,
         email: "",
-    });
-    const [chatWindow, setChatWindow] = useState({
-        show: false,
-        email: "",
-        name: "",
     });
 
     const [focused, setFocused] = useState(false)
@@ -78,6 +73,7 @@ export default function HeaderMain(props: {url: string}) {
                 visiting: selectedName.email,
             }))
             navigate('/profile');
+            setQuery("");
         }
     }, [selectedName])
 
@@ -103,7 +99,7 @@ export default function HeaderMain(props: {url: string}) {
                 <NavLink style={{textDecoration: "none"}} to="/home"><HeaderLogo>MyBear</HeaderLogo></NavLink>
                 <SearchBarContainer>
                     <SearchIcon />
-                    <Searchbar onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>
+                    <Searchbar value={query} onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>
                 </SearchBarContainer>
                 
                 {query.length > 0 && focused && <SearchResultsContainer>
@@ -116,8 +112,8 @@ export default function HeaderMain(props: {url: string}) {
                 <Link onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
                 <NavLink to="/logout">Logout</NavLink>
             </LinkContainer>
-            {showMessages && <Messages url={props.url} setChatWindow={setChatWindow}/>}
-            {chatWindow.show && <ChatWindow url={props.url} email={chatWindow.email} contactName={chatWindow.name} setChatWindow={setChatWindow}/>}
+            {showMessages && <Messages url={props.url} setChatWindow={props.setChatWindow} setShowMessages={setShowMessages}/>}
+            {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
         </Header>
     )
 }
@@ -194,6 +190,10 @@ const Link = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    &:hover {
+        background-color: var(--);
+    }
 `
 
 const IconContainer = styled.div`

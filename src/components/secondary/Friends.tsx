@@ -97,7 +97,8 @@ const FriendTile = styled.div`
 `
 
 const FriendName = styled.p`
-    
+    text-align: center;
+    margin-top: 5px;
 `
 
 const SeeAllFriends = styled.p`

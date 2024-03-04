@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import {v4 as uuidv4} from 'uuid';
 import { ExitButton } from "../main-styles/Inputs";
 import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function}) {
 
@@ -48,7 +49,6 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
 
     useEffect(() => {
         if (sendMessage) {
-            console.log("sending message", chat)
             socket.emit('send-message', {
                 name: globalUser.name,
                 chat_id: chat._id,
@@ -59,6 +59,7 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
                 setChat(res);
             })
             setSendMessage(false);
+            setMessage("");
         }
     }, [sendMessage]);
 
@@ -84,7 +85,7 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
                 <ChatWindowHeader>
                     <ChatWindowHeaderTitle>
                         {props.contactName}
-                        <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}>X</ExitButton>
+                        <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}><CloseIcon /></ExitButton>
                     </ChatWindowHeaderTitle>
                 </ChatWindowHeader>
                 <ChatWindowBody>

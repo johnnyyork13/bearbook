@@ -10,10 +10,14 @@ import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import Comment from "./Comment";
 import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
+import { updateGlobalUser } from "../../state/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Post(props: {url: String, post_id: string, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const [post, setPost] = useState<PostInterface>({
         _id: "",
         email: "",
@@ -37,6 +41,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                 key={uuidv4()}
                 url={props.url}
                 comment={comment}
+                handlePostNameClick={handlePostNameClick}
             />
         })
     } 
@@ -73,6 +78,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                     }).then((res) => res.json())
                     .then(() => {
                         setSendComment(false);
+                        setComment("");
                     }).catch((err) => console.log(err));
                 }
                 addComment();
@@ -117,6 +123,14 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
         setShowDeleteModal(true);
     }
 
+    function handlePostNameClick(email: string) {
+        dispatch(updateGlobalUser({
+            ...globalUser,
+            visiting: email,
+        }))
+        navigate('/profile');
+    }
+
     return (
         <PostContainer>
             {showDeleteModal && 
@@ -130,7 +144,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
             <PostHeader>
                 <ProfilePic width={"50px"} height={"50px"} hasEdit={false} profile_img_link={post.profile_img_link}/>
                 <PostInfo>
-                    <Name>{post.name}</Name>
+                    <Name onClick={() => handlePostNameClick(post.email)}>{post.name}</Name>
                     <PostDate>{post.date}</PostDate>
                 </PostInfo>
                 {globalUser.email === post.email && <DeletePost onClick={handleDeletePost}><CloseIcon /></DeletePost>}
@@ -187,6 +201,10 @@ const PostInfo = styled.div`
 const Name = styled.p`
     font-weight: bold;
     margin-bottom: 5px;
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
 `
 
 const PostDate = styled.p`

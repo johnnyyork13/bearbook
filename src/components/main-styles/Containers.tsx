@@ -22,5 +22,5 @@ export const OpacityBackground = styled.div`
     justify-content: center;
     align-items: center;
     background-color: var(--opacity-background);
-    z-index: 1;
+    z-index: 3;
 `

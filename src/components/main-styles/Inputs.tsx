@@ -9,6 +9,7 @@ const Button = styled.button`
     padding: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
+    cursor: pointer;
 `
 
 export const MainButton = styled(Button)`
@@ -35,6 +36,7 @@ export const ExitButton = styled.button`
     color: var(--primary-blue);
     border: none;
     background-color: var(--primary-color);
+    cursor: pointer;
 `
 
 export const Error = styled.p`

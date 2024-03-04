@@ -5,8 +5,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import {v4 as uuidv4} from 'uuid';
 import ProfilePic from "../secondary/ProfilePic";
+import { ExitButton } from "../main-styles/Inputs";
+import CloseIcon from '@mui/icons-material/Close';
 
-export default function Messages(props: {url: string, setChatWindow: Function}) {
+export default function Messages(props: {url: string, setChatWindow: Function, setShowMessages: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
 
@@ -79,7 +81,7 @@ export default function Messages(props: {url: string, setChatWindow: Function}) 
 
 
     const mappedPreviousChats = chats.map((chat: any) => {
-        return <PreviousChat onClick={() => setChatWindowContext({email: chat.email, name: chat.name})}>
+        return <PreviousChat key={uuidv4()} onClick={() => setChatWindowContext({email: chat.email, name: chat.name})}>
             <ProfilePic height="35px" width="35px" hasEdit={false} profile_img_link="" />
             <PreviousChatName>{chat.name}</PreviousChatName>
         </PreviousChat>
@@ -87,7 +89,7 @@ export default function Messages(props: {url: string, setChatWindow: Function}) 
 
     return (
         <MessagesContainer>
-            <MessagesHeader>Chats</MessagesHeader>
+            <MessagesHeader>Chats <ExitButton onClick={() => props.setShowMessages(false)}><CloseIcon /></ExitButton></MessagesHeader>
             <MessagesSearchContainer>
                 <MessagesSearchInput 
                     type="text" 
@@ -117,6 +119,9 @@ const MessagesHeader = styled.p`
     font-size: 1.4rem;
     font-weight: bold;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `
 
 const MessagesSearchContainer = styled.div`
@@ -148,6 +153,12 @@ const PreviousMessagesContainer = styled.div`
 const PreviousChat = styled.div`
     display: flex;
     align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: var(--hover-background);
+    }
 `
 
 const PreviousChatName = styled.p`

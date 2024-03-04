@@ -11,6 +11,7 @@ export interface PostInterface {
 
 export interface CommentInterface {
     _id: string;
+    email: string;
     name: string;
     date: string;
     time: string;

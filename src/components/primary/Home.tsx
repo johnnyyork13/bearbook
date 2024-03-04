@@ -9,7 +9,7 @@ import Feed from "../secondary/Feed";
 import Sidebar from "../secondary/Sidebar";
 import { PropaneSharp } from "@mui/icons-material";
 
-export default function Home(props: {url: String}) {
+export default function Home(props: {url: String, setChatWindow: Function}) {
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
@@ -23,7 +23,7 @@ export default function Home(props: {url: String}) {
         <HomeContainer>
             <Sidebar />
             <Feed url={props.url}/>
-            <Contacts />
+            <Contacts url={props.url} setChatWindow={props.setChatWindow}/>
         </HomeContainer>
     )
 }

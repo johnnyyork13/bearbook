@@ -17,11 +17,17 @@ function App() {
 
   const location: currentLocation = useLocation();
 
+  const [chatWindow, setChatWindow] = useState({
+    show: false,
+    email: "",
+    name: "",
+});
+
   return (
     <AppContainer $location={location}>
       {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout") && 
-        <HeaderMain url={url}/>}
-      <Main url={url} />
+        <HeaderMain url={url} chatWindow={chatWindow} setChatWindow={setChatWindow}/>}
+      <Main url={url} setChatWindow={setChatWindow}/>
     </AppContainer>
   )
 }

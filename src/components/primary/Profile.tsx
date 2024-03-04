@@ -1,17 +1,18 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import { EditButton, MainButton, SecondaryButton } from "../main-styles/Inputs";
-import { PrimaryContainer } from "../main-styles/Containers";
-
+import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Bio from "../secondary/Bio";
 import Friends from "../secondary/Friends";
 import ProfileFeed from "../secondary/ProfileFeed";
 import NewPost from "../secondary/NewPost";
 import { UserState, updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "../secondary/ProfilePic";
+import UploadImage from "../secondary/UploadImage";
 
 export default function Profile(props: {url: String}) {
 
@@ -31,6 +32,8 @@ export default function Profile(props: {url: String}) {
     const [loadProfile, setLoadProfile] = useState(false);
     const [addFriend, setAddFriend] = useState(false);
     const [isFriend, setIsFriend] = useState(false);
+    const [showEditProfilePicModal, setShowEditProfilePicModal] = useState(false);
+
 
     useEffect(() => {
         if (!globalUser.loggedIn) {
@@ -102,11 +105,18 @@ export default function Profile(props: {url: String}) {
         }
     }, [addFriend])
 
+
     return (
         <ProfileContainer>
+            {showEditProfilePicModal && 
+                <UploadImage url={props.url} email={globalUser.email}/>
+            }
             <ProfileHeader>
                 <ProfileNameAndImageContainer>
-                    <ProfilePic height={"150px"} width={"150px"} hasEdit={true} profile_img_link=""/>
+                    <ProfilePicContainer>
+                        <ProfilePic height={"150px"} width={"150px"} profile_img_link={globalUser.profile_img_link}/>
+                        <ProfilePicEditButton onClick={() => setShowEditProfilePicModal(true)}><CameraAltIcon /></ProfilePicEditButton>
+                    </ProfilePicContainer>
                     <ProfileNameContainer>
                         <ProfileName>{profileData.name}</ProfileName>
                         <ProfileFriendsCount>{`${profileData.friends.length} friend${profileData.friends.length > 1 ? "s" : ""}`}</ProfileFriendsCount>
@@ -140,6 +150,28 @@ export default function Profile(props: {url: String}) {
 
 const ProfileContainer = styled.main`
 
+`
+
+const ProfilePicContainer = styled.div`
+    position: relative;
+`
+
+const ProfilePicEditButton = styled.div`
+    height: 35px;
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background-color: var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    svg {
+        width: 25px;
+        height: 25px;
+    }
 `
 
 const ProfileHeader = styled(PrimaryContainer)`

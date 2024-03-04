@@ -3,7 +3,7 @@ import { CommentInterface } from "../../lib/interfaces";
 import { useEffect, useState } from "react";
 import ProfilePic from "./ProfilePic";
 
-export default function Comment(props: {url: String, comment: CommentInterface}) {
+export default function Comment(props: {url: String, comment: CommentInterface, handlePostNameClick: Function}) {
 
     const [deleteComment, setDeleteComment] = useState(false);
 
@@ -21,7 +21,7 @@ export default function Comment(props: {url: String, comment: CommentInterface})
                         },
                         body: JSON.stringify({comment_id: props.comment._id})
                     }).then((res) => res.json())
-                    .then((res) => {
+                    .then(() => {
                         setDeleteComment(false);
                     }).catch((err) => console.log(err));
                 }
@@ -36,7 +36,7 @@ export default function Comment(props: {url: String, comment: CommentInterface})
         <CommentContainer>
             <ProfilePic width="40px" height="40px" hasEdit={false} profile_img_link={props.comment.profile_img_link} />
             <CommentBodyContainer>
-                <CommentName>{props.comment.name}</CommentName>
+                <CommentName onClick={() => props.handlePostNameClick(props.comment.email)}>{props.comment.name}</CommentName>
                 <CommentText>{props.comment.text}</CommentText>
                 {/* <p>{props.comment.date}</p> */}
             </CommentBodyContainer>
@@ -61,6 +61,10 @@ const CommentBodyContainer = styled.div`
 const CommentName = styled.p`
     font-weight: bold;
     margin-bottom: 5px;
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
 `
 
 const CommentText = styled.p`
