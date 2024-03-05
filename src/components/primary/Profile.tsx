@@ -114,7 +114,7 @@ export default function Profile(props: {url: String}) {
             <ProfileHeader>
                 <ProfileNameAndImageContainer>
                     <ProfilePicContainer>
-                        <ProfilePic height={"150px"} width={"150px"} profile_img_link={globalUser.profile_img_link}/>
+                        <ProfilePic height={"150px"} width={"150px"} profile_img_link={profileData.profile_img_link}/>
                         <ProfilePicEditButton onClick={() => setShowEditProfilePicModal(true)}><CameraAltIcon /></ProfilePicEditButton>
                     </ProfilePicContainer>
                     <ProfileNameContainer>
@@ -139,7 +139,7 @@ export default function Profile(props: {url: String}) {
                     <Friends url={props.url}/>
                 </ProfileBodySidebar>
                 <ProfileMainFeedContainer>
-                    {!globalUser.visiting && <NewPost url={props.url} setLoadProfile={setLoadProfile} />}
+                    {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadProfile={setLoadProfile} />}
                     {loadProfile && <ProfileFeed url={props.url} email={profileData.email} setLoadProfile={setLoadProfile} />}
                 </ProfileMainFeedContainer>
             </ProfileBody>

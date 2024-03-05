@@ -34,7 +34,7 @@ export default function Comment(props: {url: String, comment: CommentInterface, 
 
     return (
         <CommentContainer>
-            <ProfilePic width="40px" height="40px" hasEdit={false} profile_img_link={props.comment.profile_img_link} />
+            <ProfilePic width="40px" height="40px" profile_img_link={props.comment.profile_img_link} />
             <CommentBodyContainer>
                 <CommentName onClick={() => props.handlePostNameClick(props.comment.email)}>{props.comment.name}</CommentName>
                 <CommentText>{props.comment.text}</CommentText>

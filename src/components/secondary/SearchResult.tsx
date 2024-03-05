@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import Person2Icon from '@mui/icons-material/Person2';
 import ProfilePic from "./ProfilePic";
 
-export default function SearchResult(props: {name: string, email: string, handleSelectSearchItem: Function, setFocused: Function}) {
+export default function SearchResult(props: {name: string, email: string, handleSelectSearchItem: Function, setFocused: Function, profile_img_link: string}) {
 
     return (
         <SearchResultContainer onMouseDown={() => props.handleSelectSearchItem(props.email)}>
-            <ProfilePic height="40px" width="40px" hasEdit={false} profile_img_link="" />
+            <ProfilePic height="40px" width="40px" profile_img_link={props.profile_img_link} />
             <SearchResultName>{props.name}</SearchResultName>
         </SearchResultContainer>
     )

@@ -30,6 +30,7 @@ export interface PostIDInterface {
 export interface Friend {
     name: string,
     email: string,
+    profile_img_link: string,
 }
 
 // export interface ChatWindowContextInterface {

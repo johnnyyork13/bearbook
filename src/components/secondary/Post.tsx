@@ -35,17 +35,6 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletePost, setDeletePost] = useState(false);
 
-    function addMappedComments(comments: CommentInterface[]) {
-        return comments.map((comment: CommentInterface) => {
-            return <Comment 
-                key={uuidv4()}
-                url={props.url}
-                comment={comment}
-                handlePostNameClick={handlePostNameClick}
-            />
-        })
-    } 
-
     useEffect(() => {
         try {
             async function getPost() {
@@ -59,7 +48,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                     body: JSON.stringify({post_id: props.post_id})
                 }).then((res) => res.json())
                 .then((res) => {
-                    setPost(res.post);
+                    setPost({...res.post, profile_img_link: res.profile_img_link});
                     setMappedComments(addMappedComments(res.post.comments));
                 }).catch((err) => console.log(err));
             }
@@ -109,7 +98,16 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
         }
     }, [deletePost])
 
-
+    function addMappedComments(comments: CommentInterface[]) {
+        return comments.map((comment: CommentInterface) => {
+            return <Comment 
+                key={uuidv4()}
+                url={props.url}
+                comment={comment}
+                handlePostNameClick={handlePostNameClick}
+            />
+        })
+    } 
 
     function handleCommentChange(e: React.ChangeEvent<HTMLInputElement>) {
         setComment(e.target.value);
@@ -142,7 +140,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                 />
             }
             <PostHeader>
-                <ProfilePic width={"50px"} height={"50px"} hasEdit={false} profile_img_link={post.profile_img_link}/>
+                <ProfilePic width={"50px"} height={"50px"} profile_img_link={post.profile_img_link}/>
                 <PostInfo>
                     <Name onClick={() => handlePostNameClick(post.email)}>{post.name}</Name>
                     <PostDate>{post.date}</PostDate>
@@ -160,7 +158,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                 </Comments>
                 {mappedComments.length > 2 && <CommentHeader onClick={() => setShowComments((prev) => !prev)}>{showComments ? "Hide" : "Show more"} comments</CommentHeader>}
                 <SubmitCommentContainer>
-                    <ProfilePic width={"40px"} height={"40px"} hasEdit={false} profile_img_link={globalUser.profile_img_link}/>{/* This is a placeholder for the user's profile pic */}
+                    <ProfilePic width={"40px"} height={"40px"} profile_img_link={globalUser.profile_img_link}/>{/* This is a placeholder for the user's profile pic */}
                     <CommentInput 
                         onChange={handleCommentChange}
                         value={comment}
@@ -242,7 +240,7 @@ const SubmitCommentContainer = styled.div`
 `
 
 const CommentInput = styled.input`
-    width: 90%;
+    width: calc(100% - 200px);
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--border-color);

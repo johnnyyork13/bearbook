@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import ProfilePic from "./ProfilePic";
 
-export default function NewPost(props: {url: String, setLoadProfile: Function}) {
+export default function NewPost(props: {url: String, profile_img_link: string, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
 
@@ -46,7 +46,7 @@ export default function NewPost(props: {url: String, setLoadProfile: Function}) 
 
     return (
         <NewPostContainer>
-            <ProfilePic width={"50px"} height={"50px"} hasEdit={false} profile_img_link=""/>
+            <ProfilePic width={"50px"} height={"50px"} profile_img_link={props.profile_img_link}/>
             <NewPostInput onChange={(e) => setText(e.target.value)} placeholder="What's on your mind?" />
             <ShareButton onClick={() => setSendPost(true)}>Share</ShareButton>
         </NewPostContainer>

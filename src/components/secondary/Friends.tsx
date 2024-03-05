@@ -19,7 +19,7 @@ export default function Friends(props: {url: String}) {
         try {
             if (globalUser.email) {
                 async function getFriends() {
-                    const url = props.url + "/get-friends";
+                    const url = props.url + "/get-friends-few";
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
@@ -50,8 +50,7 @@ export default function Friends(props: {url: String}) {
                     key={uuidv4()} 
                     height="70px" 
                     width="70px" 
-                    hasEdit={false} 
-                    profile_img_link=""
+                    profile_img_link={friend.profile_img_link}
                 />
                 <FriendName>{friend.name}</FriendName>
             </FriendTile>

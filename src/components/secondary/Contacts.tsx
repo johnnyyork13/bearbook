@@ -42,10 +42,10 @@ export default function Contacts(props: {url: String, setChatWindow: Function}) 
         })
     }
 
-    const mappedContacts = contacts.map((contact: {email: string, name: string}) => {
+    const mappedContacts = contacts.map((contact: {email: string, name: string, profile_img_link: string}) => {
         return (
             <Contact key={uuidv4()} onClick={() => handleContactClick(contact.email, contact.name)}>
-                <ProfilePic height={"50px"} width={"50px"} hasEdit={false} profile_img_link=''/>
+                <ProfilePic height={"50px"} width={"50px"} profile_img_link={contact.profile_img_link}/>
                 <ContactName>{contact.name}</ContactName>
             </Contact>
         )

@@ -81,6 +81,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
         name: string,
         email: string,
         handleSelectSearchTerm: Function,
+        profile_img_link: string,
     }
 
     const mappedResults = results.map((result: SearchResultInterface) => {
@@ -88,6 +89,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
                     key={uuidv4()}
                     name={result.name}
                     email={result.email}
+                    profile_img_link={result.profile_img_link}
                     handleSelectSearchItem={handleSelectSearchItem}
                     setFocused={setFocused}
                 />
@@ -132,6 +134,7 @@ const HeaderLogo = styled(Logo)`
     font-size: 2.2rem;
     font-weight: bolder;
     text-decoration: none !important;
+    color: white;
 `
 
 const SearchContainer = styled.div`
