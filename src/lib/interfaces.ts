@@ -33,6 +33,16 @@ export interface Friend {
     profile_img_link: string,
 }
 
+export interface BioInterface {
+    bio: string,
+    address: {
+        address1: string,
+        address2: string,
+        city: string,
+        state: string,
+    },
+    major: string,
+}
 // export interface ChatWindowContextInterface {
 //     chat_id: string,
 //     name: string,

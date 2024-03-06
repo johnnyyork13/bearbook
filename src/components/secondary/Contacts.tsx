@@ -54,7 +54,7 @@ export default function Contacts(props: {url: String, setChatWindow: Function}) 
     return (
         <ContactsContainer>
             <ContactsHeader>Contacts</ContactsHeader>
-            {mappedContacts}
+            {mappedContacts.length > 0 ? mappedContacts : <p>No contacts yet.</p>}
         </ContactsContainer>
     )
 }

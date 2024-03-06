@@ -5,7 +5,7 @@ import { PrimaryContainer } from "../main-styles/Containers";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import { CommentInterface, PostInterface } from "../../lib/interfaces";
-import { MainButton } from "../main-styles/Inputs";
+import { ExitButton, MainButton } from "../main-styles/Inputs";
 import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import Comment from "./Comment";
@@ -185,10 +185,8 @@ const PostHeader = styled.div`
     }
 `
 
-const DeletePost = styled.button`
+const DeletePost = styled(ExitButton)`
     margin-left: auto;
-    background-color: var(--primary-color);
-    border: none;
     visibility: hidden;
 `
 

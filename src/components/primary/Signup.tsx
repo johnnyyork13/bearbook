@@ -161,13 +161,13 @@ const SignupHeaderContainer = styled.div`
 const SignupHeader = styled.p`
     font-weight: bold;
     font-size: 2rem;
-    color: var(--primary-blue);
+    color: var(--primary-orange);
     margin-bottom: 10px;
 `
 
 const SignupSubheader = styled.p`
     font-size: 1.1rem;
-    color: var(--primary-blue);
+    color: var(--primary-orange);
     margin-bottom: 5px;
 `
 

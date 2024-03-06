@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { PrimaryContainer } from '../main-styles/Containers';
 import Post from './Post';
 import { PostIDInterface } from '../../lib/interfaces';
+import { Link } from 'react-router-dom';
 
 
 export default function Feed(props: {url: String}) {
@@ -39,11 +40,23 @@ export default function Feed(props: {url: String}) {
 
     return (
         <FeedContainer>
-            {mappedPosts}
+            {mappedPosts.length > 0 ? mappedPosts : 
+                <>
+                    <NoPostsText>Friend's Posts Show up Here.</NoPostsText>
+                    <NoPostsText><Link to="/friends" >Find Friends</Link></NoPostsText>
+                </>
+            }
         </FeedContainer>
     )
 }
 
 export const FeedContainer = styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
+const NoPostsText = styled.p`
+    font-size: 1.2rem;
+    margin-top: 20px;
 `

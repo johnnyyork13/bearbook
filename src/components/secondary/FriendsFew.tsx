@@ -9,7 +9,7 @@ import {v4 as uuidv4} from 'uuid';
 import { Friend } from "../../lib/interfaces";
 
 
-export default function Friends(props: {url: String}) {
+export default function FriendsFew(props: {url: String}) {
 
     const [friends, setFriends] = useState([]);
     const globalUser = useSelector((state: RootState) => state.user);

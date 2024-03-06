@@ -30,13 +30,21 @@ export const MainInput = styled.input`
     border-radius: 5px;
     border: 1px solid var(--border-color);
     font-family: "Titillium Web";
+    box-sizing: border-box;
 `
 
 export const ExitButton = styled.button`
-    color: var(--primary-blue);
+    color: black;
     border: none;
     background-color: var(--primary-color);
     cursor: pointer;
+    svg {
+        border: 1px solid rgba(0,0,0,.01);
+        border-radius: 5px;
+    }
+    svg:hover {
+        border: 1px solid var(--primary-orange);
+    }
 `
 
 export const Error = styled.p`

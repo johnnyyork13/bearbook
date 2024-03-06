@@ -3,23 +3,52 @@ import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
 import { ExitButton, MainButton, MainInput } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
 import { EditHeader } from "../main-styles/Text";
+import { useState } from "react";
+import { BioInterface } from "../../lib/interfaces";
 
-export default function EditAddress(props: {setShowEditAddress: React.MouseEventHandler<HTMLButtonElement>}) {
+export default function EditAddress(props: {
+    setUpdateBio: Function,
+    setShowEditAddress: Function, 
+    setBio: Function  
+}) {
+
+    const [address, setAddress] = useState({
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+    })
+
+    function handleAddressChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setAddress((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }))
+    }
+
+    function handleAddressSubmit() {
+        props.setBio((prev: BioInterface) => ({
+            ...prev,
+            address: address,
+        }))
+        props.setUpdateBio(true);
+        props.setShowEditAddress(false);
+    }
 
     return (
         <OpacityBackground>
             <EditAddressContainer>
                 <EditAddressHeaderContainer>
                     <EditAddressHeader>Edit Address</EditAddressHeader>
-                    <ExitButton onClick={props.setShowEditAddress}><CloseIcon /></ExitButton>
+                    <ExitButton onClick={() => props.setShowEditAddress(false)}><CloseIcon /></ExitButton>
                 </EditAddressHeaderContainer>
-                <EditInput placeholder="Address Line 1"/>
-                <EditInput placeholder="Address Line 2"/>
+                <EditInput onChange={handleAddressChange} name="address1" placeholder="Address Line 1"/>
+                <EditInput onChange={handleAddressChange} name="address2" placeholder="Address Line 2"/>
                 <EditInputContainer>
-                    <EditInput placeholder="City" />
-                    <EditInput placeholder="State" />
+                    <EditInput  onChange={handleAddressChange} name="city"placeholder="City" />
+                    <EditInput  onChange={handleAddressChange} name="state"placeholder="State" />
                 </EditInputContainer>
-                <MainButton>Update</MainButton>
+                <MainButton onClick={handleAddressSubmit}>Update</MainButton>
             </EditAddressContainer>
         </OpacityBackground>
     )

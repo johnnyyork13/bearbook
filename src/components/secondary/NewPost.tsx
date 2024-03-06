@@ -34,6 +34,7 @@ export default function NewPost(props: {url: String, profile_img_link: string, s
                     .then(() => {
                         setSendPost(false)
                         props.setLoadProfile(false);
+                        setText("");
                     })
                     .catch((err) => console.log(err));
                 }
@@ -47,7 +48,7 @@ export default function NewPost(props: {url: String, profile_img_link: string, s
     return (
         <NewPostContainer>
             <ProfilePic width={"50px"} height={"50px"} profile_img_link={props.profile_img_link}/>
-            <NewPostInput onChange={(e) => setText(e.target.value)} placeholder="What's on your mind?" />
+            <NewPostInput value={text} onChange={(e) => setText(e.target.value)} placeholder="What's on your mind?" />
             <ShareButton onClick={() => setSendPost(true)}>Share</ShareButton>
         </NewPostContainer>
     )
@@ -61,23 +62,14 @@ const NewPostContainer = styled(PrimaryContainer)`
     align-items: center;
 `
 
-const Img = styled.div`
-    width: 50px;
-    height: 50px;
-    background-color: var(--secondary-color);
-    border-radius: 50%;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
-
 const NewPostInput = styled(MainInput)`
-    width: 80%;
+    width: calc(100% - 150px);
+    margin-left: 10px;
+    margin-right: 10px;
     border: 1px solid var(--border-color);
     border-radius: 30px;
     font-size: 1.3rem;
-    padding-left: 10px;
+    padding-left: 15px;
     padding-right: 10px;
 `
 
