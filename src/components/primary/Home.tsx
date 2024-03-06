@@ -7,7 +7,6 @@ import styled from "styled-components";
 import Contacts from "../secondary/Contacts";
 import Feed from "../secondary/Feed";
 import Sidebar from "../secondary/Sidebar";
-import { PropaneSharp } from "@mui/icons-material";
 
 export default function Home(props: {url: String, setChatWindow: Function}) {
 
@@ -31,7 +30,7 @@ export default function Home(props: {url: String, setChatWindow: Function}) {
 const HomeContainer = styled.main`
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 50px;
     padding: 20px;
 `

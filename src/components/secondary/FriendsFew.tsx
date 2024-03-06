@@ -7,9 +7,10 @@ import { updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "./ProfilePic";
 import {v4 as uuidv4} from 'uuid';
 import { Friend } from "../../lib/interfaces";
+import { PropaneSharp } from "@mui/icons-material";
 
 
-export default function FriendsFew(props: {url: String}) {
+export default function FriendsFew(props: {url: String, setSelectedProfileSection: Function}) {
 
     const [friends, setFriends] = useState([]);
     const globalUser = useSelector((state: RootState) => state.user);
@@ -64,7 +65,7 @@ export default function FriendsFew(props: {url: String}) {
             <FriendsGrid>
                 {mappedFriends}
             </FriendsGrid>
-            <SeeAllFriends>See all friends</SeeAllFriends>
+            <SeeAllFriends onClick={() => props.setSelectedProfileSection("friends")}>See all friends</SeeAllFriends>
         </FriendsContainer>
     )
 }
@@ -93,11 +94,18 @@ const FriendTile = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 10px;
+    &:hover {
+        background-color: var(--hover-background);
+    }
 `
 
 const FriendName = styled.p`
     text-align: center;
     margin-top: 5px;
+    font-weight: bold;
 `
 
 const SeeAllFriends = styled.p`

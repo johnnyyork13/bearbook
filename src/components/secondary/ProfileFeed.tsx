@@ -8,7 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 import Post from "./Post";
 import { PostIDInterface } from "../../lib/interfaces";
 
-export default function ProfileFeed(props: {url: String, email: String, setLoadProfile: Function}) {
+export default function ProfileFeed(props: {url: String, email: String, firstName: String, setLoadProfile: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
     const [postList, setPostList] = useState([]);
@@ -50,7 +50,7 @@ export default function ProfileFeed(props: {url: String, email: String, setLoadP
 
     return (
         <ProfileFeedContainer>
-            {mappedFeed}
+            {mappedFeed.length > 0 ? mappedFeed : <ProfileFeedNoPosts>{props.firstName} hasn't posted anything yet.</ProfileFeedNoPosts>}
         </ProfileFeedContainer>
     )   
 }
@@ -58,4 +58,10 @@ export default function ProfileFeed(props: {url: String, email: String, setLoadP
 const ProfileFeedContainer = styled.div`
     width: 100%;
 
+`
+
+const ProfileFeedNoPosts = styled.p`
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2rem;
 `

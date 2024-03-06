@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import './styles/reset.css';
@@ -21,13 +21,18 @@ function App() {
     show: false,
     email: "",
     name: "",
-});
+  });
+  const [friendsDefaultSection, setFriendsDefaultSection] = useState("all");
+
+  useEffect(() => {
+    setFriendsDefaultSection("all");
+  }, [])
 
   return (
     <AppContainer $location={location}>
       {(location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/logout") && 
         <HeaderMain url={url} chatWindow={chatWindow} setChatWindow={setChatWindow}/>}
-      <Main url={url} setChatWindow={setChatWindow}/>
+      <Main url={url} setChatWindow={setChatWindow} friendsDefaultSection={friendsDefaultSection} setFriendsDefaultSection={setFriendsDefaultSection}/>
     </AppContainer>
   )
 }

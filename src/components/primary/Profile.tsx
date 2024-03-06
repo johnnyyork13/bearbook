@@ -17,7 +17,7 @@ import ProfilePic from "../secondary/ProfilePic";
 import UploadImage from "../secondary/UploadImage";
 import EditProfile from "../secondary/EditProfile";
 
-export default function Profile(props: {url: String}) {
+export default function Profile(props: {url: String, setFriendsDefaultSection: Function}) {
 
     const navigate = useNavigate();
     const globalUser = useSelector((state: RootState) => state.user);
@@ -34,7 +34,7 @@ export default function Profile(props: {url: String}) {
     });
     const [loadProfile, setLoadProfile] = useState(false);
     const [addFriend, setAddFriend] = useState(false);
-    const [isFriend, setIsFriend] = useState(false);
+    const [friendStatus, setFriendStatus] = useState("");
     const [showEditProfilePicModal, setShowEditProfilePicModal] = useState(false);
     const [selectedProfileSection, setSelectedProfileSection] = useState("posts");
     const [allFriends, setAllFriends] = useState([]);
@@ -43,6 +43,7 @@ export default function Profile(props: {url: String}) {
 
 
     useEffect(() => {
+        setSelectedProfileSection("posts");
         if (!globalUser.loggedIn) {
             navigate("/login");
         }
@@ -63,9 +64,7 @@ export default function Profile(props: {url: String}) {
                     }).then((res) => res.json())
                     .then((res) => {
                         setProfileData(res.user);
-                        if (res.isFriend) {
-                            setIsFriend(true);
-                        }
+                        setFriendStatus(res.friendStatus);
                         setLoadProfile(true);
                     }).catch((err) => console.log(err));
                 }
@@ -98,10 +97,7 @@ export default function Profile(props: {url: String}) {
                     }).then((res) => res.json())
                     .then(() => {
                         setAddFriend(false);
-                        dispatch(updateGlobalUser({
-                            ...globalUser,
-                            friends: [...globalUser.friends, profileData.email],
-                        }))
+                        
                     })
                     .catch((err) => console.log(err));
                 }
@@ -190,12 +186,14 @@ export default function Profile(props: {url: String}) {
                 </ProfileNameAndImageContainer>
                 <ProfileHeaderButtons>
                     {profileData.email === globalUser.email && <>
-                        <FindFriendsButton>Find Friends</FindFriendsButton>
+                        <FindFriendsButton onClick={() => {props.setFriendsDefaultSection("search"); navigate("/friends")}}>Find Friends</FindFriendsButton>
                         <EditProfileButton onClick={() => setShowEditProfile(true)}>Edit Profile</EditProfileButton>
                     </>}
                     {profileData.email !== globalUser.email && <>
-                        {!isFriend && <AddFriendButton onClick={() => setAddFriend(true)}>Add Friend</AddFriendButton>}
-                        {isFriend && <RemoveFriendButton>Remove Friend</RemoveFriendButton>}
+                        {friendStatus === "not friends" && <AddFriendButton onClick={() => setAddFriend(true)}>Add Friend</AddFriendButton>}
+                        {friendStatus === "friends" && <RemoveFriendButton>Remove Friend</RemoveFriendButton>}
+                        {friendStatus === "sent" && <RemoveFriendButton>Cancel Friend Request</RemoveFriendButton>}
+                        {friendStatus === "received" && <RemoveFriendButton>Confirm Friend Request</RemoveFriendButton>}
                     </>}
                 </ProfileHeaderButtons>
             </ProfileHeader>
@@ -209,23 +207,26 @@ export default function Profile(props: {url: String}) {
                         </ProfileTrackOption>
                     </ProfileTrackOptionContainer>
             </ProfileTrackSection>
-            {selectedProfileSection === 'posts' && <ProfilePosts>
-                <ProfilePostsSidebar>
-                    <Bio url={props.url} profileData={profileData}/>
-                    <FriendsFew url={props.url}/>
-                </ProfilePostsSidebar>
-                <ProfileMainFeedContainer>
-                    {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadProfile={setLoadProfile} />}
-                    {loadProfile && <ProfileFeed url={props.url} email={profileData.email} setLoadProfile={setLoadProfile} />}
-                </ProfileMainFeedContainer>
-            </ProfilePosts>}
+
+            {selectedProfileSection === 'posts' && 
+                <ProfilePosts>
+                    <ProfilePostsSidebar>
+                        <Bio url={props.url} profileData={profileData}/>
+                        <FriendsFew url={props.url} setSelectedProfileSection={setSelectedProfileSection}/>
+                    </ProfilePostsSidebar>
+                    <ProfileMainFeedContainer>
+                        {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadProfile={setLoadProfile} />}
+                        {loadProfile && <ProfileFeed url={props.url} firstName={profileData.firstName} email={profileData.email} setLoadProfile={setLoadProfile} />}
+                    </ProfileMainFeedContainer>
+                </ProfilePosts>}
+
             {selectedProfileSection === "friends" && 
                 <ProfileFriendsContainer>
                     <ProfileFriendsHeaderContainer>
                         <ProfileFriendsHeader>Friends</ProfileFriendsHeader>
                         <ProfileFriendsSearchContainer>
                             <SearchIcon />
-                            <ProfileFriendsSearchInput value={findFriends} onChange={(e) => setFindFriends(e.target.value)} placeholder="Search for friends"/>
+                            <ProfileFriendsSearchInput value={findFriends} onChange={(e) => setFindFriends(e.target.value)} placeholder={`Search ${profileData.firstName}'s friends.`}/>
                         </ProfileFriendsSearchContainer>
                     </ProfileFriendsHeaderContainer>
                     <ProfileFriends>

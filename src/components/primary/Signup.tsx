@@ -79,7 +79,6 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
     useEffect(() => {
         try {
             if (sendUser) {
-                console.log('sending user');
                 async function addUser() {
                     const url = props.url + '/signup';
                     await fetch(url, {

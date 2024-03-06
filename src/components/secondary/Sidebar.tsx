@@ -6,8 +6,33 @@ import GradeIcon from '@mui/icons-material/Grade';
 import WebAssetIcon from '@mui/icons-material/WebAsset';
 import MessageIcon from '@mui/icons-material/Message';
 import GroupIcon from '@mui/icons-material/Group';
+import { useNavigate } from 'react-router-dom';
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from '../../state/store';
+import { setGlobalUser } from '../../state/user/userSlice';
+import ProfilePic from './ProfilePic';
 
 
+export default function Sidebar() {
+
+    const navigate = useNavigate();
+
+    const globalUser = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch<AppDispatch>(); 
+
+    function handleSidebarClick(route: string) {
+
+    } 
+
+    return (
+        <SidebarContainer>
+            <Span onClick={() => {dispatch(setGlobalUser({...globalUser, visiting: ""})); navigate("/profile")}}><ProfilePic width={"30px"} height={"30px"} profile_img_link={globalUser.profile_img_link} /><SpanText>{globalUser.firstName} {globalUser.lastName}</SpanText></Span>
+            <Span onClick={() => navigate("/friends")}><GroupIcon /><SpanText>Friends</SpanText></Span>
+            <Span><WebAssetIcon /><SpanText>Feeds</SpanText></Span>
+            <Span><GradeIcon /><SpanText>Saved</SpanText></Span>
+        </SidebarContainer>
+    )
+}
 
 const SidebarContainer = styled(SecondaryContainer)`
     background-color: var(--secondary-color);
@@ -20,21 +45,18 @@ const SidebarContainer = styled(SecondaryContainer)`
 const Span = styled.span`
     display: flex;
     align-items: center;
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+    cursor: pointer;
+    &:hover {
+        background-color: var(--hover-background);
+    }
+    border-radius: 10px;
+    padding: 5px;
 `
 const SpanText = styled.p`
     margin-left: 10px;
     font-size: 1.5rem;
 `
-
-export default function Sidebar() {
-
-    return (
-        <SidebarContainer>
-            <Span><Person2Icon /><SpanText>Profile</SpanText></Span>
-            <Span><GroupIcon /><SpanText>Friends</SpanText></Span>
-            <Span><MessageIcon /><SpanText>Messenger</SpanText></Span>
-            <Span><WebAssetIcon /><SpanText>Feeds</SpanText></Span>
-            <Span><GradeIcon /><SpanText>Saved Posts</SpanText></Span>
-        </SidebarContainer>
-    )
-}

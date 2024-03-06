@@ -8,12 +8,15 @@ import {v4 as uuidv4} from 'uuid';
 import { ExitButton } from "../main-styles/Inputs";
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
+import { setGlobalUser } from "../../state/user/userSlice";
 
 export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function}) {
 
+    const navigate = useNavigate();
     const messagesEndRef = useRef(null);
     const globalUser = useSelector((state: RootState) => state.user);
-
+    const dispatch = useDispatch<AppDispatch>();
     const [chat, setChat] = useState({
         _id: "",
         messages: [],
@@ -63,6 +66,12 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
         }
     }, [sendMessage]);
 
+    function handleChatWindowTitleClick() {
+        dispatch(setGlobalUser({...globalUser, visiting: props.email}))
+        navigate("/profile");
+        props.setChatWindow({show: false, email: ""});
+    }
+
     const mappedMessages = chat && chat.messages.map((message: any) => {
         return message.email === globalUser.email ?
         <MessageContainerRight key={uuidv4()}>
@@ -83,7 +92,7 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
         <>
             {chat && <ChatWindowContainer>
                 <ChatWindowHeader>
-                    <ChatWindowHeaderTitle>
+                    <ChatWindowHeaderTitle onClick={handleChatWindowTitleClick}>
                         {props.contactName}
                         <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}><CloseIcon /></ExitButton>
                     </ChatWindowHeaderTitle>
@@ -133,6 +142,10 @@ const ChatWindowHeaderTitle = styled.h1`
     font-weight: bolder;
     display: flex;
     justify-content: space-between;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 `
 
 const ChatWindowBody = styled.div`

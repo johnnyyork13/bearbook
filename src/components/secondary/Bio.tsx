@@ -93,7 +93,7 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditAddress(true)}>Add Address</BioButton> :
-                        <BioText>User has not provided an address yet.</BioText>
+                        <BioText>{props.profileData.firstName} hasn't provided an address yet.</BioText>
                 }
                 {bio.major ?
                     <BioTextContainer>
@@ -103,7 +103,7 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditMajor(true)}>Add Major</BioButton> :
-                        <BioText>User has not provided a major yet.</BioText>
+                        <BioText>{props.profileData.firstName} hasn't provided a major yet.</BioText>
                 }
             </BioSection>
                 <BioSection>
@@ -112,7 +112,7 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     <BioTextContainer>{bio.bio}</BioTextContainer> :
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditBio(true)}>Add Bio</BioButton>:
-                        <BioText>User has not provided a bio yet.</BioText>
+                        <BioText>{props.profileData.firstName} hasn't provided a bio yet.</BioText>
                     }
                 </BioSection>
              

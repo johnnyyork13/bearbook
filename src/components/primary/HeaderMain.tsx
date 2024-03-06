@@ -109,7 +109,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
                 </SearchResultsContainer>}
             </SearchContainer>
             <LinkContainer>
-                <Link><NavLink to=""><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
+                <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
                 <Link onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
                 <NavLink to="/logout">Logout</NavLink>

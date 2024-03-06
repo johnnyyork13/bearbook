@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import ProfilePic from "../secondary/ProfilePic";
 import { ExitButton } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
+import Profile from "./Profile";
 
 export default function Messages(props: {url: string, setChatWindow: Function, setShowMessages: Function}) {
 
@@ -73,16 +74,17 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
 
     const mappedSearchedContacts = searchedContacts.map((contact: any) => {
         return (
-            <div key={uuidv4()} onClick={() => setChatWindowContext({email: contact.email, name: contact.name})}>
-                <p>{contact.name}</p>
-            </div>
+            <SearchedContact key={uuidv4()} onClick={() => setChatWindowContext({email: contact.email, name: contact.name})}>
+                <ProfilePic height="35px" width="35px" profile_img_link={contact.profile_img_link} />
+                <SearchedContactName>{contact.name}</SearchedContactName>
+            </SearchedContact>
         )
     })
 
 
     const mappedPreviousChats = chats.map((chat: any) => {
         return <PreviousChat key={uuidv4()} onClick={() => setChatWindowContext({email: chat.email, name: chat.name})}>
-            <ProfilePic height="35px" width="35px" hasEdit={false} profile_img_link="" />
+            <ProfilePic height="35px" width="35px" profile_img_link={chat.profile_img_link} />
             <PreviousChatName>{chat.name}</PreviousChatName>
         </PreviousChat>
     })
@@ -95,13 +97,15 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
                     type="text" 
                     value={findContactToChat} 
                     onChange={(e) => setFindContactToChat(e.target.value)} 
-                    placeholder="Search for contacts"
+                    placeholder="Start new chat"
                     />
-                <MessagesSearchResults>
-                    {mappedSearchedContacts}
-                </MessagesSearchResults>
+                {findContactToChat.length > 0 && <MessagesSearchResults>
+                    <MessagesSearchResultsHeader>Search Results</MessagesSearchResultsHeader>
+                    {mappedSearchedContacts.length > 0 ? mappedSearchedContacts : <p>No results...</p>}
+                </MessagesSearchResults>}
             </MessagesSearchContainer>
             <PreviousMessagesContainer>
+                <MessagesSearchResultsHeader>Previous Chats</MessagesSearchResultsHeader>
                 {mappedPreviousChats}
             </PreviousMessagesContainer>
         </MessagesContainer>
@@ -139,15 +143,42 @@ const MessagesSearchInput = styled.input`
     width: 270px;
 `
 
-const MessagesSearchResults = styled.div`
+const MessagesSearchResults = styled(PrimaryContainer)`
     width: 100%;
-    margin-top: 15px;
     display: flex;
     flex-direction: column;
+    position: absolute;
+    width: 300px;
+    top: 95px;
+    z-index: 2;
+    padding: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+`
+
+const MessagesSearchResultsHeader = styled.p`
+    font-weight: bold;
+    margin-bottom: 10px;
+`
+
+const SearchedContact = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: var(--hover-background);
+    }
+`
+
+const SearchedContactName = styled.p`
+    font-weight: bold;
+    margin-left: 15px;
 `
 
 const PreviousMessagesContainer = styled.div`
-    
+    margin-top: 10px;
 `
 
 const PreviousChat = styled.div`

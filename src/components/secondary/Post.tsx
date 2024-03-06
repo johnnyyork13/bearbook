@@ -175,6 +175,7 @@ const PostContainer = styled(PrimaryContainer)`
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    width: 100%;
 `
 
 const PostHeader = styled.div`
