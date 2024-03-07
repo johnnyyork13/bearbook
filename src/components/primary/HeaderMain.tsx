@@ -14,6 +14,8 @@ import {v4 as uuidv4} from 'uuid';
 import { updateGlobalUser } from '../../state/user/userSlice';
 import Messages from './Messages';
 import ChatWindow from './ChatWindow';
+import ProfilePic from '../secondary/ProfilePic';
+import UserSettings from './UserSettings';
 
 export default function HeaderMain(props: {url: string, chatWindow: {show: boolean, email: string, name: string}, setChatWindow: Function}) {
 
@@ -31,6 +33,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
     const [focused, setFocused] = useState(false)
     const onFocus = () => setFocused(true)
     const onBlur = () => setFocused(false)
+    const [openUserSettings, setOpenUserSettings] = useState(false);
 
     function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuery(e.target.value);
@@ -111,11 +114,13 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             <LinkContainer>
                 <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
-                <Link onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: ""}))}><NavLink to="/profile"><IconContainer><Person2Icon /></IconContainer></NavLink></Link>
-                <NavLink to="/logout">Logout</NavLink>
+                <Link onClick={() => setOpenUserSettings((prev) => !prev)}><ProfilePic width={"25px"} height={"25px"} profile_img_link={globalUser.profile_img_link}/></Link>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={props.setChatWindow} setShowMessages={setShowMessages}/>}
             {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
+            {openUserSettings && 
+                <UserSettings url={props.url} setOpenUserSettings={setOpenUserSettings}/>
+            }
         </Header>
     )
 }
@@ -186,6 +191,8 @@ const LinkContainer = styled.div`
 `
 
 const Link = styled.div`
+    width: 25px;
+    height: 25px;
     margin-right: 10px;
     padding: 10px;
     background-color: var(--secondary-color);

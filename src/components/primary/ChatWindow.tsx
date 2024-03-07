@@ -92,8 +92,8 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
         <>
             {chat && <ChatWindowContainer>
                 <ChatWindowHeader>
-                    <ChatWindowHeaderTitle onClick={handleChatWindowTitleClick}>
-                        {props.contactName}
+                    <ChatWindowHeaderTitle>
+                        <ChatWindowHeaderText onClick={handleChatWindowTitleClick}>{props.contactName}</ChatWindowHeaderText>
                         <ExitButton onClick={() => props.setChatWindow({show: false, email: ""})}><CloseIcon /></ExitButton>
                     </ChatWindowHeaderTitle>
                 </ChatWindowHeader>
@@ -142,6 +142,10 @@ const ChatWindowHeaderTitle = styled.h1`
     font-weight: bolder;
     display: flex;
     justify-content: space-between;
+
+`
+
+const ChatWindowHeaderText = styled.span`
     &:hover {
         cursor: pointer;
         text-decoration: underline;

@@ -116,7 +116,7 @@ const MessagesContainer = styled(PrimaryContainer)`
     width: 300px;
     position: absolute;
     right: 10px;
-    top: 64px;
+    top: 60px;
 `
 
 const MessagesHeader = styled.p`

@@ -289,6 +289,7 @@ const AllFriends = styled.div`
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
+    margin-top: 20px;
 `
 
 const Friend = styled(PrimaryContainer)`
