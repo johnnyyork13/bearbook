@@ -28,4 +28,23 @@ html, body, #root {
     position: relative;
 }
 
+.accordion {
+    animation-name: animateAccordion;
+    animation-duration: .4s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
 
+@keyframes animateAccordion {
+    0% {
+        max-height: 0px;
+        overflow: hidden;
+    }
+    99% {
+        max-height: 300px;
+        overflow: hidden;
+    }
+    100% {
+        overflow: visible;
+    }
+}
