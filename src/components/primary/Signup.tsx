@@ -13,6 +13,7 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
         lastName: "",
         email: "",
         password: "",
+        role: "", //student, faculty, staff
     })
     const [error, setError] = useState({
         firstName: false,
@@ -125,10 +126,10 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
             />}
             <SignupForm onSubmit={(e) => e.preventDefault()}>
                 <SignupHeaderContainer>
-                    <SignupHeader>Sign Up for HistoryBook</SignupHeader>
+                    <SignupHeader>Sign Up for MyBear</SignupHeader>
                     <ExitButton onClick={() => props.setOpenSignup(false)}><CloseIcon /></ExitButton>
                 </SignupHeaderContainer>
-                <SignupSubheader>And speak to your favorite historical figure.</SignupSubheader>
+                <SignupSubheader>And connect with Mercer.</SignupSubheader>
                 <Hr></Hr>
                 {(error.firstName || error.lastName) && <Error>Please enter a valid name.</Error>}
                 <div>
@@ -137,6 +138,12 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
                 </div>
                 {error.email && <Error>Please enter a valid email.</Error>}
                 <Input name="email" type="email" placeholder="Email" onChange={handleInputChange}/>
+                <Select name="role" onChange={handleInputChange} required={true} defaultValue={"Academic Role"}>
+                    <option value="Academic Role" disabled={true}>Academic Role</option>
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                    <option value="staff">Staff</option>
+                </Select>
                 {error.password && <Error>Please enter a valid password.</Error>}
                 <Input name="password" type="password" placeholder="Password (minimum 8 characters)" onChange={handleInputChange}/>
                 <SignupButton onClick={handleUserSubmit}>Sign Up</SignupButton>
@@ -182,6 +189,27 @@ const Input = styled(MainInput)`
     margin-left: 10px;
     margin-right: 10px;
     background-color: var(--input-background-grey);
+`
+
+const Label = styled.label`
+    font-size: 1.2rem;
+    margin-left: 10px;
+    margin-top: 10px;
+`
+
+const Select = styled.select`
+    box-sizing: border-box;
+    margin: 10px;
+    margin-top: 0px;
+    height: 30px;
+    background-color: var(--input-background-grey);
+    border-radius: 5px;
+    padding-left: 5px;
+    border: 1px solid var(--border-color);
+    font-family: "Titillium Web";
+    &:invalid {
+        color: gray;
+    }
 `
 
 const SignupButton = styled(SecondaryButton)`

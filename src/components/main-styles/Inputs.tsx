@@ -27,7 +27,7 @@ export const EditButton = styled(Button)`
 export const MainInput = styled.input`
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 5px;
+    border-radius: 5px;background-color: var(--input-background-grey);
     border: 1px solid var(--border-color);
     font-family: "Titillium Web";
     box-sizing: border-box;

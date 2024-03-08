@@ -42,7 +42,7 @@ export default function Feed(props: {url: String}) {
         <FeedContainer>
             {mappedPosts.length > 0 ? mappedPosts : 
                 <>
-                    <NoPostsText>Friend's Posts Show up Here.</NoPostsText>
+                    <NoPostsText>No Posts yet.</NoPostsText>
                     <NoPostsText><Link to="/friends" >Find Friends</Link></NoPostsText>
                 </>
             }

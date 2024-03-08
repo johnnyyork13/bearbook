@@ -4,6 +4,8 @@ import Login from './Login';
 import Profile from './Profile';
 import Logout from './Logout';
 import Friends from './Friends';
+import Feeds from './Feeds';
+import MercerDashboard from './MercerDashboard';
 
 
 export default function Main(props: {url: string, setChatWindow: Function, friendsDefaultSection: string, setFriendsDefaultSection: Function}) {
@@ -14,6 +16,8 @@ export default function Main(props: {url: string, setChatWindow: Function, frien
         <Route path="/logout" element={<Logout url={props.url}/>}></Route>
         <Route path="/profile" element={<Profile url={props.url} setFriendsDefaultSection={props.setFriendsDefaultSection}/>}></Route>
         <Route path="/friends" element={<Friends url={props.url} friendsDefaultSection={props.friendsDefaultSection}/>}></Route>
+        <Route path="/feeds" element={<Feeds url={props.url} />}></Route>
+        <Route path="/mercer" element={<MercerDashboard url={props.url} />}></Route>
         <Route path="/home" element={<Home url={props.url} setChatWindow={props.setChatWindow}/>}></Route>
     </Routes>
 }

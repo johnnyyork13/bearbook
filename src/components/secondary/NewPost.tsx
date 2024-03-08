@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import ProfilePic from "./ProfilePic";
 
-export default function NewPost(props: {url: String, profile_img_link: string, setLoadProfile: Function}) {
+export default function NewPost(props: {url: String, profile_img_link: string, setLoadParent: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
 
@@ -28,13 +28,14 @@ export default function NewPost(props: {url: String, profile_img_link: string, s
                         body: JSON.stringify({
                             email: globalUser.email,
                             name: globalUser.name,
+                            role: globalUser.role,
                             text: text,
                         })
                     }).then((res) => res.json())
                     .then(() => {
                         setSendPost(false)
-                        props.setLoadProfile(false);
                         setText("");
+                        props.setLoadParent(true);
                     })
                     .catch((err) => console.log(err));
                 }

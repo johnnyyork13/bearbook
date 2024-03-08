@@ -9,6 +9,7 @@ import EditBio from "./EditBio";
 import EditMajor from "./EditMajor";
 import SchoolIcon from '@mui/icons-material/School';
 import HomeIcon from '@mui/icons-material/Home';
+import BadgeIcon from '@mui/icons-material/Badge';
 import { UserState } from "../../state/user/userSlice";
 
 export default function Bio(props: {url: String, profileData: UserState}) {
@@ -93,7 +94,10 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditAddress(true)}>Add Address</BioButton> :
-                        <BioText>{props.profileData.firstName} hasn't provided an address yet.</BioText>
+                        <BioTextContainer>
+                            <HomeIcon /> 
+                            <BioText>No address to show.</BioText>
+                        </BioTextContainer>
                 }
                 {bio.major ?
                     <BioTextContainer>
@@ -103,8 +107,15 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditMajor(true)}>Add Major</BioButton> :
-                        <BioText>{props.profileData.firstName} hasn't provided a major yet.</BioText>
+                        <BioTextContainer>
+                            <SchoolIcon /> 
+                            <BioText>No major to show.</BioText>
+                        </BioTextContainer>
                 }
+                <BioTextContainer>
+                    <BadgeIcon />
+                    <BioText><BioTextBold>{props.profileData.role.length > 0 && props.profileData.role[0].toUpperCase() + props.profileData.role.slice(1)}</BioTextBold> at Mercer University</BioText>
+                </BioTextContainer>
             </BioSection>
                 <BioSection>
                     <BioSectionHeader>About Me</BioSectionHeader>
@@ -112,7 +123,7 @@ export default function Bio(props: {url: String, profileData: UserState}) {
                     <BioTextContainer>{bio.bio}</BioTextContainer> :
                     globalUser.email === props.profileData.email ? 
                         <BioButton onClick={() => setShowEditBio(true)}>Add Bio</BioButton>:
-                        <BioText>{props.profileData.firstName} hasn't provided a bio yet.</BioText>
+                        <BioText>No bio to show.</BioText>
                     }
                 </BioSection>
              

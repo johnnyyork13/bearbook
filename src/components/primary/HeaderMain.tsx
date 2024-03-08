@@ -114,7 +114,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             <LinkContainer>
                 <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
-                <Link onClick={() => setOpenUserSettings((prev) => !prev)}><ProfilePic width={"25px"} height={"25px"} profile_img_link={globalUser.profile_img_link}/></Link>
+                <ProfileLink onClick={() => setOpenUserSettings((prev) => !prev)}><ProfilePic width={"45px"} height={"45px"} profile_img_link={globalUser.profile_img_link}/></ProfileLink>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={props.setChatWindow} setShowMessages={setShowMessages}/>}
             {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
@@ -204,6 +204,12 @@ const Link = styled.div`
     &:hover {
         background-color: var(--);
     }
+`
+
+const ProfileLink = styled(Link)`
+    padding: 0px;
+    width: 45px;
+    height: 45px;
 `
 
 const IconContainer = styled.div`

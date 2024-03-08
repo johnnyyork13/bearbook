@@ -10,12 +10,13 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import Bio from "../secondary/Bio";
 import FriendsFew from "../secondary/FriendsFew";
-import ProfileFeed from "../secondary/ProfileFeed";
 import NewPost from "../secondary/NewPost";
 import { UserState, updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "../secondary/ProfilePic";
 import UploadImage from "../secondary/UploadImage";
 import EditProfile from "../secondary/EditProfile";
+import { PostIDInterface } from "../../lib/interfaces";
+import Post from "../secondary/Post";
 
 export default function Profile(props: {url: String, setFriendsDefaultSection: Function}) {
 
@@ -27,12 +28,13 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
         firstName: "",
         lastName: "",
         name: "",
+        role: "",
         friends: [],
         loggedIn: false,
         visiting: "",
         profile_img_link: "",
     });
-    const [loadProfile, setLoadProfile] = useState(false);
+    const [loadParent, setLoadParent] = useState(false);
     const [addFriend, setAddFriend] = useState(false);
     const [friendStatus, setFriendStatus] = useState("");
     const [showEditProfilePicModal, setShowEditProfilePicModal] = useState(false);
@@ -40,7 +42,8 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
     const [allFriends, setAllFriends] = useState([]);
     const [findFriends, setFindFriends] = useState("");
     const [showEditProfile, setShowEditProfile] = useState(false);
-
+    const [cancelFriendRequest, setCancelFriendRequest] = useState(false);
+    const [postList, setPostList] = useState([]);
 
     useEffect(() => {
         setSelectedProfileSection("posts");
@@ -65,7 +68,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     .then((res) => {
                         setProfileData(res.user);
                         setFriendStatus(res.friendStatus);
-                        setLoadProfile(true);
+                        setLoadParent(false);
                     }).catch((err) => console.log(err));
                 }
                 getUserProfile();
@@ -74,9 +77,8 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
             }
         } else {
             setProfileData(globalUser);
-            setLoadProfile(true);
         }
-    }, [globalUser.visiting, loadProfile, addFriend, globalUser.profile_img_link]);
+    }, [globalUser.visiting, addFriend, globalUser.profile_img_link, cancelFriendRequest, loadParent]);
 
     useEffect(() => {
         if (addFriend) {
@@ -97,7 +99,6 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     }).then((res) => res.json())
                     .then(() => {
                         setAddFriend(false);
-                        
                     })
                     .catch((err) => console.log(err));
                 }
@@ -107,6 +108,35 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
             }
         }
     }, [addFriend])
+
+    useEffect(() => {
+        if (cancelFriendRequest) {
+            try {
+                async function sendCancelFriendRequest() {
+                    const url = props.url + "/handle-friend-request";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({
+                            email: globalUser.email,
+                            friendName: profileData.name,
+                            friendEmail: profileData.email,
+                            accept: false
+                        })}).then((res) => res.json())
+                        .then(() => {
+                            setCancelFriendRequest(false);
+                        }).catch((err) => console.log(err));
+                }
+                sendCancelFriendRequest();
+            } catch(err) {
+                console.log(err);
+            }
+        }
+    }, [cancelFriendRequest])
     
     useEffect(() => {
         if (selectedProfileSection === "friends" && findFriends.length === 0) {
@@ -158,12 +188,48 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
         }
     }, [findFriends])   
 
+    useEffect(() => {
+        try {
+            if (profileData.email) {
+
+                async function getUserFeed() {
+                    const url = props.url + "/get-profile-feed";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({email: profileData.email})
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setPostList(res.posts);
+                        setLoadParent(false);
+                    })
+                    .catch((err) => console.log(err));
+                }
+                getUserFeed();  
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }, [profileData.email, loadParent])
+
     const mappedFriends = allFriends.map((friend: any) => {
         return <MappedFriendContainer key={uuidv4()} onClick={() => dispatch(updateGlobalUser({...globalUser, visiting: friend.email}))}>
                     <ProfilePic height={"70px"} width={"70px"} profile_img_link={friend.profile_img_link}/>
                     <MappedFriendName>{friend.name}</MappedFriendName>
                 </MappedFriendContainer>
             })
+
+    const mappedPosts = postList.map((post: PostIDInterface) => {
+        return <Post
+            key={uuidv4()}
+            url={props.url}
+            post_id={post._id}
+            setLoadParent={setLoadParent}
+        />
+    })
 
     return (
         <ProfileContainer>
@@ -177,7 +243,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                 <ProfileNameAndImageContainer>
                     <ProfilePicContainer>
                         <ProfilePic height={"150px"} width={"150px"} profile_img_link={profileData.profile_img_link}/>
-                        <ProfilePicEditButton onClick={() => setShowEditProfilePicModal(true)}><CameraAltIcon /></ProfilePicEditButton>
+                        {profileData.email === globalUser.email && <ProfilePicEditButton onClick={() => setShowEditProfilePicModal(true)}><CameraAltIcon /></ProfilePicEditButton>}
                     </ProfilePicContainer>
                     <ProfileNameContainer>
                         <ProfileName>{profileData.name}</ProfileName>
@@ -192,7 +258,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     {profileData.email !== globalUser.email && <>
                         {friendStatus === "not friends" && <AddFriendButton onClick={() => setAddFriend(true)}>Add Friend</AddFriendButton>}
                         {friendStatus === "friends" && <RemoveFriendButton>Remove Friend</RemoveFriendButton>}
-                        {friendStatus === "sent" && <RemoveFriendButton>Cancel Friend Request</RemoveFriendButton>}
+                        {friendStatus === "sent" && <RemoveFriendButton onClick={() => setCancelFriendRequest(true)}>Cancel Friend Request</RemoveFriendButton>}
                         {friendStatus === "received" && <RemoveFriendButton>Confirm Friend Request</RemoveFriendButton>}
                     </>}
                 </ProfileHeaderButtons>
@@ -215,8 +281,8 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                         <FriendsFew url={props.url} setSelectedProfileSection={setSelectedProfileSection}/>
                     </ProfilePostsSidebar>
                     <ProfileMainFeedContainer>
-                        {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadProfile={setLoadProfile} />}
-                        {loadProfile && <ProfileFeed url={props.url} firstName={profileData.firstName} email={profileData.email} setLoadProfile={setLoadProfile} />}
+                        {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadParent={setLoadParent}/>}
+                        {mappedPosts}
                     </ProfileMainFeedContainer>
                 </ProfilePosts>}
 
@@ -381,7 +447,8 @@ const ProfileFriendsContainer = styled(PrimaryContainer)`
 
 const ProfileFriends = styled.div`
     display: grid;
-    grid-auto-columns: 100px;
+    grid-template-columns: repeat(8, minmax(100px, 1fr));
+    grid-auto-rows: 130px;
     text-align: center;
 `
 

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import SettingsIcon from '@mui/icons-material/Settings';
+import SchoolIcon from '@mui/icons-material/School';
 import Person2Icon from '@mui/icons-material/Person2';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -47,6 +48,10 @@ export default function UserSettings(props: {url: string, setOpenUserSettings: F
                 }}>
                 <Person2Icon />
                 <SectionText>Profile</SectionText>
+            </Section>
+            <Section>
+                <SchoolIcon />
+                <SectionText>Mercer Resources</SectionText>
             </Section>
             <Section>
                 <SettingsIcon />

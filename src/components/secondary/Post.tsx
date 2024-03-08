@@ -13,7 +13,7 @@ import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
 import { updateGlobalUser } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
-export default function Post(props: {url: String, post_id: string, setLoadProfile: Function}) {
+export default function Post(props: {url: String, post_id: string, setLoadParent: Function}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
@@ -28,6 +28,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
         profile_img_link: "",
         comments: [],
     });
+
     const [mappedComments, setMappedComments] = useState<any[]>([]);
     const [comment, setComment] = useState("");
     const [sendComment, setSendComment] = useState(false);
@@ -91,7 +92,7 @@ export default function Post(props: {url: String, post_id: string, setLoadProfil
                 }).then((res) => res.json())
                 .then(() => {
                     setDeletePost(false);
-                    props.setLoadProfile(false);
+                    props.setLoadParent(true);
                 }).catch((err) => console.log(err));
             }
             deletePost();

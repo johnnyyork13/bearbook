@@ -155,8 +155,19 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         </Friend>
     })
 
-    const mappedFriendRequests = friendRequests.map((request: any) => {
-        return request.status === "received" && <Friend key={uuidv4()}>
+    const mappedSentFriendRequests = friendRequests.filter((request: any) => request.status === "sent" && request)
+        .map((request: any) => {
+        return <Friend key={uuidv4()}>
+            <ProfilePic width={"70px"} height={"70px"} profile_img_link={request.profile_img_link} />
+            <FriendName>{request.name}</FriendName>
+            <AlreadyFriendsText>Pending</AlreadyFriendsText>
+            <SecondaryButton onClick={() => setRespondToFriendRequest({accept: false, send: true, friendEmail: request.email, friendName: request.name})}>Delete</SecondaryButton>
+        </Friend>
+    })
+
+    const mappedReceivedFriendRequests = friendRequests.filter((request: any) => request.status === "received" && request)
+        .map((request: any) => {
+        return <Friend key={uuidv4()}>
             <ProfilePic width={"70px"} height={"70px"} profile_img_link={request.profile_img_link} />
             <FriendName>{request.name}</FriendName>
             <MainButton onClick={() => setRespondToFriendRequest({accept: true, send: true, friendEmail: request.email, friendName: request.name})}>Confirm</MainButton>
@@ -177,25 +188,25 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         <FriendsContainer>
             <Sidebar>
                 <SidebarHeader>Friends</SidebarHeader>
-                <SidebarOption onClick={() => setDisplaySection("all")}>
+                <SidebarOption onClick={() => setDisplaySection("all")} $selected={displaySection === "all" ? true : false}>
                     <SidebarIconContainer>
                         <GroupAddIcon />
                     </SidebarIconContainer>
                     <SidebarOptionText>Show All</SidebarOptionText>
                 </SidebarOption>
-                <SidebarOption onClick={() => setDisplaySection("requests")}>
+                <SidebarOption onClick={() => setDisplaySection("requests")} $selected={displaySection === "requests" ? true : false}>
                     <SidebarIconContainer>
                         <PersonAddIcon />
                     </SidebarIconContainer>
                     <SidebarOptionText>Friend Requests</SidebarOptionText>
                 </SidebarOption>
-                <SidebarOption onClick={() => setDisplaySection("friends")}>
+                <SidebarOption onClick={() => setDisplaySection("friends")} $selected={displaySection === "friends" ? true : false}>
                     <SidebarIconContainer>
                         <PeopleAltIcon />
                     </SidebarIconContainer>
                     <SidebarOptionText>Friends</SidebarOptionText>
                 </SidebarOption>
-                <SidebarOption onClick={() => setDisplaySection("search")}>
+                <SidebarOption onClick={() => setDisplaySection("search")} $selected={displaySection === "search" ? true : false}>
                     <SidebarIconContainer>
                         <SearchIcon />
                     </SidebarIconContainer>
@@ -204,9 +215,13 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
             </Sidebar>
             <Main>
                 {(displaySection === "all" || displaySection === "requests") && <FriendsCardContainer>
-                    <MainHeader>Friend Requests</MainHeader>
+                    <MainHeader>Sent Friend Requests</MainHeader>
                     <AllFriends>
-                        {mappedFriendRequests[0] && mappedFriendRequests.length > 0 ? mappedFriendRequests : <NoFriendsText>No Friend Requests</NoFriendsText>}
+                        {mappedSentFriendRequests[0] && mappedSentFriendRequests.length > 0 ? mappedSentFriendRequests : <NoFriendsText>No sent requests.</NoFriendsText>}
+                    </AllFriends>
+                    <MainHeader>Received Friend Requests</MainHeader>
+                    <AllFriends>
+                        {mappedReceivedFriendRequests[0] && mappedReceivedFriendRequests.length > 0 ? mappedReceivedFriendRequests : <NoFriendsText>No received requests.</NoFriendsText>}
                     </AllFriends>
                 </FriendsCardContainer>}
                 {(displaySection === "all" || displaySection === "friends") && <FriendsCardContainer>
@@ -235,11 +250,11 @@ const FriendsContainer = styled.main`
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 3fr;
     gap: 20px;
-    padding: 20px;
 `
 
-const Sidebar = styled.div`
-
+const Sidebar = styled(PrimaryContainer)`
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 `
 
 const SidebarHeader = styled.p`
@@ -248,16 +263,18 @@ const SidebarHeader = styled.p`
     margin-bottom: 20px;
 `
 
-const SidebarOption = styled.div`
+const SidebarOption = styled.div<({$selected: boolean})>`
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     &:hover {
-        background-color: var(--hover-background);
+        background-color: var(--hover-orange-background);
+        p {color: white}
     }
     cursor: pointer;
     padding: 5px;
     border-radius: 10px;
+    ${(props) => props.$selected ? "background-color: var(--primary-orange); p {color: white}" : ""}
 `
 
 const SidebarIconContainer = styled.div`
@@ -272,7 +289,7 @@ const SidebarOptionText = styled.p`
 `
 
 const Main = styled.div`
-    
+    padding: 20px;
 `
 
 const MainHeader = styled.p`
@@ -290,6 +307,7 @@ const AllFriends = styled.div`
     grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     margin-top: 20px;
+    margin-bottom: 30px;
 `
 
 const Friend = styled(PrimaryContainer)`
@@ -305,6 +323,7 @@ const Friend = styled(PrimaryContainer)`
 const FriendName = styled.p`
     font-weight: bold;
     margin-top: 5px;
+    text-align: center;
 `
 
 const AlreadyFriendsText = styled.p`
