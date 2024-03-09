@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import SquareIcon from '@mui/icons-material/Square';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
@@ -79,9 +80,10 @@ export default function MercerDashboard(props: {url: String}) {
     function handleLinkClick(e) {
         const title = e.target.parentElement.parentElement.parentElement.children[0].innerText
         const name = e.target.parentElement.children[0].innerText;
+        const link = e.target.parentElement.children[0].href;
         setSaveLink({
             send: true,
-            link: e.target.parentElement.children[0].href,
+            link: link,
             title: title,
             name: name,
             remove: false,
@@ -90,7 +92,7 @@ export default function MercerDashboard(props: {url: String}) {
 
     const mappedSavedLinks = savedLinks && savedLinks.map((link: any) => {
         return <SavedLink key={uuidv4()} onClick={(() => window.open(link.link))}>
-            <SavedLinkTitle><LinkTitleSpan>{link.title}</LinkTitleSpan><ExitButton onClick={() => setSaveLink({remove: true, send: true, name: link.name, title: link.title, link: link.link})}><CloseIcon /></ExitButton></SavedLinkTitle>
+            <SavedLinkTitle><LinkTitleSpan>{link.title}</LinkTitleSpan><ExitButton onClick={(e) => {e.stopPropagation(); setSaveLink({remove: true, send: true, name: link.name, title: link.title, link: link.link})}}><CloseIcon /></ExitButton></SavedLinkTitle>
             <SavedLinkName>{link.name}</SavedLinkName>
         </SavedLink>
     })
@@ -108,8 +110,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "catalogMacon" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "catalogMacon" ? "accordion" : ""}>
-                        <Link><LinkText href="https://documents.mercer.edu/catalogs/MaconCatalog/" target="_blank"><ArrowForwardIosIcon />2023-2024 Catalog- HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                        <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/macon/upload/MaconCatalog23_24_02262024.pdf" target="_blank"><ArrowForwardIosIcon />2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                        <Link><LinkText href="https://documents.mercer.edu/catalogs/MaconCatalog/" target="_blank"><SquareIcon />2023-2024 Catalog- HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                        <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/macon/upload/MaconCatalog23_24_02262024.pdf" target="_blank"><SquareIcon />2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -118,8 +120,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "catalogAtlanta" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "catalogAtlanta" ? "accordion" : ""}>
-                         <Link><LinkText href="https://documents.mercer.edu/catalogs/AtlantaCatalog/" target="_blank" ><ArrowForwardIosIcon /> 2023-2024 Catalog - HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/atlanta/upload/AtlantaCatalog23_24-02262024.pdf" target="_blank" ><ArrowForwardIosIcon /> 2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://documents.mercer.edu/catalogs/AtlantaCatalog/" target="_blank" ><SquareIcon /> 2023-2024 Catalog - HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/atlanta/upload/AtlantaCatalog23_24-02262024.pdf" target="_blank" ><SquareIcon /> 2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -128,8 +130,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "catalogRegional" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "catalogRegional" ? "accordion" : ""}>
-                         <Link><LinkText href="https://documents.mercer.edu/catalogs/RACCatalog/" target="_blank" ><ArrowForwardIosIcon /> 2023-2024 Catalog - HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/regional-academic-centers/upload/RAC_Catalog23_24-02262024.pdf" target="_blank" ><ArrowForwardIosIcon /> 2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://documents.mercer.edu/catalogs/RACCatalog/" target="_blank" ><SquareIcon /> 2023-2024 Catalog - HTML Version</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://registrar.mercer.edu/www/mu-registrar/regional-academic-centers/upload/RAC_Catalog23_24-02262024.pdf" target="_blank" ><SquareIcon /> 2023-2024 Catalog - Download PDF</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
 
@@ -142,17 +144,16 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "technology" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "technology" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> Canvas</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Class Schedules and Academic Calendars</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Handshake</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Mercer Directory</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> My Mercer Portal</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Email Login</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Email Instructions</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Hardware and Software Discounts</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Technology Support - IT Help Desk</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Technology Tutorials</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Student Turnitin.com Tutorials</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://canvas.mercer.edu/" target="_blank"><SquareIcon /> Canvas</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://registrar.mercer.edu/" target="_blank"><SquareIcon /> Class Schedules and Academic Calendars</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://career.mercer.edu/handshake.cfm" target="_blank"><SquareIcon /> Handshake</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://directory.mercer.edu/" target="_blank"><SquareIcon /> Mercer Directory</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://my.mercer.edu/" target="_blank"><SquareIcon /> My Mercer Portal</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://outlook.office.com/mail/" target="_blank"><SquareIcon /> Student Email Login</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://it.mercer.edu/student/email/email_access.htm" target="_blank"><SquareIcon /> Student Email Instructions</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://it.mercer.edu/student/hardware_software/student_discounts.htm" target="_blank"><SquareIcon /> Student Hardware and Software Discounts</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://it.mercer.edu/student/contact_us.htm" target="_blank"><SquareIcon /> Student Technology Support - IT Help Desk</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://help.turnitin.com/new-links.htm" target="_blank"><SquareIcon /> Student Turnitin.com Tutorials</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -161,10 +162,9 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "writing" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "writing" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> Academic Resource Center</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> College Study Skills</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Online Writing Lab {'(OWL)'}</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Purdue Online Writing Lab</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://arc.mercer.edu/college-study-skills/" target="_blank"><SquareIcon /> College Study Skills</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://arc.mercer.edu/" target="_blank"><SquareIcon /> Online Writing Lab {'(OWL)'}</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://owl.purdue.edu/owl/" target="_blank"><SquareIcon /> Purdue Online Writing Lab</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -173,8 +173,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "research" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "research" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> GALILEO Tutorials</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Web Search Strategies {'(Video)'}</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://www.usg.edu/galileo/skills/unit05/" target="_blank"><SquareIcon /> GALILEO Tutorials</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://www.commoncraft.com/video/web-search-strategies" target="_blank"><SquareIcon /> Web Search Strategies {'(Video)'}</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -183,7 +183,7 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "apa" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "apa" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> APA Publication Manual</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://apastyle.apa.org/products/publication-manual-7th-edition" target="_blank"><SquareIcon /> APA Publication Manual</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -192,8 +192,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "math" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "math" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> Academic Resource Center Math Links</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> Virtual Math Lab</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://arc.mercer.edu/math-online-tutor/" target="_blank"><SquareIcon /> Academic Resource Center Math Links</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://www.wtamu.edu/academic/anns/mps/math/mathlab/col_algebra/index.htm" target="_blank"><SquareIcon /> Virtual Math Lab</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
                 <Section>
@@ -202,8 +202,8 @@ export default function MercerDashboard(props: {url: String}) {
                         {expand === "studying" ? <RemoveIcon />: <AddIcon />}
                     </SubHeader>
                     <LinkContainer className={expand === "studying" ? "accordion" : ""}>
-                         <Link><LinkText><ArrowForwardIosIcon /> Academic Resource Center</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
-                         <Link><LinkText><ArrowForwardIosIcon /> College Study Skills</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://arc.mercer.edu/" target="_blank"><SquareIcon /> Academic Resource Center</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
+                         <Link><LinkText href="https://arc.mercer.edu/college-study-skills/" target="_blank"><SquareIcon /> College Study Skills</LinkText><SaveLink onClick={handleLinkClick}>Save Link</SaveLink></Link>
                     </LinkContainer>
                 </Section>
 
@@ -213,9 +213,9 @@ export default function MercerDashboard(props: {url: String}) {
             </Main>
             <Sidebar>
                 <SidebarHeader>Useful Links</SidebarHeader>
-                <SidebarLink>MyMercer</SidebarLink>
-                <SidebarLink>Canvas</SidebarLink>
-                <SidebarLink>Microsoft Outlook</SidebarLink>
+                <SidebarLink href="https://my.mercer.edu/" target="_blank">MyMercer</SidebarLink>
+                <SidebarLink href="https://canvas.mercer.edu/" target="_blank">Canvas</SidebarLink>
+                <SidebarLink href="https://outlook.office.com/mail/" target="_blank">Microsoft Outlook</SidebarLink>
                 <SidebarHeader>Saved Links</SidebarHeader>
                 {mappedSavedLinks}
             </Sidebar>
@@ -299,9 +299,10 @@ const Link = styled.div`
         }
     }
     svg {
-        height: 15px;
-        width: 15px;
+        height: 10px;
+        width: 10px;
         color: var(--primary-orange);
+        margin-right: 5px;
     }
     margin-bottom: 5px;
 `
@@ -332,6 +333,8 @@ const SidebarHeader = styled.p`
 
 const SidebarLink = styled.a`
     display: block;
+    color: black;
+    text-decoration: none;
     background-color: var(--primary-color);
     box-shadow: 1px 2px 1px 1px rgba(220,220,220,.5);
     border-radius: 15px;
@@ -346,7 +349,10 @@ const SidebarLink = styled.a`
 `
 
 const SavedLink = styled(PrimaryContainer)`
+    padding: 20px;
+    padding-top: 10px;
     margin-bottom: 10px;
+    margin-top: 10px;
     &:hover {
         background-color: var(--primary-orange);
         color: white;
