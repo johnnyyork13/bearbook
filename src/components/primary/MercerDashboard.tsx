@@ -77,7 +77,7 @@ export default function MercerDashboard(props: {url: String}) {
         }
     }, [saveLink.send])
 
-    function handleLinkClick(e) {
+    function handleLinkClick(e: any) {
         const title = e.target.parentElement.parentElement.parentElement.children[0].innerText
         const name = e.target.parentElement.children[0].innerText;
         const link = e.target.parentElement.children[0].href;
