@@ -63,6 +63,9 @@ const ContactsContainer = styled(SecondaryContainer)`
     background-color: var(--secondary-color);
     display: flex;
     flex-direction: column;
+    @media (max-width: 979px) { 
+        display: none;
+    }
 `
 
 const ContactsHeader = styled.p`

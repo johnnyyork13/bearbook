@@ -217,7 +217,7 @@ export default function MercerDashboard(props: {url: String}) {
                 <SidebarLink href="https://canvas.mercer.edu/" target="_blank">Canvas</SidebarLink>
                 <SidebarLink href="https://outlook.office.com/mail/" target="_blank">Microsoft Outlook</SidebarLink>
                 <SidebarHeader>Saved Links</SidebarHeader>
-                {mappedSavedLinks}
+                {mappedSavedLinks.length > 0 ? mappedSavedLinks : <NoLinks>No Saved Links</NoLinks>}
             </Sidebar>
         </MercerContainer>
     )
@@ -227,6 +227,9 @@ const MercerContainer = styled.div`
     display: grid;
     grid-template-columns: 3.5fr 1fr;
     gap: 20px;
+    @media (max-width: 979px) { 
+        grid-template-columns: 1fr;
+    }
 `
 
 const Main = styled.div`
@@ -305,6 +308,12 @@ const Link = styled.div`
         margin-right: 5px;
     }
     margin-bottom: 5px;
+    @media (max-width: 979px) { 
+        button {
+            padding: 2px;
+            font-size: 1rem;
+        }
+    }
 `
 
 const LinkText = styled.a`
@@ -320,9 +329,14 @@ const SaveLink = styled(MainButton)`
     display: none;
 `
 
-const Sidebar = styled(PrimaryContainer)`
+const Sidebar = styled.div`
+    padding: 20px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+    background-color: var(--secondary-color);
+    @media (max-width: 979px) { 
+        order: -1;
+    }
 `
 
 const SidebarHeader = styled.p`
@@ -371,6 +385,12 @@ const SavedLink = styled(PrimaryContainer)`
             }
         }
     }
+`
+
+const NoLinks = styled.p`
+    font-size: 1.1rem;
+    margin-left: 20px;
+    margin-top: 20px;
 `
 
 const SavedLinkTitle = styled.p`

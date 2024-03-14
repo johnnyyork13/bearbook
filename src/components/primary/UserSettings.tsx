@@ -5,6 +5,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import Person2Icon from '@mui/icons-material/Person2';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
+import WebAssetIcon from '@mui/icons-material/WebAsset';
+import GroupIcon from '@mui/icons-material/Group';
 import {useSelector, useDispatch} from "react-redux";
 import { RootState, AppDispatch} from "../../state/store";
 import { useNavigate } from "react-router-dom";
@@ -49,15 +51,23 @@ export default function UserSettings(props: {url: string, setOpenUserSettings: F
                 <Person2Icon />
                 <SectionText>Profile</SectionText>
             </Section>
-            <Section>
-                <SchoolIcon />
-                <SectionText>Mercer Resources</SectionText>
+            <Section onClick={() => navigate("/friends")}>
+                <GroupIcon />
+                <SectionText>Friends</SectionText>
             </Section>
-            <Section>
+            <Section onClick={() => navigate("/feeds")}>
+                <WebAssetIcon />
+                <SectionText>Feeds</SectionText>
+            </Section>
+            <Section onClick={() => navigate("/mercer")}>
+                <SchoolIcon />
+                <SectionText>Mercer Dashboard</SectionText>
+            </Section>
+            <Section onClick={() => navigate("/settings")}>
                 <SettingsIcon />
                 <SectionText>Settings & Privacy</SectionText>
             </Section>
-            <Section>
+            <Section onClick={() => navigate('/help')}>
                 <HelpIcon />
                 <SectionText>Help & Support</SectionText>
             </Section>

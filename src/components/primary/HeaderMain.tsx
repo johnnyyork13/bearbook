@@ -31,9 +31,10 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
     });
 
     const [focused, setFocused] = useState(false)
-    const onFocus = () => setFocused(true)
-    const onBlur = () => setFocused(false)
+    const onFocus = () => {setFocused(true);}
+    const onBlur = () => {setFocused(false); setShowMiniSearchbar(false);}
     const [openUserSettings, setOpenUserSettings] = useState(false);
+    const [showMiniSearchbar, setShowMiniSearchbar] = useState(false);
 
     function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuery(e.target.value);
@@ -112,6 +113,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
                 </SearchResultsContainer>}
             </SearchContainer>
             <LinkContainer>
+                <SearchLink onClick={() => setShowMiniSearchbar((prev) => !prev)}><SearchIcon /></SearchLink>
                 <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
                 <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
                 <ProfileLink onClick={() => setOpenUserSettings((prev) => !prev)}><ProfilePic width={"45px"} height={"45px"} profile_img_link={globalUser.profile_img_link}/></ProfileLink>
@@ -120,6 +122,9 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
             {openUserSettings && 
                 <UserSettings url={props.url} setOpenUserSettings={setOpenUserSettings}/>
+            }
+            {showMiniSearchbar && 
+                <MiniSearchBar value={query} onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>
             }
         </Header>
     )
@@ -162,6 +167,9 @@ const SearchBarContainer = styled.div`
         left: 10px;
         color: var(--border-color);
     }
+    @media (max-width: 979px) { 
+        display: none;
+    }
 `
 
 const Searchbar = styled.input`
@@ -183,6 +191,9 @@ const SearchResultsContainer = styled(PrimaryContainer)`
     left: -20px;
     border-radius: 0px;
     width: 430px;
+    @media (max-width: 979px) {
+        top: 105px;
+    }
 `
 
 const LinkContainer = styled.div`
@@ -204,6 +215,20 @@ const Link = styled.div`
     &:hover {
         background-color: var(--);
     }
+`
+
+const SearchLink = styled(Link)`
+    display: none;
+    @media (max-width: 979px) {
+        display: block;
+    }
+`
+
+const MiniSearchBar = styled(Searchbar)`
+    position: absolute;
+    top: 68px;
+    left: 0px;
+    z-index: 100;
 `
 
 const ProfileLink = styled(Link)`

@@ -33,4 +33,12 @@ const HomeContainer = styled.main`
     grid-template-columns: 1fr 2fr 1fr;
     gap: 50px;
     padding: 20px;
+    @media (min-width: 768px) and (max-width: 979px) { 
+        grid-template-columns: 1fr;
+        padding: 50px;
+    }
+    @media (max-width: 767px) { 
+        grid-template-columns: 1fr;
+        padding: 50px;
+    }
 `

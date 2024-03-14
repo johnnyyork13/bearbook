@@ -102,10 +102,16 @@ const FeedsContainer = styled.main`
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 3fr;
     gap: 20px;
+    @media (max-width: 979px) { 
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
 `
 
 const Sidebar = styled(PrimaryContainer)`
-
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    height: fit-content;
 `
 
 const SidebarHeader = styled.p`
@@ -142,6 +148,13 @@ const SidebarOptionText = styled.p`
 const Main = styled.div`
     padding: 20px;
     padding-right: 200px;
+    @media (max-width: 979px) { 
+        padding: 20px;
+        &> div {
+            padding: 20px;
+            width: auto;
+        }
+    }
 `
 
 const MainHeader = styled.p`

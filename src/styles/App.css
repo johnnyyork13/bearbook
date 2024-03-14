@@ -2,18 +2,11 @@
 
 :root {
     /* --primary-color: #1877F2; */
-    --primary-color: white;
     --secondary-color: rgb(252, 251, 251);
-    --primary-blue: #1877f2;
-    --primary-green: #42b72a;
-    --primary-orange: #f76800;
-    --primary-black: #222;
     --secondary-black: #333;
     --primary-grey: rgb(211, 211, 211);
     --profile-pic-background: rgb(236, 236, 236);
     --opacity-background: rgba(255,255,255,.5);
-    --hover-background: rgb(231, 231, 231);
-    --hover-orange-background: #f767009d;
     --input-background-grey: rgb(245,245,245);
     --border-color: rgb(200,200,200);
     font-family: "Titillium Web";
@@ -47,4 +40,28 @@ html, body, #root {
     100% {
         overflow: visible;
     }
+}
+
+
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+
+}
+
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+
+}
+
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+    
+}
+
+
+/* Large desktop */
+@media (min-width: 1200px) { 
+
 }

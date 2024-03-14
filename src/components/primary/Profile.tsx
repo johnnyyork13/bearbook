@@ -33,6 +33,13 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
         loggedIn: false,
         visiting: "",
         profile_img_link: "",
+        settings: {
+            theme: "",
+            profile_visibility: "",
+            show_posts: "",
+            show_major: "",
+            show_location: "",
+        }
     });
     const [loadParent, setLoadParent] = useState(false);
     const [addFriend, setAddFriend] = useState(false);
@@ -339,15 +346,32 @@ const ProfileHeader = styled(PrimaryContainer)`
     padding-right: 200px;
     border-radius: 0px;
     box-shadow: 0px 0px 0px 0px;
+    @media (max-width: 979px) { 
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        justify-content: center;
+    }
 `
 const ProfileNameAndImageContainer = styled.div`
     display: flex;
     align-items: flex-end;
+    @media (max-width: 979px) { 
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 
 const ProfileNameContainer = styled.div`
     margin-left: 20px;
+    @media (max-width: 979px) { 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
 `
 
 const ProfileName = styled.p`
@@ -386,6 +410,12 @@ const ProfileTrackSection = styled(PrimaryContainer)`
     padding-top: 20px;
     padding-left: 200px;
     padding-right: 200px;
+    @media (max-width: 979px) { 
+        padding: 0px;
+        align-self: center;
+        box-shadow: 0px 0px 0px 0px;
+        border: 1px solid rgba(0,0,0,.01);
+    }
 
 `
 
@@ -420,18 +450,34 @@ const ProfilePosts = styled.div`
     display: flex;
     justify-content: space-between;
     padding-top: 30px;
+    @media (max-width: 979px) { 
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 const ProfilePostsSidebar = styled.div`
     width: 30%;
     margin-left: 150px;
     margin-right: 20px;
+    @media (max-width: 979px) { 
+        width: 90%;
+        margin: 0px;
+        margin-bottom: 20px;
+    }
 `
 
 const ProfileMainFeedContainer = styled.div`
     margin-right: 150px;
     margin-left: 20px;
     width: 50%;
+    @media (max-width: 979px) { 
+        margin: 0px;
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 const MappedFriendName = styled.p`
@@ -443,6 +489,10 @@ const ProfileFriendsContainer = styled(PrimaryContainer)`
     margin-left: 200px;
     margin-right: 200px;
     margin-top: 20px;
+    @media (max-width: 979px) { 
+        margin: 0px;
+        width: 90%;
+    }
 `
 
 const ProfileFriends = styled.div`
@@ -450,6 +500,10 @@ const ProfileFriends = styled.div`
     grid-template-columns: repeat(8, minmax(100px, 1fr));
     grid-auto-rows: 130px;
     text-align: center;
+    @media (max-width: 979px) { 
+        grid-template-columns: repeat(4, minmax(100px, 1fr));
+    }
+    
 `
 
 const MappedFriendContainer = styled.div`

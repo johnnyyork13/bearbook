@@ -10,6 +10,13 @@ export interface UserState {
     loggedIn: boolean,
     visiting: string,
     profile_img_link: string,
+    settings: {
+        theme: string,
+        profile_visibility: string,
+        show_posts: string,
+        show_major: string,
+        show_location: string,
+    }
 }
 
 const initialState: UserState = {
@@ -22,6 +29,13 @@ const initialState: UserState = {
     loggedIn: false,
     visiting: "",
     profile_img_link: "",
+    settings: {
+        theme: "",
+        profile_visibility: "",
+        show_posts: "",
+        show_major: "",
+        show_location: "",
+    }
 };
 
 const userSlice = createSlice({

@@ -33,7 +33,6 @@ export default function Feed(props: {url: String}) {
                 key={post._id}
                 url={props.url}
                 post_id={post._id}
-                setLoadProfile={() => {}}
             />
         )
     })

@@ -110,6 +110,10 @@ const EditProfileContainer = styled(PrimaryContainer)`
     align-items: center;
     padding-left: 40px;
     padding-right: 40px;
+    width: 60%;
+    @media (max-width: 979px) { 
+        width: 80%;
+    position: fixed;
 `
 
 const EditProfileHeader = styled.div`
@@ -128,6 +132,7 @@ const EditProfileForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 `
 
 const EditProfileLabel = styled.label`
@@ -140,7 +145,7 @@ const EditProfileLabel = styled.label`
 const EditProfileInput = styled(MainInput)`
     margin-bottom: 20px;
     height: 30px;
-    width: 300px;
+    width: 100%;
 `
 
 const EditProfileTextArea = styled.textarea`
@@ -152,7 +157,8 @@ const EditProfileTextArea = styled.textarea`
     padding-left: 10px;
     padding-right: 10px;
     border: 1px solid var(--border-color);
-    font-family: "Titillium Web";
+    font-family: "Titillium Web"; 
+    width: 100%;
 `
 
 const EditProfileButton = styled(MainButton)`

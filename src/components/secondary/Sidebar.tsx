@@ -21,10 +21,6 @@ export default function Sidebar() {
     const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>(); 
 
-    function handleSidebarClick(route: string) {
-
-    } 
-
     return (
         <SidebarContainer>
             <Span onClick={() => {dispatch(setGlobalUser({...globalUser, visiting: ""})); navigate("/profile")}}><ProfilePic width={"30px"} height={"30px"} profile_img_link={globalUser.profile_img_link} /><SpanText>{globalUser.firstName} {globalUser.lastName}</SpanText></Span>
@@ -41,6 +37,9 @@ const SidebarContainer = styled(SecondaryContainer)`
     grid-template-columns: 1fr;
     grid-auto-rows: 50px;
     gap: 10px;
+    @media (max-width: 979px) { 
+        display: none;
+    }
 `
 
 const Span = styled.span`
@@ -52,7 +51,8 @@ const Span = styled.span`
     }
     cursor: pointer;
     &:hover {
-        background-color: var(--hover-background);
+        background-color: var(--hover-orange-background);
+        color: white;
     }
     border-radius: 10px;
     padding: 5px;

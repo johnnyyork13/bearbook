@@ -308,6 +308,9 @@ const AllFriends = styled.div`
     gap: 10px;
     margin-top: 20px;
     margin-bottom: 30px;
+    @media (max-width: 979px) { 
+        grid-template-columns: 1fr;
+    }
 `
 
 const Friend = styled(PrimaryContainer)`
@@ -343,5 +346,8 @@ const Searchbar = styled(MainInput)`
     border-radius: 10px;
     height: 40px;
     font-size: 1.3rem;
+    @media (max-width: 979px) { 
+        width: 100%;
+    }
 `
 
