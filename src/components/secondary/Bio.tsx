@@ -2,8 +2,8 @@ import styled from "styled-components"
 import {useEffect, useState} from 'react';
 import { PrimaryContainer } from "../main-styles/Containers"
 import { EditButton } from "../main-styles/Inputs";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import { useSelector} from "react-redux";
+import { RootState} from '../../state/store';
 import EditAddress from "./EditAddress";
 import EditBio from "./EditBio";
 import EditMajor from "./EditMajor";

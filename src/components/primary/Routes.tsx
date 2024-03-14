@@ -1,4 +1,4 @@
-import { NavLink, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Login from './Login';
 import Profile from './Profile';
@@ -22,6 +22,6 @@ export default function Main(props: {url: string, setChatWindow: Function, frien
         <Route path="/mercer" element={<MercerDashboard url={props.url} />}></Route>
         <Route path="/home" element={<Home url={props.url} setChatWindow={props.setChatWindow}/>}></Route>
         <Route path="/settings" element={<Settings url={props.url} />}></Route>
-        <Route path="/help" element={<Help url={props.url} />}></Route>
+        <Route path="/help" element={<Help />}></Route>
     </Routes>
 }

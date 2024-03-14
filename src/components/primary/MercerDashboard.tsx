@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SquareIcon from '@mui/icons-material/Square';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from "react";
 import { ExitButton, MainButton } from "../main-styles/Inputs";
-import {useSelector, useDispatch} from "react-redux";
-import { AppDispatch, RootState } from "../../state/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
 import {v4 as uuidv4} from 'uuid';
 
 export default function MercerDashboard(props: {url: String}) {

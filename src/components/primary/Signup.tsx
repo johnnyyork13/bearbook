@@ -28,7 +28,7 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
         buttonFunc: () => props.setOpenSignup(false)
     });
 
-    function  handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function  handleInputChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) {
         setUser((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
@@ -189,12 +189,6 @@ const Input = styled(MainInput)`
     margin-left: 10px;
     margin-right: 10px;
     background-color: var(--input-background-grey);
-`
-
-const Label = styled.label`
-    font-size: 1.2rem;
-    margin-left: 10px;
-    margin-top: 10px;
 `
 
 const Select = styled.select`

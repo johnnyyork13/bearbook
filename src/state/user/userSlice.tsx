@@ -43,11 +43,11 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         //is actually counter/increment for name
-        setGlobalUser: (state, action: PayloadAction<UserState>) => { //can also take action. I.E. (state, action)
-            return state = {...action.payload, loggedIn: true};
+        setGlobalUser: (_state, action: PayloadAction<UserState>) => { //can also take action. I.E. (state, action)
+            return _state = {...action.payload, loggedIn: true};
         },
-        updateGlobalUser: (state, action: PayloadAction<UserState>) => {
-            return state = {...action.payload}
+        updateGlobalUser: (_state, action: PayloadAction<UserState>) => {
+            return _state = {...action.payload}
         },
     },
 });

@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { PrimaryContainer } from '../main-styles/Containers';
 import Post from './Post';
 import { PostIDInterface } from '../../lib/interfaces';
 import { Link } from 'react-router-dom';
@@ -33,6 +32,7 @@ export default function Feed(props: {url: String}) {
                 key={post._id}
                 url={props.url}
                 post_id={post._id}
+                setLoadParent={() => {}}
             />
         )
     })

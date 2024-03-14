@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import { useEffect, useState } from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import { useSelector } from "react-redux";
+import { RootState} from '../../state/store';
 import {v4 as uuidv4} from 'uuid';
 import ProfilePic from "../secondary/ProfilePic";
 import { ExitButton } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
-import Profile from "./Profile";
 
 export default function Messages(props: {url: string, setChatWindow: Function, setShowMessages: Function}) {
 

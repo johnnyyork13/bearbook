@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import { useEffect, useState} from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from '../../state/store';
 import { setGlobalUser } from "../../state/user/userSlice";
-import {NavLink, useNavigate} from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 
 import Signup from './Signup';
 import { PrimaryContainer } from "../main-styles/Containers";

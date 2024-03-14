@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { SecondaryContainer } from '../main-styles/Containers';
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import { useSelector} from "react-redux";
+import { RootState} from '../../state/store';
 import ProfilePic from './ProfilePic';
 import {v4 as uuidv4} from 'uuid';
 

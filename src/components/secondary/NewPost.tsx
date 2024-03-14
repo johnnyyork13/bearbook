@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import { MainButton, MainInput } from "../main-styles/Inputs";
-import Person2Icon from '@mui/icons-material/Person2';
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import { RootState} from '../../state/store';
 import ProfilePic from "./ProfilePic";
 
 export default function NewPost(props: {url: String, profile_img_link: string, setLoadParent: Function}) {

@@ -1,11 +1,7 @@
-import {useState, useEffect, FC} from 'react';
 import styled from 'styled-components'
 import { SecondaryContainer } from '../main-styles/Containers';
-import Person2Icon from '@mui/icons-material/Person2';
-import GradeIcon from '@mui/icons-material/Grade';
 import SchoolIcon from '@mui/icons-material/School';
 import WebAssetIcon from '@mui/icons-material/WebAsset';
-import MessageIcon from '@mui/icons-material/Message';
 import GroupIcon from '@mui/icons-material/Group';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";

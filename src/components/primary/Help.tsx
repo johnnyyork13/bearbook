@@ -2,19 +2,12 @@ import styled from "styled-components";
 import InfoIcon from '@mui/icons-material/Info';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
-import { updateGlobalUser } from '../../state/user/userSlice';
-import {v4 as uuidv4} from 'uuid';
+import { useState } from "react";
 import { PrimaryContainer } from "../main-styles/Containers";
 import { MainInput, SecondaryButton } from "../main-styles/Inputs";
 
 
-export default function Help(props: {url: String}) {
-
-    const globalUser = useSelector((state: RootState) => state.user);
-    const dispatch = useDispatch<AppDispatch>();
+export default function Help() {
 
     const [helpSection, setHelpSection] = useState("about");
 

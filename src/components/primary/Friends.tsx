@@ -8,7 +8,7 @@ import { AppDispatch, RootState } from '../../state/store';
 import { setGlobalUser } from '../../state/user/userSlice';
 import {v4 as uuidv4} from 'uuid';
 import ProfilePic from "../secondary/ProfilePic";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MainButton, MainInput, SecondaryButton } from "../main-styles/Inputs";
 import { PrimaryContainer } from "../main-styles/Containers";
 import SearchIcon from '@mui/icons-material/Search';

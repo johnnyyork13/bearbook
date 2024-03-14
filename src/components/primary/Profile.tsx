@@ -1,11 +1,11 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import styled from "styled-components";
 import {v4 as uuidv4} from 'uuid';
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
 import { EditButton, MainButton, MainInput, SecondaryButton } from "../main-styles/Inputs";
-import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
+import { PrimaryContainer } from "../main-styles/Containers";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import Bio from "../secondary/Bio";

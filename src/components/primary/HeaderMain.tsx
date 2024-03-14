@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
@@ -6,7 +6,6 @@ import { PrimaryContainer } from '../main-styles/Containers';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Logo } from '../main-styles/Logo';
 import MessageIcon from '@mui/icons-material/Message';
-import Person2Icon from '@mui/icons-material/Person2';
 import GroupIcon from '@mui/icons-material/Group';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchResult from '../secondary/SearchResult';

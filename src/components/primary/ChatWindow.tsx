@@ -14,7 +14,7 @@ import { setGlobalUser } from "../../state/user/userSlice";
 export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function}) {
 
     const navigate = useNavigate();
-    const messagesEndRef = useRef(null);
+    const messagesEndRef = useRef<null | HTMLDivElement>(null);
     const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
     const [chat, setChat] = useState({

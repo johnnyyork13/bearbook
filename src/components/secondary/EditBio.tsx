@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
 import { EditHeader } from "../main-styles/Text";
-import { ExitButton, MainButton, MainInput } from "../main-styles/Inputs";
+import { ExitButton, MainButton } from "../main-styles/Inputs";
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import { BioInterface } from "../../lib/interfaces";

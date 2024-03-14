@@ -6,9 +6,8 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import PersonIcon from '@mui/icons-material/Person';
 import Post from "../secondary/Post";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
-import { updateGlobalUser } from '../../state/user/userSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state/store';
 import {v4 as uuidv4} from 'uuid';
 import { PrimaryContainer } from "../main-styles/Containers";
 
@@ -16,9 +15,7 @@ import { PrimaryContainer } from "../main-styles/Containers";
 export default function Feeds(props: {url: String}) {
 
     const globalUser = useSelector((state: RootState) => state.user);
-    const dispatch = useDispatch<AppDispatch>();
 
-    const [loadParent, setLoadParent] = useState(false);
     const [posts, setPosts] = useState([]);
     const [postType, setPostType] = useState({
         send: true,
@@ -52,7 +49,7 @@ export default function Feeds(props: {url: String}) {
 
 
     const mappedPosts = posts.map((post: any) => {
-        return <Post key={uuidv4()} url={props.url} post_id={post._id} setLoadParent={setLoadParent}/>
+        return <Post key={uuidv4()} url={props.url} post_id={post._id} setLoadParent={() => {}}/>
     })
 
     return (
@@ -155,10 +152,4 @@ const Main = styled.div`
             width: auto;
         }
     }
-`
-
-const MainHeader = styled.p`
-    font-size: 1.2rem;
-    font-weight: bolder;
-    margin-bottom: 20px;
 `

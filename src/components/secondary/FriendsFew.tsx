@@ -7,7 +7,6 @@ import { updateGlobalUser } from "../../state/user/userSlice";
 import ProfilePic from "./ProfilePic";
 import {v4 as uuidv4} from 'uuid';
 import { Friend } from "../../lib/interfaces";
-import { PropaneSharp } from "@mui/icons-material";
 
 
 export default function FriendsFew(props: {url: String, setSelectedProfileSection: Function}) {

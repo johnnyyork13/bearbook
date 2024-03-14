@@ -4,8 +4,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
-import { setGlobalUser, updateGlobalUser } from '../../state/user/userSlice';
-import {v4 as uuidv4} from 'uuid';
+import { setGlobalUser } from '../../state/user/userSlice';
 import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers";
 import { MainButton, SecondaryButton } from "../main-styles/Inputs";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,6 @@ export default function Settings(props: {url: String}) {
     const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
 
-    const [loadParent, setLoadParent] = useState(false);
     const [settingSection, setSettingSection] = useState("preferences");
     const [settings, setSettings] = useState({
         theme: "",

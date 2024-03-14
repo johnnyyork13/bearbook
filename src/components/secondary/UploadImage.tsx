@@ -3,8 +3,8 @@ import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers"
 import ProfilePic from "./ProfilePic"
 import styled from "styled-components";
 import { ExitButton, MainButton, SecondaryButton } from "../main-styles/Inputs";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from '../../state/store';
+import {useDispatch } from "react-redux";
+import { AppDispatch } from '../../state/store';
 import { updateGlobalUser } from "../../state/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
@@ -13,10 +13,10 @@ export default function UploadImage(props: {url: String, email: String, preview:
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const uploadImage = useRef(null);
+    const uploadImage = useRef<null | HTMLInputElement>(null);
     const [selectUploadImage, setSelectUploadImage] = useState(false);
     const [fileUrl, setFileUrl] = useState("");
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<any>(null);
     const [sendImageForUpload, setSendImageForUpload] = useState(false);
 
     useEffect(() => {

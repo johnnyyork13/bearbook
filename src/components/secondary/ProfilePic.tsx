@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Person2Icon from '@mui/icons-material/Person2';
-import { useEffect, useRef, useState } from "react";
 
 export default function ProfilePic(props: {height: string, width: string, profile_img_link: string}) {
 
