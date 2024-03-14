@@ -16,7 +16,7 @@ function App() {
 
   const globalUser = useSelector((state: RootState) => state.user);
 
-  const url = "http://localhost:3000";
+  const url = "https://us-central1-mybear-server.cloudfunctions.net/api";
 
   const location: currentLocation = useLocation();
 
