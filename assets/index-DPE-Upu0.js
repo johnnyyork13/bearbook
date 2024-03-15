@@ -412,7 +412,7 @@ Error generating stack: `+o.message+`
     display: flex;
     justify-content: center;
     align-items: center;
-`;function k4(e){const[t,n]=S.useState([]),r=Te(s=>s.user);S.useEffect(()=>{try{async function s(){const a=e.url+"/get-contacts";await fetch(a,{method:"POST",credentials:"include",mode:"cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:r.email})}).then(c=>c.json()).then(c=>{n(c.contacts)}).catch(c=>console.log(c))}s()}catch(s){console.log(s)}},[]);function i(s,a){e.setChatWindow({show:!0,name:a,email:s})}const o=t.map(s=>l.jsxs(_4,{onClick:()=>i(s.email,s.name),children:[l.jsx(Ee,{height:"50px",width:"50px",profile_img_link:s.profile_img_link}),l.jsx(b4,{children:s.name})]},Ae()));return l.jsxs(C4,{children:[l.jsx(j4,{children:"Contacts"}),o.length>0?o:l.jsx("p",{children:"No contacts yet."})]})}const C4=w(l1)`
+`;function k4(e){const[t,n]=S.useState([]),r=Te(s=>s.user);S.useEffect(()=>{if(r.email)try{async function s(){const a=e.url+"/get-contacts";await fetch(a,{method:"POST",credentials:"include",mode:"cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:r.email})}).then(c=>c.json()).then(c=>{n(c.contacts)}).catch(c=>console.log(c))}s()}catch(s){console.log(s)}},[]);function i(s,a){e.setChatWindow({show:!0,name:a,email:s})}const o=t.map(s=>l.jsxs(_4,{onClick:()=>i(s.email,s.name),children:[l.jsx(Ee,{height:"50px",width:"50px",profile_img_link:s.profile_img_link}),l.jsx(b4,{children:s.name})]},Ae()));return l.jsxs(C4,{children:[l.jsx(j4,{children:"Contacts"}),o.length>0?o:l.jsx("p",{children:"No contacts yet."})]})}const C4=w(l1)`
     background-color: var(--secondary-color);
     display: flex;
     flex-direction: column;
@@ -520,7 +520,7 @@ Error generating stack: `+o.message+`
     background-color: var(--secondary-color);
 `,G4=w(ue)`
 
-`;function Q4(e){const[t,n]=S.useState([]),r=Te(o=>o.user);S.useEffect(()=>{try{async function o(){const s=e.url+"/get-main-feed";await fetch(s,{method:"POST",credentials:"include",mode:"cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:r.email})}).then(a=>a.json()).then(a=>{n(a.posts)}).catch(a=>console.log(a))}o()}catch(o){console.log(o)}},[]);const i=t.map(o=>l.jsx(Qf,{url:e.url,post_id:o._id,setLoadParent:()=>{}},o._id));return l.jsx(Y4,{children:i.length>0?i:l.jsxs(l.Fragment,{children:[l.jsx(Wm,{children:"No Posts yet."}),l.jsx(Wm,{children:l.jsx(Ry,{to:"/friends",children:"Find Friends"})})]})})}const Y4=w.div`
+`;function Q4(e){const[t,n]=S.useState([]),r=Te(o=>o.user);S.useEffect(()=>{if(r.email)try{async function o(){const s=e.url+"/get-main-feed";await fetch(s,{method:"POST",credentials:"include",mode:"cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:r.email})}).then(a=>a.json()).then(a=>{n(a.posts)}).catch(a=>console.log(a))}o()}catch(o){console.log(o)}},[]);const i=t.map(o=>l.jsx(Qf,{url:e.url,post_id:o._id,setLoadParent:()=>{}},o._id));return l.jsx(Y4,{children:i.length>0?i:l.jsxs(l.Fragment,{children:[l.jsx(Wm,{children:"No Posts yet."}),l.jsx(Wm,{children:l.jsx(Ry,{to:"/friends",children:"Find Friends"})})]})})}const Y4=w.div`
     display: flex;
     flex-direction: column;
     align-items: center;
