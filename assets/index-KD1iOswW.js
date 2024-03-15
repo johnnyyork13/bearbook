@@ -1078,6 +1078,12 @@ Error generating stack: `+o.message+`
     margin-top: 20px;
     margin-bottom: 30px;
     @media (max-width: 979px) { 
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 767px) { 
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 479px) { 
         grid-template-columns: 1fr;
     }
 `,Pl=w(U)`
