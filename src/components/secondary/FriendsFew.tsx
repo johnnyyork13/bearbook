@@ -23,6 +23,7 @@ export default function FriendsFew(props: {url: String, setSelectedProfileSectio
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

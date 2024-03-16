@@ -44,8 +44,8 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                 const url = props.url + "/get-friends-all";
                 await fetch(url, {
                     method: "POST",
-                    mode: "cors",
                     credentials: "include",
+                    mode: "cors",
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -70,8 +70,8 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                     const url = props.url + '/handle-friend-request';
                     await fetch(url, {
                         method: "POST",
-                        mode: "cors",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type": "application/json"
                         },
@@ -309,6 +309,12 @@ const AllFriends = styled.div`
     margin-top: 20px;
     margin-bottom: 30px;
     @media (max-width: 979px) { 
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width: 767px) { 
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 479px) { 
         grid-template-columns: 1fr;
     }
 `

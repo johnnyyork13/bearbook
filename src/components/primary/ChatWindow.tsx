@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { PrimaryContainer } from "../main-styles/Containers";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
-import { io } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import {v4 as uuidv4} from 'uuid';
 import { ExitButton } from "../main-styles/Inputs";
@@ -25,9 +24,6 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
     const [sendMessage, setSendMessage] = useState(false);
     const [requestSent, setRequestSent] = useState(false);
 
-    const SOCKET_URL = "http://localhost:3001";
-    const socket = io(SOCKET_URL);
-
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     
@@ -35,14 +31,31 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
 
     useEffect(() => {
         if (!requestSent) {
-            socket.emit("get-chat-history", {
-                userEmail: globalUser.email,
-                contactEmail: props.email,
-            })
-            socket.on("receive-chat-history", (res) => {
-                setChat(res);
-            })
-            setRequestSent(true);
+            try {
+                async function getChatHistory() {
+                    const url = props.url + "/get-chat-history";
+                    await fetch(url, {
+                        method: "POST",
+                        mode: "cors",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            userEmail: globalUser.email,
+                            contactEmail: props.email
+                        })
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setChat(res.chat)
+                        setRequestSent(true);
+                    })
+                    .catch((err) => console.log(err));
+                }
+                getChatHistory();
+            } catch(err) {
+                console.log(err);
+            }
         }
     }, [])
 
@@ -52,17 +65,34 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
 
     useEffect(() => {
         if (sendMessage) {
-            socket.emit('send-message', {
-                name: globalUser.name,
-                chat_id: chat._id,
-                email: globalUser.email,
-                message: message
-            });
-            socket.on("receive-message", (res) => {
-                setChat(res);
-            })
-            setSendMessage(false);
-            setMessage("");
+            try {
+                async function sendMessage() {
+                    const url = props.url + "/send-message";
+                    await fetch(url, {
+                        method: "POST",
+                        mode: "cors",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: globalUser.name,
+                            chat_id: chat._id,
+                            email: globalUser.email,
+                            message: message
+                        })
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setChat(res.chat);
+                        setSendMessage(false);
+                        setMessage("");
+                    })
+                    .catch((err) => console.log(err));
+                }
+                sendMessage();
+            } catch(err) {
+                console.log(err);
+            }
         }
     }, [sendMessage]);
 
@@ -90,7 +120,7 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
 
     return (
         <>
-            {chat && <ChatWindowContainer>
+            {chat && <ChatWindowContainer id="chat-window" onClick={(e) => e.stopPropagation()}>
                 <ChatWindowHeader>
                     <ChatWindowHeaderTitle>
                         <ChatWindowHeaderText onClick={handleChatWindowTitleClick}>{props.contactName}</ChatWindowHeaderText>

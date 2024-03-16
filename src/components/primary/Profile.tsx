@@ -204,6 +204,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

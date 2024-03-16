@@ -46,11 +46,12 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
                     const url = props.url + "/get-searched-message-contacts";
                     await fetch(url, {
                         method: "POST",
+                        credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },
-                        credentials: "include",
-                        body: JSON.stringify({name: findContactToChat})
+                        body: JSON.stringify({email: globalUser.email, name: findContactToChat})
                     }).then((res) => res.json())
                     .then((res) => {
                         setSearchedContacts(res.friends);
@@ -71,6 +72,12 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
         })
     }
 
+    document.onclick = function(e: any) {
+        if (e.target.id !== "messages") {
+            props.setShowMessages(false);
+        }
+    }
+
     const mappedSearchedContacts = searchedContacts.map((contact: any) => {
         return (
             <SearchedContact key={uuidv4()} onClick={() => setChatWindowContext({email: contact.email, name: contact.name})}>
@@ -89,7 +96,7 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
     })
 
     return (
-        <MessagesContainer>
+        <MessagesContainer id="messages">
             <MessagesHeader>Chats <ExitButton onClick={() => props.setShowMessages(false)}><CloseIcon /></ExitButton></MessagesHeader>
             <MessagesSearchContainer>
                 <MessagesSearchInput 

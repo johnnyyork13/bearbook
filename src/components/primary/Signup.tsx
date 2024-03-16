@@ -85,6 +85,7 @@ export default function Signup(props: {url: string, setOpenSignup: Function}) {
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

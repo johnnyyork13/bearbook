@@ -41,8 +41,14 @@ export default function UserSettings(props: {url: string, setOpenUserSettings: F
         }
     }, [logout])
 
+    document.onclick = function(e: any) {
+        if (e.target.id !== "chat-window") {
+            props.setOpenUserSettings(false);
+        }
+    }
+
     return (
-        <UserSettingsContainer>
+        <UserSettingsContainer id="user-settings" onClick={(e) => e.stopPropagation()}>
             <Section onClick={() => {
                     dispatch(setGlobalUser({...globalUser, visiting: ""})); 
                     navigate("/profile")

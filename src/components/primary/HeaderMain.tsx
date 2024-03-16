@@ -54,6 +54,7 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },
@@ -114,13 +115,13 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             <LinkContainer>
                 <SearchLink onClick={() => setShowMiniSearchbar((prev) => !prev)}><SearchIcon /></SearchLink>
                 <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
-                <Link onClick={() => setShowMessages((prev: boolean) => !prev)}><IconContainer><MessageIcon /></IconContainer></Link>
-                <ProfileLink onClick={() => setOpenUserSettings((prev) => !prev)}><ProfilePic width={"45px"} height={"45px"} profile_img_link={globalUser.profile_img_link}/></ProfileLink>
+                <Link onClick={(e) => {e.stopPropagation(); setShowMessages((prev: boolean) => !prev)}}><IconContainer><MessageIcon /></IconContainer></Link>
+                <ProfileLink onClick={(e) => {e.stopPropagation(); setOpenUserSettings((prev) => !prev)}}><ProfilePic width={"45px"} height={"45px"} profile_img_link={globalUser.profile_img_link}/></ProfileLink>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={props.setChatWindow} setShowMessages={setShowMessages}/>}
             {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
             {openUserSettings && 
-                <UserSettings url={props.url} setOpenUserSettings={setOpenUserSettings}/>
+                <UserSettings url={props.url} setOpenUserSettings={setOpenUserSettings} />
             }
             {showMiniSearchbar && 
                 <MiniSearchBar value={query} onFocus={onFocus} onBlur={onBlur} onChange={handleSearchInputChange} placeholder="Search for other Bears"/>

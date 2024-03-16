@@ -35,6 +35,7 @@ export default function Login(props: {url: string}) {
             async function checkIfAlreadyLoggedIn(){
                 const url = props.url + "/login";
                 await fetch(url, {
+                    mode: "cors",
                     credentials: "include",
                 }).then((res) => res.json())
                 .then((res) => {
@@ -57,6 +58,7 @@ export default function Login(props: {url: string}) {
                     const url = props.url + "/login";
                     await fetch(url, {
                         method: "POST",
+                        mode: "cors",
                         credentials: "include",
                         headers: {
                             "Content-Type":"application/json",

@@ -15,10 +15,9 @@ interface currentLocation {
 function App() {
 
   const globalUser = useSelector((state: RootState) => state.user);
-
-  const url = "https://us-central1-mybear-server.cloudfunctions.net/api";
-
   const location: currentLocation = useLocation();
+
+  const url:string = import.meta.env.VITE_FIREBASE_API_URL!;
 
   const [chatWindow, setChatWindow] = useState({
     show: false,

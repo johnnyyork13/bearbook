@@ -34,6 +34,7 @@ export default function UploadImage(props: {url: String, email: String, preview:
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

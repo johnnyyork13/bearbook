@@ -21,6 +21,7 @@ export default function NewPost(props: {url: String, profile_img_link: string, s
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

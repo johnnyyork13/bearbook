@@ -30,6 +30,7 @@ export default function Feeds(props: {url: String}) {
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },

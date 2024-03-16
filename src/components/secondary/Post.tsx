@@ -43,6 +43,7 @@ export default function Post(props: {url: String, post_id: string, setLoadParent
                 await fetch(url, {
                     method: "POST",
                     credentials: "include",
+                    mode: "cors",
                     headers: {
                         "Content-Type":"application/json",
                     },
@@ -61,6 +62,7 @@ export default function Post(props: {url: String, post_id: string, setLoadParent
                     await fetch(url, {
                         method: "POST",
                         credentials: "include",
+                        mode: "cors",
                         headers: {
                             "Content-Type":"application/json",
                         },
@@ -85,6 +87,7 @@ export default function Post(props: {url: String, post_id: string, setLoadParent
                 await fetch(url, {
                     method: "POST",
                     credentials: "include",
+                    mode: "cors",
                     headers: {
                         "Content-Type":"application/json",
                     },

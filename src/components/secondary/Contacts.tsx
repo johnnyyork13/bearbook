@@ -13,24 +13,27 @@ export default function Contacts(props: {url: String, setChatWindow: Function}) 
     const globalUser = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
-        try {
-            async function getContacts() {
-                const url = props.url + "/get-contacts";
-                await fetch(url, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type":"application/json",
-                    },
-                    body: JSON.stringify({email: globalUser.email})
-                }).then((res) => res.json())
-                .then((res) => {
-                    setContacts(res.contacts);
-                }).catch((err) => console.log(err));
+        if (globalUser.email) {
+            try {
+                async function getContacts() {
+                    const url = props.url + "/get-contacts";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({email: globalUser.email})
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setContacts(res.contacts);
+                    }).catch((err) => console.log(err));
+                }
+                getContacts();
+            } catch(err) {
+                console.log(err);
             }
-            getContacts();
-        } catch(err) {
-            console.log(err);
         }
     }, [])
 
