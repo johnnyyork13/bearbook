@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PrimaryContainer } from "../main-styles/Containers";
+import { PrimaryContainer, UnreadIcon } from "../main-styles/Containers";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState} from '../../state/store';
@@ -90,7 +90,10 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
 
     const mappedPreviousChats = chats.map((chat: any) => {
         return <PreviousChat key={uuidv4()} onClick={() => setChatWindowContext({email: chat.email, name: chat.name})}>
-            <ProfilePic height="35px" width="35px" profile_img_link={chat.profile_img_link} />
+            <ProfilePicContainer>
+                <ProfilePic height="35px" width="35px" profile_img_link={chat.profile_img_link} />
+                {chat.new_message && <UnreadChatIcon />}
+            </ProfilePicContainer>
             <PreviousChatName>{chat.name}</PreviousChatName>
         </PreviousChat>
     })
@@ -196,6 +199,15 @@ const PreviousChat = styled.div`
     &:hover {
         background-color: var(--hover-background);
     }
+`
+
+const ProfilePicContainer = styled.div`
+    position: relative;
+`
+
+const UnreadChatIcon = styled(UnreadIcon)`
+    width: 12px;
+    height: 12px;
 `
 
 const PreviousChatName = styled.p`

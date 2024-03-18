@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 import { setGlobalUser } from "../../state/user/userSlice";
 
-export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function}) {
+export default function ChatWindow(props: {url: string, email: string, contactName: string, setChatWindow: Function, setUpdateUnread: Function}) {
 
     const navigate = useNavigate();
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -49,6 +49,7 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
                     .then((res) => {
                         setChat(res.chat)
                         setRequestSent(true);
+                        props.setUpdateUnread(true);
                     })
                     .catch((err) => console.log(err));
                 }
@@ -79,7 +80,8 @@ export default function ChatWindow(props: {url: string, email: string, contactNa
                             name: globalUser.name,
                             chat_id: chat._id,
                             email: globalUser.email,
-                            message: message
+                            message: message,
+                            contactEmail: props.email
                         })
                     }).then((res) => res.json())
                     .then((res) => {
@@ -223,6 +225,7 @@ const MessageBubble = styled.div`
     background-color: var(--primary-grey);
     padding: 10px;
     width: fit-content;
+    max-width: 150px;
 `
 
 const MessageBubbleName = styled.p`

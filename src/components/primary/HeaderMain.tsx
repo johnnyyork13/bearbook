@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from '../../state/store';
-import { PrimaryContainer } from '../main-styles/Containers';
+import { PrimaryContainer, UnreadIcon } from '../main-styles/Containers';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Logo } from '../main-styles/Logo';
 import MessageIcon from '@mui/icons-material/Message';
@@ -34,6 +34,8 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
     const onBlur = () => {setFocused(false); setShowMiniSearchbar(false);}
     const [openUserSettings, setOpenUserSettings] = useState(false);
     const [showMiniSearchbar, setShowMiniSearchbar] = useState(false);
+    const [unreadMessage, setUnreadMessage] = useState(false);
+    const [updateUnread, setUpdateUnread] = useState(false)
 
     function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuery(e.target.value);
@@ -45,6 +47,34 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             email: email,
         })
     }
+
+    useEffect(() => {
+        try {
+            async function getUnreadMessages() {
+                const url = props.url + "/check-if-unread-messages";
+                await fetch(url, {
+                    method: "POST",
+                    credentials: "include",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type":"application/json",
+                    },
+                    body: JSON.stringify({email: globalUser.email})
+                }).then((res) => res.json())
+                .then((res) => {
+                    if (res.unreadMessages) {
+                        setUnreadMessage(true);
+                    } else {
+                        setUnreadMessage(false);
+                    }
+                    setUpdateUnread(false);
+                }).catch((err) => console.log(err));
+            }
+            getUnreadMessages();
+        } catch(err) {
+            console.log(err);
+        }
+    }, [updateUnread])
 
     useEffect(() => {
         try {
@@ -115,11 +145,18 @@ export default function HeaderMain(props: {url: string, chatWindow: {show: boole
             <LinkContainer>
                 <SearchLink onClick={() => setShowMiniSearchbar((prev) => !prev)}><SearchIcon /></SearchLink>
                 <Link><NavLink to="/friends"><IconContainer><GroupIcon /></IconContainer></NavLink></Link> 
-                <Link onClick={(e) => {e.stopPropagation(); setShowMessages((prev: boolean) => !prev)}}><IconContainer><MessageIcon /></IconContainer></Link>
+                <Link onClick={(e) => {e.stopPropagation(); setShowMessages((prev: boolean) => !prev)}}>
+                    <IconContainer>
+                        {unreadMessage && 
+                            <UnreadIcon />
+                        }
+                        <MessageIcon />
+                    </IconContainer>
+                </Link>
                 <ProfileLink onClick={(e) => {e.stopPropagation(); setOpenUserSettings((prev) => !prev)}}><ProfilePic width={"45px"} height={"45px"} profile_img_link={globalUser.profile_img_link}/></ProfileLink>
             </LinkContainer>
             {showMessages && <Messages url={props.url} setChatWindow={props.setChatWindow} setShowMessages={setShowMessages}/>}
-            {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow}/>}
+            {props.chatWindow.show && <ChatWindow url={props.url} email={props.chatWindow.email} contactName={props.chatWindow.name} setChatWindow={props.setChatWindow} setUpdateUnread={setUpdateUnread}/>}
             {openUserSettings && 
                 <UserSettings url={props.url} setOpenUserSettings={setOpenUserSettings} />
             }
@@ -202,6 +239,7 @@ const LinkContainer = styled.div`
 `
 
 const Link = styled.div`
+    position: relative;
     width: 25px;
     height: 25px;
     margin-right: 10px;

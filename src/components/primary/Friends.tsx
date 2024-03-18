@@ -61,7 +61,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         } catch(err) {
             console.log(err);
         }
-    }, [globalUser])
+    }, [globalUser, addFriend])
 
     useEffect(() => {
         if (respondToFriendRequest.send) {
@@ -116,7 +116,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                 console.log(err);
             }
         }
-    }, [searchTerm])
+    }, [searchTerm, addFriend, respondToFriendRequest])
 
     useEffect(() => {
         if (addFriend.send) {
@@ -143,6 +143,11 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         }
     }, [addFriend.send])
 
+    function handleRequestClick(profileEmail: string) {
+        dispatch(setGlobalUser({...globalUser, visiting: profileEmail}));
+        navigate('/profile');
+    }
+
     const mappedAllFriends = allFriends.map((friend: any) => {
         return <Friend key={uuidv4()} onClick={() => {
                 dispatch(setGlobalUser({...globalUser, visiting: friend.email}));
@@ -150,7 +155,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                 }
             }>
             <ProfilePic width={"70px"} height={"70px"} profile_img_link={friend.profile_img_link} />
-            <FriendName>{friend.name}</FriendName>
+            <FriendName onClick={() => handleRequestClick(friend.email)}>{friend.name}</FriendName>
             <MainButton onClick={() => {dispatch(setGlobalUser({...globalUser, visiting: friend.email})); navigate('/profile')}}>Go to Profile</MainButton>
         </Friend>
     })
@@ -159,7 +164,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         .map((request: any) => {
         return <Friend key={uuidv4()}>
             <ProfilePic width={"70px"} height={"70px"} profile_img_link={request.profile_img_link} />
-            <FriendName>{request.name}</FriendName>
+            <FriendName onClick={() => handleRequestClick(request.email)}>{request.name}</FriendName>
             <AlreadyFriendsText>Pending</AlreadyFriendsText>
             <SecondaryButton onClick={() => setRespondToFriendRequest({accept: false, send: true, friendEmail: request.email, friendName: request.name})}>Delete</SecondaryButton>
         </Friend>
@@ -169,7 +174,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         .map((request: any) => {
         return <Friend key={uuidv4()}>
             <ProfilePic width={"70px"} height={"70px"} profile_img_link={request.profile_img_link} />
-            <FriendName>{request.name}</FriendName>
+            <FriendName onClick={() => handleRequestClick(request.email)}>{request.name}</FriendName>
             <MainButton onClick={() => setRespondToFriendRequest({accept: true, send: true, friendEmail: request.email, friendName: request.name})}>Confirm</MainButton>
             <SecondaryButton onClick={() => setRespondToFriendRequest({accept: false, send: true, friendEmail: request.email, friendName: request.name})}>Delete</SecondaryButton>
         </Friend>
@@ -178,9 +183,17 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
     const mappedSearchResults = searchResults.map((result: any) => {
         return <Friend key={uuidv4()}>
             <ProfilePic width={"70px"} height={"70px"} profile_img_link={result.profile_img_link} />
-            <FriendName>{result.name}</FriendName>
-            {result.status === "friends" ? <AlreadyFriendsText>Friends <CheckIcon /></AlreadyFriendsText> 
-            :<MainButton onClick={() => setAddFriend((prev) => ({...prev, friend: result.email, name: result.name, send: true}))}>Add Friend</MainButton>}            <SecondaryButton onClick={() => {dispatch(setGlobalUser({...globalUser, visiting: result.email})); navigate('/profile')}}>Go to Profile</SecondaryButton>
+            <FriendName onClick={() => handleRequestClick(result.email)}>{result.name}</FriendName>
+            {result.email !== globalUser.email &&
+                <>
+                    {result.status === "friends" ? <AlreadyFriendsText>Friends <CheckIcon /></AlreadyFriendsText> :
+                        result.status === "sent" ? <AlreadyFriendsText>Request Sent</AlreadyFriendsText> :
+                        result.status === "received" ? <MainButton onClick={() => setRespondToFriendRequest({accept: true, send: true, friendEmail: result.email, friendName: result.name})}>Confirm Request</MainButton> :
+                        <MainButton onClick={() => setAddFriend((prev) => ({...prev, friend: result.email, name: result.name, send: true}))}>Add Friend</MainButton>
+                    }
+                </>
+            }            
+            <SecondaryButton onClick={() => {dispatch(setGlobalUser({...globalUser, visiting: result.email})); navigate('/profile')}}>Go to Profile</SecondaryButton>
         </Friend>
     })
 
@@ -333,6 +346,11 @@ const FriendName = styled.p`
     font-weight: bold;
     margin-top: 5px;
     text-align: center;
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+
+    }
 `
 
 const AlreadyFriendsText = styled.p`

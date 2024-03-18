@@ -18,6 +18,7 @@ function App() {
   const location: currentLocation = useLocation();
 
   const url:string = import.meta.env.VITE_FIREBASE_API_URL!;
+  // const url:string = import.meta.env.VITE_LOCALHOST_URL!;
 
   const [chatWindow, setChatWindow] = useState({
     show: false,

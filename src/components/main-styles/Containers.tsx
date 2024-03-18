@@ -24,3 +24,14 @@ export const OpacityBackground = styled.div`
     background-color: var(--opacity-background);
     z-index: 3;
 `
+
+export const UnreadIcon = styled.div`
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: var(--primary-orange);
+    border: 1px solid var(--opacity-background);
+    border-radius: 50%;
+    top: 0px;
+    right: 0px;
+`

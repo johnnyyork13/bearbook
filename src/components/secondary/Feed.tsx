@@ -10,7 +10,7 @@ export default function Feed(props: {url: String}) {
 
     const [posts, setPosts] = useState([]);
     const globalUser = useSelector((state: RootState) => state.user);
-
+    const [loadAmount, setLoadAmount] = useState(5);
     useEffect(() => {
         if (globalUser.email) {
             try {
@@ -51,12 +51,14 @@ export default function Feed(props: {url: String}) {
 
     return (
         <FeedContainer>
-            {mappedPosts.length > 0 ? mappedPosts : 
+            {mappedPosts.length > 0 ? mappedPosts.slice(0, loadAmount) : 
                 <>
                     <NoPostsText>No Posts yet.</NoPostsText>
                     <NoPostsText><Link to="/friends" >Find Friends</Link></NoPostsText>
                 </>
             }
+            {mappedPosts.length > loadAmount && 
+                <LoadMoreText onClick={() => setLoadAmount(loadAmount + 3)}>Load More Posts</LoadMoreText>}
         </FeedContainer>
     )
 }
@@ -70,4 +72,13 @@ export const FeedContainer = styled.div`
 const NoPostsText = styled.p`
     font-size: 1.2rem;
     margin-top: 20px;
+`
+
+const LoadMoreText = styled.p`
+    font-size: 1.2rem;
+    margin-top: 20px;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
 `

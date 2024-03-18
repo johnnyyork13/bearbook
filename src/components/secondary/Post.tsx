@@ -38,24 +38,25 @@ export default function Post(props: {url: String, post_id: string, setLoadParent
 
     useEffect(() => {
         try {
-            async function getPost() {
-                const url = props.url + "/get-post";
-                await fetch(url, {
-                    method: "POST",
-                    credentials: "include",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type":"application/json",
-                    },
-                    body: JSON.stringify({post_id: props.post_id})
-                }).then((res) => res.json())
-                .then((res) => {
-                    setPost({...res.post, profile_img_link: res.profile_img_link});
-                    setMappedComments(addMappedComments(res.post.comments));
-                }).catch((err) => console.log(err));
+            if (props.post_id) {
+                async function getPost() {
+                    const url = props.url + "/get-post";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({post_id: props.post_id})
+                    }).then((res) => res.json())
+                    .then((res) => {
+                        setPost({...res.post, profile_img_link: res.profile_img_link});
+                        setMappedComments(addMappedComments(res.post.comments));
+                    }).catch((err) => console.log(err));
+                }
+                getPost();
             }
-            getPost();
-
             if (sendComment) {
                 const url = props.url + "/add-comment";
                 async function addComment() {

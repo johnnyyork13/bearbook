@@ -17,6 +17,7 @@ import UploadImage from "../secondary/UploadImage";
 import EditProfile from "../secondary/EditProfile";
 import { PostIDInterface } from "../../lib/interfaces";
 import Post from "../secondary/Post";
+import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
 
 export default function Profile(props: {url: String, setFriendsDefaultSection: Function}) {
 
@@ -49,43 +50,51 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
     const [allFriends, setAllFriends] = useState([]);
     const [findFriends, setFindFriends] = useState("");
     const [showEditProfile, setShowEditProfile] = useState(false);
-    const [cancelFriendRequest, setCancelFriendRequest] = useState(false);
+    const [handleFriendRequest, setHandleFriendRequest] = useState({
+        accept: false,
+        send: false,
+    });
     const [postList, setPostList] = useState([]);
+    const [showRemoveFriendModal, setShowRemoveFriendModal] = useState(false);
+    const [handleRemoveFriend, setHandleRemoveFriend] = useState(false);
 
     useEffect(() => {
         setSelectedProfileSection("posts");
         if (!globalUser.loggedIn) {
             navigate("/login");
         }
-        if (globalUser.visiting) {
-            try {
-                const url = props.url + "/get-profile";
-                async function getUserProfile() {
-                    await fetch(url, {
-                        method: "POST",
-                        credentials: "include",
-                        headers: {
-                            "Content-Type":"application/json",
-                        },
-                        body: JSON.stringify({
-                            email: globalUser.email,
-                            visiting: globalUser.visiting
-                        })
-                    }).then((res) => res.json())
-                    .then((res) => {
-                        setProfileData(res.user);
+        try {
+            const url = props.url + "/get-profile";
+            async function getUserProfile() {
+                await fetch(url, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type":"application/json",
+                    },
+                    body: JSON.stringify({
+                        globalUserEmail: globalUser.email,
+                        profileEmail: (globalUser.visiting && globalUser.visiting !== globalUser.email) ? 
+                            globalUser.visiting : 
+                            globalUser.email,
+                        visiting: (globalUser.visiting && globalUser.visiting !== globalUser.email) ? 
+                            true : 
+                            false,
+                    })
+                }).then((res) => res.json())
+                .then((res) => {
+                    setProfileData(res.user);
+                    if (res.friendStatus) {
                         setFriendStatus(res.friendStatus);
-                        setLoadParent(false);
-                    }).catch((err) => console.log(err));
-                }
-                getUserProfile();
-            } catch(err) {
-                console.log(err);
+                    }
+                    setLoadParent(false);
+                }).catch((err) => console.log(err));
             }
-        } else {
-            setProfileData(globalUser);
+            getUserProfile();
+        } catch(err) {
+            console.log(err);
         }
-    }, [globalUser.visiting, addFriend, globalUser.profile_img_link, cancelFriendRequest, loadParent]);
+    }, [globalUser.visiting, addFriend, globalUser.profile_img_link, handleFriendRequest, loadParent, showEditProfilePicModal, handleRemoveFriend]);
 
     useEffect(() => {
         if (addFriend) {
@@ -117,7 +126,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
     }, [addFriend])
 
     useEffect(() => {
-        if (cancelFriendRequest) {
+        if (handleFriendRequest.send) {
             try {
                 async function sendCancelFriendRequest() {
                     const url = props.url + "/handle-friend-request";
@@ -132,10 +141,13 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                             email: globalUser.email,
                             friendName: profileData.name,
                             friendEmail: profileData.email,
-                            accept: false
+                            accept: handleFriendRequest.accept
                         })}).then((res) => res.json())
                         .then(() => {
-                            setCancelFriendRequest(false);
+                            setHandleFriendRequest({
+                                accept: false,
+                                send: false,
+                            });
                         }).catch((err) => console.log(err));
                 }
                 sendCancelFriendRequest();
@@ -143,7 +155,35 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                 console.log(err);
             }
         }
-    }, [cancelFriendRequest])
+    }, [handleFriendRequest.send])
+
+    useEffect(() => {
+        if (handleRemoveFriend) {
+            try {
+                async function removeFriend() {
+                    const url = props.url + "/remove-friend";
+                    await fetch(url, {
+                        method: "POST",
+                        credentials: "include",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify({
+                            email: globalUser.email,
+                            friendEmail: profileData.email,
+                            friendName: profileData.name,
+                        })}).then((res) => res.json())
+                        .then(() => {
+                            setHandleRemoveFriend(false);
+                        }).catch((err) => console.log(err));
+                }
+                removeFriend();
+            } catch(err) {
+                console.log(err);
+            }
+        }
+    }, [handleRemoveFriend])
     
     useEffect(() => {
         if (selectedProfileSection === "friends" && findFriends.length === 0) {
@@ -241,8 +281,16 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
 
     return (
         <ProfileContainer>
+            {showRemoveFriendModal &&
+                <DeleteConfirmModal 
+                    mainText={`Are you sure you want to remove ${profileData.name} as a friend?`}
+                    buttonText={"Remove Friend"}
+                    buttonFunc={() => {setHandleRemoveFriend(true); setShowRemoveFriendModal(false)}}
+                    closeFunc={() => setShowRemoveFriendModal(false)}
+                />
+            }
             {showEditProfilePicModal && 
-                <UploadImage url={props.url} email={globalUser.email} preview={profileData.profile_img_link} setShowEditProfilePicModal={setShowEditProfilePicModal}/>
+                <UploadImage url={props.url} email={globalUser.email} profile_img_link={profileData.profile_img_link} setShowEditProfilePicModal={setShowEditProfilePicModal}/>
             }
             {showEditProfile && 
                 <EditProfile url={props.url} profileData={profileData} setProfileData={setProfileData} setShowEditProfile={setShowEditProfile}/>  
@@ -265,9 +313,9 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     </>}
                     {profileData.email !== globalUser.email && <>
                         {friendStatus === "not friends" && <AddFriendButton onClick={() => setAddFriend(true)}>Add Friend</AddFriendButton>}
-                        {friendStatus === "friends" && <RemoveFriendButton>Remove Friend</RemoveFriendButton>}
-                        {friendStatus === "sent" && <RemoveFriendButton onClick={() => setCancelFriendRequest(true)}>Cancel Friend Request</RemoveFriendButton>}
-                        {friendStatus === "received" && <RemoveFriendButton>Confirm Friend Request</RemoveFriendButton>}
+                        {friendStatus === "friends" && <RemoveFriendButton onClick={() => setShowRemoveFriendModal(true)}>Remove Friend</RemoveFriendButton>}
+                        {friendStatus === "sent" && <RemoveFriendButton onClick={() => setHandleFriendRequest({accept: false, send: true})}>Cancel Friend Request</RemoveFriendButton>}
+                        {friendStatus === "received" && <RemoveFriendButton onClick={() => setHandleFriendRequest({accept: true, send: true})}>Confirm Friend Request</RemoveFriendButton>}
                     </>}
                 </ProfileHeaderButtons>
             </ProfileHeader>

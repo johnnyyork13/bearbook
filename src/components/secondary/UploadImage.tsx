@@ -3,21 +3,29 @@ import { OpacityBackground, PrimaryContainer } from "../main-styles/Containers"
 import ProfilePic from "./ProfilePic"
 import styled from "styled-components";
 import { ExitButton, MainButton, SecondaryButton } from "../main-styles/Inputs";
-import {useDispatch } from "react-redux";
-import { AppDispatch } from '../../state/store';
-import { updateGlobalUser } from "../../state/user/userSlice";
-import { useNavigate } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
+import { AppDispatch } from "../../state/store";
+import { useDispatch } from "react-redux";
+import { setGlobalUser } from "../../state/user/userSlice";
 
-export default function UploadImage(props: {url: String, email: String, preview: string, setShowEditProfilePicModal: Function}) {
+export default function UploadImage(props: {url: String, email: String, profile_img_link: string, setShowEditProfilePicModal: Function}) {
 
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
     const uploadImage = useRef<null | HTMLInputElement>(null);
     const [selectUploadImage, setSelectUploadImage] = useState(false);
     const [fileUrl, setFileUrl] = useState("");
-    const [file, setFile] = useState<any>(null);
     const [sendImageForUpload, setSendImageForUpload] = useState(false);
+
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.files) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFileUrl(reader.result as string);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
     useEffect(() => {
         if (selectUploadImage && uploadImage.current) {
@@ -27,74 +35,44 @@ export default function UploadImage(props: {url: String, email: String, preview:
     }, [selectUploadImage])
 
     useEffect(() => {
-        try {
-            if (sendImageForUpload && fileUrl) {
-                async function updateUserProfileImage() {
-                    const url = props.url + "/profile-image-uploaded";
+        if (sendImageForUpload) {
+            try {
+                async function uploadImage() {
+                    const url = props.url + "/upload-profile-image";
                     await fetch(url, {
                         method: "POST",
-                        credentials: "include",
                         mode: "cors",
+                        credentials: "include",
                         headers: {
-                            "Content-Type":"application/json",
+                            "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
                             email: props.email,
-                            url: fileUrl
+                            image: fileUrl,
                         })
                     }).then((res) => res.json())
                     .then((res) => {
-                        dispatch(updateGlobalUser(res.user))
-                    }).then(() => {
-                        navigate("/profile");
+                        dispatch(setGlobalUser(res.user));
                         props.setShowEditProfilePicModal(false);
-                        setSendImageForUpload(false);
                     })
-                    .catch((err) => console.log(err));
                 }
-                updateUserProfileImage();
+                uploadImage();
+            } catch(err) {  
+                console.log(err);
             }
-        } catch(err) {
-            console.log(err);
         }
-    }, [fileUrl])
-
-    async function handleSubmitImage() {
-        if (file) {
-            const url = props.url + "/update-profile-image";
-            let formData = new FormData();
-            formData.append("file", file.data);
-    
-            await fetch(url, {
-                method: "POST",
-                credentials: "include",
-                body: formData
-            }).then((res) => res.json())
-            .then((res) => {
-                setFileUrl(res.url)
-                setSendImageForUpload(true);
-            });
-        }
-    }
-
-    function handleFileChange(e: any) {
-        const img = {
-            preview: URL.createObjectURL(e.target.files[0]),
-            data: e.target.files[0],
-        }
-        setFile(img);
-    }
+    })
 
     return (
         <OpacityBackground>
                 <UploadImageModalContainer>
-                    <ProfilePic height={"150px"} width={"150px"} profile_img_link={file ? file.preview : props.preview}/>
+                    <ProfilePic height={"150px"} width={"150px"} profile_img_link={fileUrl ? fileUrl : props.profile_img_link}/>
                     <ButtonContainer>
                         <ExitButton onClick={() => props.setShowEditProfilePicModal(false)}><CloseIcon /></ExitButton>
-                        <UploadButtons onSubmit={handleSubmitImage}>
-                            <UploadImageButton onClick={() => setSelectUploadImage(true)}>Upload Image</UploadImageButton>
+                        <UploadButtons>
+                            <UploadImageButton onClick={() => setSelectUploadImage(true)}>Choose Image</UploadImageButton>
                             <input ref={uploadImage} onChange={handleFileChange} style={{display: "none"}} type="file" name="file"/>
-                            <SubmitImageButton onClick={handleSubmitImage}>Submit</SubmitImageButton>
+                            <SubmitImageButton onClick={() => setSendImageForUpload(true)}>Upload</SubmitImageButton>
                         </UploadButtons>
                     </ButtonContainer>
                 </UploadImageModalContainer>

@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from '../../state/store';
 import { setGlobalUser } from "../../state/user/userSlice";
 import { useNavigate} from "react-router-dom"
-
 import Signup from './Signup';
 import { PrimaryContainer } from "../main-styles/Containers";
 import { MainInput, Error, MainButton, SecondaryButton } from '../main-styles/Inputs';
@@ -12,7 +11,6 @@ import { Logo } from '../main-styles/Logo';
 
 export default function Login(props: {url: string}) {
     const navigate = useNavigate();
-    // const globalUser = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
 
     const [sendUser, setSendUser] = useState(false);
@@ -29,27 +27,6 @@ export default function Login(props: {url: string}) {
             [e.target.name]: e.target.value,
         }))
     }
-
-    useEffect(() => {
-        try {
-            async function checkIfAlreadyLoggedIn(){
-                const url = props.url + "/login";
-                await fetch(url, {
-                    mode: "cors",
-                    credentials: "include",
-                }).then((res) => res.json())
-                .then((res) => {
-                    if (!res.message) {
-                        dispatch(setGlobalUser(res));
-                        navigate("/home");
-                    }
-                }).catch((err) => console.log(err));
-            }
-            checkIfAlreadyLoggedIn();
-        } catch(err) {
-            console.log(err);
-        }
-    }, []);
 
     useEffect(() => {
         try {
@@ -101,6 +78,8 @@ export default function Login(props: {url: string}) {
                 <SignupButton onClick={() => setOpenSignup(true)}>Create new account</SignupButton>
             </FormContainer>
             {openSignup && <Signup url={props.url} setOpenSignup={setOpenSignup}/>}
+            <LoginBreak>Or test drive an account</LoginBreak>
+            <MainButton onClick={() => {setUser({email: "jjenkins@yahoo.com", password: "testtest"}); setSendUser(true)}}>Login with Test Account</MainButton>
         </MainContainer>
     )
 }
@@ -154,3 +133,10 @@ const SignupButton = styled(SecondaryButton)`
     margin-right: 50px;
     font-size: 1.2rem;
 `
+
+const LoginBreak = styled.p`
+    color: rgba(0,0,0,0.5);
+    margin-top: 40px;
+    margin-bottom: 20px;
+`
+

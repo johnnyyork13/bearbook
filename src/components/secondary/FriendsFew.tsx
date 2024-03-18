@@ -111,6 +111,9 @@ const FriendName = styled.p`
 const SeeAllFriends = styled.p`
     text-align: end;
     font-weight: bold;
-    text-decoration: underline;
-    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    margin-top: 20px;
 `
