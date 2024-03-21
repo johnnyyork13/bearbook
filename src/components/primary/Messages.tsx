@@ -99,13 +99,13 @@ export default function Messages(props: {url: string, setChatWindow: Function, s
     })
 
     return (
-        <MessagesContainer id="messages">
+        <MessagesContainer id="messages" onClick={(e) => e.stopPropagation()}>
             <MessagesHeader>Chats <ExitButton onClick={() => props.setShowMessages(false)}><CloseIcon /></ExitButton></MessagesHeader>
             <MessagesSearchContainer>
                 <MessagesSearchInput 
                     type="text" 
                     value={findContactToChat} 
-                    onChange={(e) => setFindContactToChat(e.target.value)} 
+                    onChange={(e) => {e.stopPropagation(); setFindContactToChat(e.target.value)}} 
                     placeholder="Start new chat"
                     />
                 {findContactToChat.length > 0 && <MessagesSearchResults>
