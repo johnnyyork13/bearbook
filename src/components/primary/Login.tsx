@@ -8,6 +8,7 @@ import Signup from './Signup';
 import { PrimaryContainer } from "../main-styles/Containers";
 import { MainInput, Error, MainButton, SecondaryButton } from '../main-styles/Inputs';
 import { Logo } from '../main-styles/Logo';
+import LoadSpinner from '../secondary/LoadSpinner';
 
 export default function Login(props: {url: string}) {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Login(props: {url: string}) {
     })
     const [error, setError] = useState(false);
     const [openSignup, setOpenSignup] = useState(false);
+    const [loadSpinner, setLoadSpinner] = useState(false);
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>){
         setUser((prev) => ({
@@ -32,6 +34,7 @@ export default function Login(props: {url: string}) {
         try {
             if (sendUser) {
                 async function loginUser() {
+                    setLoadSpinner(true);
                     const url = props.url + "/login";
                     await fetch(url, {
                         method: "POST",
@@ -49,10 +52,12 @@ export default function Login(props: {url: string}) {
                         } else {
                             setError(true);
                         }
+                        setLoadSpinner(false);
                         setSendUser(false);
                     }).catch((err) => {
                         console.log(err);
                         setSendUser(false);
+                        setLoadSpinner(false);
                     });
                 }
                 loginUser();
@@ -66,6 +71,7 @@ export default function Login(props: {url: string}) {
     return (
         <MainContainer>
             <HistoryLogo>MyBear</HistoryLogo>
+            {!loadSpinner && <LoadSpinner />}
             <FormContainer>
                 <LoginForm onSubmit={(e) => e.preventDefault()}>
                     {error && <Error>Please enter a valid email and password.</Error>}
