@@ -13,6 +13,7 @@ import { MainButton, MainInput, SecondaryButton } from "../main-styles/Inputs";
 import { PrimaryContainer } from "../main-styles/Containers";
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
+import FriendPlaceholder from "../secondary/FriendPlaceholder";
 
 export default function Friends(props: {url: String, friendsDefaultSection: String}) {
 
@@ -37,6 +38,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
         friend: "",
         name: "",
     });
+    const [friendsLoaded, setFriendsLoaded] = useState(false);
 
     useEffect(() => {
         try {
@@ -53,6 +55,7 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                 }).then((res) => res.json())
                     .then((res) => {
                         setAllFriends(res.friends)
+                        setFriendsLoaded(true);
                         setFriendRequests(res.friendRequests)
                     })
                     .catch((err) => console.log(err));
@@ -240,8 +243,19 @@ export default function Friends(props: {url: String, friendsDefaultSection: Stri
                 {(displaySection === "all" || displaySection === "friends") && <FriendsCardContainer>
                     <MainHeader>All Friends</MainHeader>
                     <AllFriends>
-                        {mappedAllFriends.length > 0 ? mappedAllFriends : <NoFriendsText>No Friends</NoFriendsText>}
-                    </AllFriends>
+                        {friendsLoaded ? <>
+                            {mappedAllFriends.length > 0 ? mappedAllFriends : <NoFriendsText>No Friends</NoFriendsText>}
+                            </> : 
+                            <>
+                                <FriendPlaceholder />
+                                <FriendPlaceholder />
+                                <FriendPlaceholder />
+                                <FriendPlaceholder />
+                                <FriendPlaceholder />
+                            </>
+                        }
+                        
+                    </AllFriends> : 
                 </FriendsCardContainer>}
                 {displaySection === "search" && <FriendsCardContainer>
                     <Searchbar onChange={(e) => setSearchTerm(e.target.value)} value={searchTerm} placeholder="Search for friends"/>

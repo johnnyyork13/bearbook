@@ -18,6 +18,7 @@ import EditProfile from "../secondary/EditProfile";
 import { PostIDInterface } from "../../lib/interfaces";
 import Post from "../secondary/Post";
 import DeleteConfirmModal from "../secondary/DeleteConfirmModal";
+import PostPlaceholder from "../secondary/PostPlaceholder";
 
 export default function Profile(props: {url: String, setFriendsDefaultSection: Function}) {
 
@@ -57,6 +58,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
     const [postList, setPostList] = useState([]);
     const [showRemoveFriendModal, setShowRemoveFriendModal] = useState(false);
     const [handleRemoveFriend, setHandleRemoveFriend] = useState(false);
+    const [postsLoaded, setPostsLoaded] = useState(false);
 
     useEffect(() => {
         setSelectedProfileSection("posts");
@@ -252,6 +254,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     }).then((res) => res.json())
                     .then((res) => {
                         setPostList(res.posts);
+                        setPostsLoaded(true);
                         setLoadParent(false);
                     })
                     .catch((err) => console.log(err));
@@ -338,7 +341,7 @@ export default function Profile(props: {url: String, setFriendsDefaultSection: F
                     </ProfilePostsSidebar>
                     <ProfileMainFeedContainer>
                         {!globalUser.visiting && <NewPost profile_img_link={profileData.profile_img_link} url={props.url} setLoadParent={setLoadParent}/>}
-                        {mappedPosts}
+                        {postsLoaded ? mappedPosts : <><PostPlaceholder /><PostPlaceholder /></>}
                     </ProfileMainFeedContainer>
                 </ProfilePosts>}
 

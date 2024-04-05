@@ -5,12 +5,15 @@ import { PostIDInterface } from '../../lib/interfaces';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
+import PostPlaceholder from './PostPlaceholder';
 
 export default function Feed(props: {url: String}) {
 
     const [posts, setPosts] = useState([]);
     const globalUser = useSelector((state: RootState) => state.user);
     const [loadAmount, setLoadAmount] = useState(5);
+    const [postsLoaded, setPostsLoaded] = useState(false);
+
     useEffect(() => {
         if (globalUser.email) {
             try {
@@ -29,6 +32,7 @@ export default function Feed(props: {url: String}) {
                     }).then((res) => res.json())
                     .then((res) => {
                         setPosts(res.posts);
+                        setPostsLoaded(true);
                     }).catch((err) => console.log(err));
                 }
                 getFeed();
@@ -51,14 +55,22 @@ export default function Feed(props: {url: String}) {
 
     return (
         <FeedContainer>
-            {mappedPosts.length > 0 ? mappedPosts.slice(0, loadAmount) : 
+            {postsLoaded && <>
+                {mappedPosts.length > 0 ? mappedPosts.slice(0, loadAmount) : 
                 <>
                     <NoPostsText>No Posts yet.</NoPostsText>
                     <NoPostsText><Link to="/friends" >Find Friends</Link></NoPostsText>
                 </>
-            }
-            {mappedPosts.length > loadAmount && 
-                <LoadMoreText onClick={() => setLoadAmount(loadAmount + 3)}>Load More Posts</LoadMoreText>}
+                }
+                {mappedPosts.length > loadAmount && 
+                    <LoadMoreText onClick={() => setLoadAmount(loadAmount + 3)}>Load More Posts</LoadMoreText>}
+            </>}
+            {!postsLoaded && <>
+                <PostPlaceholder />
+                <PostPlaceholder />
+                <PostPlaceholder />
+            </>}
+
         </FeedContainer>
     )
 }

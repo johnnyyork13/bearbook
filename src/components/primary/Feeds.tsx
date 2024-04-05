@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import {v4 as uuidv4} from 'uuid';
 import { PrimaryContainer } from "../main-styles/Containers";
+import PostPlaceholder from "../secondary/PostPlaceholder";
 
 
 export default function Feeds(props: {url: String}) {
@@ -21,6 +22,7 @@ export default function Feeds(props: {url: String}) {
         send: true,
         type: "all",
     });
+    const [postsLoaded, setPostsLoaded] = useState(false);
 
     useEffect(() => {
         try {
@@ -39,6 +41,7 @@ export default function Feeds(props: {url: String}) {
                     .then((res) => {
                         setPosts(res.posts);
                         setPostType((prev) => ({...prev, send: false}))
+                        setPostsLoaded(true);
                     }).catch((err) => console.log(err));
                 }
                 getPosts();
@@ -89,7 +92,7 @@ export default function Feeds(props: {url: String}) {
                 </SidebarOption>
             </Sidebar>
             <Main>
-                {mappedPosts}
+                {postsLoaded ? mappedPosts : <><PostPlaceholder /><PostPlaceholder /><PostPlaceholder /></>}
             </Main>
         </FeedsContainer>
     )
